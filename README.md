@@ -26,3 +26,15 @@
 ## 访问别人
 
 是不是还没写了。
+
+
+
+# 坑
+
+full path form Ctx
+```go
+c.Request().URI().String()
+```
+
+app.Use is always first used.
+
