@@ -6,6 +6,7 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 
+	"github.com/Hana-ame/fedi-antenna/user"
 	"github.com/Hana-ame/fedi-antenna/webfinger"
 )
 
@@ -23,6 +24,30 @@ func main() {
 		log.Println(c.Path())
 		// c.SendString(c.Path())
 		return c.Next()
+	})
+
+	app.All("/users/:username", func(c *fiber.Ctx) (err error) {
+		username := c.Params("username")
+		if username == "" {
+			return nil
+		}
+
+		as, err := user.UserAS(username)
+		if err != nil {
+			return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
+				"error": err.Error(),
+			})
+		}
+
+		c.Set("Content-Type", `application/ld+json; profile="https://www.w3.org/ns/activitystreams"; charset=utf-8`)
+		_, err = c.Status(fiber.StatusOK).Write(as)
+		if err != nil {
+			return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
+				"error": err.Error(),
+			})
+		}
+
+		return nil
 	})
 
 	log.Fatal(app.Listen(":5000"))

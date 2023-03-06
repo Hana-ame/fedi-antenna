@@ -14,7 +14,7 @@ import (
 	"github.com/fatih/color"
 )
 
-var RSABits = 1024
+var RSABits = 4096
 
 // parse pem string to public key
 func ParsePublicKey(publicKey string) (*rsa.PublicKey, error) {
