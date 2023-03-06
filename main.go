@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"net/url"
 
 	"github.com/gofiber/fiber/v2"
 
@@ -33,6 +34,13 @@ func webfingerApp() *fiber.App {
 	app.All("", func(c *fiber.Ctx) error {
 		acct := c.Query("resource")
 
+		acct, err := url.PathUnescape(acct)
+		if err != nil {
+			return c.Status(fiber.StatusUnprocessableEntity).JSON(fiber.Map{
+				"error": "invalid_resource",
+			})
+		}
+
 		// log.Println(acct)
 
 		username, domain := webfinger.ParseAcct(acct)
@@ -49,7 +57,7 @@ func webfingerApp() *fiber.App {
 			})
 		}
 
-		err := c.Status(fiber.StatusOK).JSON(webfinger.GetResource(username, domain))
+		err = c.Status(fiber.StatusOK).JSON(webfinger.GetResource(username, domain))
 
 		return err
 	})
