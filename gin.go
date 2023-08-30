@@ -12,13 +12,16 @@ import (
 	"github.com/iancoleman/orderedmap"
 )
 
+// /users/:name
 func users(c *gin.Context) {
 	name := c.Param("name")
+	host := c.Request.Host
 	if name != "nanaka" {
-		c.JSON(http.StatusNotFound, gin.H{"error": "only support nanaka@fedi.moonchan.xyz"})
+		c.JSON(http.StatusNotFound, gin.H{"error": "only support nanaka"})
 		return
 	}
-	c.JSON(http.StatusOK, gin.H{"1": "2"})
+	o := core.APUserObj(name, host)
+	c.JSON(http.StatusOK, o)
 }
 
 // not work
@@ -93,8 +96,8 @@ func usersInbox(c *gin.Context) {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
-	// verify := verify(c.Request)
-	var verify error = nil
+	verify := verify(c.Request)
+	// var verify error = nil
 
 	core.Inbox(c.Request.Header, o, verify)
 

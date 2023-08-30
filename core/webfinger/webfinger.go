@@ -9,6 +9,21 @@ import (
 	"github.com/iancoleman/orderedmap"
 )
 
+// acct = "meromero@p1.a9z.dev"
+func GetUserIdFromAcct(acct string) (userId string, err error) {
+	defer func() {
+		if e := recover(); e != nil {
+			err = fmt.Errorf("%s", e)
+		}
+	}()
+	o, err := FetchWebfingerObj(acct)
+	handleErr(err)
+
+	userId = ParseUserId(o)
+
+	return
+}
+
 // as server
 
 func CreateWebfingerObj(username, host string) (o *orderedmap.OrderedMap, err error) {

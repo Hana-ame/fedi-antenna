@@ -14,3 +14,23 @@ func CreateOrderedMap(kvlist []*KV) (o *orderedmap.OrderedMap) {
 	}
 	return
 }
+
+// utils
+func OrderedMap(keys []string, values []interface{}) *orderedmap.OrderedMap {
+	o := orderedmap.New()
+	for i, key := range keys {
+		o.Set(key, values[i])
+	}
+	return o
+}
+
+func IdType(id, typestr string) *orderedmap.OrderedMap {
+	return OrderedMap([]string{"@id", "@type"}, []any{id, typestr})
+}
+
+// mycrypto
+func PkPem(name string) string {
+	pk, _ := ReadKeyFromFile(name + ".pem")
+	pubKeyStr := MarshalPublicKey(&pk.PublicKey)
+	return string(pubKeyStr)
+}

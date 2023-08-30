@@ -3,6 +3,8 @@ package utils
 import (
 	"errors"
 	"strings"
+
+	"github.com/iancoleman/orderedmap"
 )
 
 // parse
@@ -18,4 +20,13 @@ func ParseAcctStrToUserAndHost(acct string) (user, host string) {
 	}
 	user, host = arr[0], arr[1]
 	return
+}
+
+func ParseObjValueToString(o *orderedmap.OrderedMap, key string) (string, bool) {
+	if v, ok := o.Get(key); !ok {
+		return "not found", false
+	} else {
+		s, ok := v.(string)
+		return s, ok
+	}
 }

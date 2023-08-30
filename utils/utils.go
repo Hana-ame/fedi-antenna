@@ -6,3 +6,7 @@ func handleErr(err error) {
 		panic(err)
 	}
 }
+
+func ObjectId(path, host string) string {
+	return "https://" + host + "/o/" + path
+}
