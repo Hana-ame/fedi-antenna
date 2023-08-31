@@ -6,13 +6,13 @@ import (
 
 type Log struct {
 	gorm.Model
-	Headers *string
-	Body    *string
-	Verify  *string
+	Header *string
+	Body   *string
+	Verify *string
 }
 
-func CreateLog(headers, body, verify *string) error {
-	tx := db.Create(&Log{Headers: headers, Body: body, Verify: verify})
+func CreateLog(header, body, verify *string) error {
+	tx := db.Create(&Log{Header: header, Body: body, Verify: verify})
 	if tx.Error != nil {
 		return tx.Error
 	}

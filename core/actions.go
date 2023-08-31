@@ -26,7 +26,7 @@ func Follow(user, host, object string) (err error) {
 	return
 }
 
-func Undo(user, host string, obj *orderedmap.OrderedMap) (err error) {
+func UndoFollow(user, host string, obj *orderedmap.OrderedMap) (err error) {
 	id, ok := utils.ParseObjValueToString(obj, "id")
 	if !ok {
 		return errors.New("id not found in object")
@@ -35,7 +35,7 @@ func Undo(user, host string, obj *orderedmap.OrderedMap) (err error) {
 	if !ok {
 		return errors.New("actor not found in object")
 	}
-	object, ok := utils.ParseObjValueToString(obj, "actor")
+	object, ok := utils.ParseObjValueToString(obj, "object")
 	if !ok {
 		return errors.New("object not found in object")
 	}
@@ -53,14 +53,64 @@ func Undo(user, host string, obj *orderedmap.OrderedMap) (err error) {
 	return
 }
 
-func UnFollow() {
+func Reject(user, host string, obj *orderedmap.OrderedMap) (err error) {
+	// id, ok := utils.ParseObjValueToString(obj, "id")
+	// if !ok {
+	// 	return errors.New("id not found in object")
+	// }
+	actor, ok := utils.ParseObjValueToString(obj, "actor")
+	if !ok {
+		return errors.New("actor not found in object")
+	}
+	// object, ok := utils.ParseObjValueToString(obj, "object")
+	// if !ok {
+	// 	return errors.New("object not found in object")
+	// }
 
+	rejectObj := activitypub.Reject(
+		activitypub.APUserID(user, host)+"#follows/reject",
+		activitypub.APUserID(user, host),
+		obj,
+	)
+
+	// endpoint
+	inbox := actor + "/inbox"
+	// sign object
+	req, err := signObjectByUser(rejectObj, user, host, inbox)
+	if err != nil {
+		return err
+	}
+	_, err = fetchObjectWithRequest(req)
+	return
 }
 
-func Accept() {
+func Accept(user, host string, obj *orderedmap.OrderedMap) (err error) {
+	// id, ok := utils.ParseObjValueToString(obj, "id")
+	// if !ok {
+	// 	return errors.New("id not found in object")
+	// }
+	actor, ok := utils.ParseObjValueToString(obj, "actor")
+	if !ok {
+		return errors.New("actor not found in object")
+	}
+	// object, ok := utils.ParseObjValueToString(obj, "object")
+	// if !ok {
+	// 	return errors.New("object not found in object")
+	// }
 
-}
+	acceptObj := activitypub.Accept(
+		activitypub.APUserID(user, host)+"#follows/accpet",
+		activitypub.APUserID(user, host),
+		obj,
+	)
 
-func Reject() {
-
+	// endpoint
+	inbox := actor + "/inbox"
+	// sign object
+	req, err := signObjectByUser(acceptObj, user, host, inbox)
+	if err != nil {
+		return err
+	}
+	_, err = fetchObjectWithRequest(req)
+	return
 }

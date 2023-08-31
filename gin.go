@@ -12,6 +12,7 @@ import (
 	"github.com/iancoleman/orderedmap"
 )
 
+// only test
 // /users/:name
 func users(c *gin.Context) {
 	name := c.Param("name")
@@ -24,6 +25,7 @@ func users(c *gin.Context) {
 	c.JSON(http.StatusOK, o)
 }
 
+// todo
 // not work
 func usersOutbox(c *gin.Context) {
 	b, _ := json.Marshal(c.Request.Header)
@@ -35,6 +37,7 @@ func usersOutbox(c *gin.Context) {
 
 }
 
+// todo
 // not work
 func usersFollowers(c *gin.Context) {
 	b, _ := json.Marshal(c.Request.Header)
@@ -45,6 +48,7 @@ func usersFollowers(c *gin.Context) {
 
 }
 
+// todo
 // not work
 func usersFollowing(c *gin.Context) {
 	b, _ := json.Marshal(c.Request.Header)
@@ -54,6 +58,7 @@ func usersFollowing(c *gin.Context) {
 	c.JSON(400, gin.H{"error": "not supported"})
 }
 
+// todo
 // not work
 func usersCollectionsFeatured(c *gin.Context) {
 	b, _ := json.Marshal(c.Request.Header)
@@ -63,6 +68,7 @@ func usersCollectionsFeatured(c *gin.Context) {
 	c.JSON(400, gin.H{"error": "not supported"})
 }
 
+// todo
 // not work
 func usersCollectionsTags(c *gin.Context) {
 	b, _ := json.Marshal(c.Request.Header)
@@ -72,6 +78,7 @@ func usersCollectionsTags(c *gin.Context) {
 	c.JSON(400, gin.H{"error": "not supported"})
 }
 
+// todo
 // notwork
 func usersStatuses(c *gin.Context) {
 	b, _ := json.Marshal(c.Request.Header)
@@ -80,6 +87,7 @@ func usersStatuses(c *gin.Context) {
 	c.JSON(400, gin.H{"error": "not supported"})
 }
 
+// todo
 // notwork
 func apiFollow(c *gin.Context) {
 	b, _ := json.Marshal(c.Request.Header)
@@ -90,6 +98,7 @@ func apiFollow(c *gin.Context) {
 
 // inbox
 
+// todo
 func usersInbox(c *gin.Context) {
 	o := orderedmap.New()
 	if err := c.ShouldBindJSON(&o); err != nil {
@@ -111,6 +120,7 @@ func usersInbox(c *gin.Context) {
 
 }
 
+// todo
 func inbox(c *gin.Context) {
 	o := orderedmap.New()
 	if err := c.ShouldBindJSON(&o); err != nil {
