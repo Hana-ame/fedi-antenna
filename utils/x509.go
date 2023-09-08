@@ -27,8 +27,8 @@ func ParsePublicKey(publicKey string) (*rsa.PublicKey, error) {
 }
 
 // parse pem string to private key
-func ParsePrivateKey(privateKey string) (*rsa.PrivateKey, error) {
-	block, _ := pem.Decode([]byte(privateKey))
+func ParsePrivateKey(privateKeyPem []byte) (*rsa.PrivateKey, error) {
+	block, _ := pem.Decode(privateKeyPem)
 	pk, err := x509.ParsePKCS8PrivateKey(block.Bytes)
 	if err != nil {
 		return nil, err
@@ -96,7 +96,7 @@ func readKeyFromFile(path string) (*rsa.PrivateKey, error) {
 		}
 		return privateKey, nil
 	} else {
-		privateKey, err := ParsePrivateKey(string(privateKeyPem))
+		privateKey, err := ParsePrivateKey(privateKeyPem)
 		if err != nil {
 			color.Red(err.Error())
 			return nil, err

@@ -4,13 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 	"testing"
+
+	"github.com/Hana-ame/fedi-antenna/utils"
 )
 
 func TestU(t *testing.T) {
 	user := "nanaka"
 	host := "fedi.moonchan.xyz"
 	var published int64 = 1693394962808
-	pubkey := PublicKeyObj(user, host)
+	pubkey := PublicKeyObj(user, host, utils.PrikeyToPubkeyPem(user))
 	icon := ImageObj("image/jpeg", "https://s3.arkjp.net/misskey/678ad158-f160-48f4-a369-8756aa92350e.jpg")
 	o := UserObj(
 		host, user,

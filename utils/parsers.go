@@ -30,3 +30,7 @@ func ParseObjValueToString(o *orderedmap.OrderedMap, key string) (string, bool) 
 		return s, ok
 	}
 }
+
+func ParseNameAndHostToAcctStr(user, host string) (acct string) {
+	return user + "@" + host
+}

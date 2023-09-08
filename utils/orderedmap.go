@@ -29,8 +29,8 @@ func IdType(id, typestr string) *orderedmap.OrderedMap {
 }
 
 // mycrypto
-func PkPem(name string) string {
-	pk, _ := ReadKeyFromFile(name + ".pem")
+func PrikeyToPubkeyPem(file string) string {
+	pk, _ := ReadKeyFromFile(file + ".pem")
 	pubKeyStr := MarshalPublicKey(&pk.PublicKey)
 	return string(pubKeyStr)
 }

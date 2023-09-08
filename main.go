@@ -32,12 +32,20 @@ func main() {
 	// s2s recv
 	r.POST("/users/:name/inbox", usersInbox) // inbox, only on POST?
 	r.POST("/inbox", inbox)                  // inbox
-	// what's this?
-	r.POST("/api/v1/follow", apiFollow)
+	// users
+	r.POST("/api/v1/users", apiPostUser)
+	r.GET("/api/v1/users/:name", apiGetUser)
+	r.PUT("/api/v1/users/:name", apiPutUser)
+	r.DELETE("/api/v1/users/:name", apiDeleteUser)
+
+	r.GET("/api/v1/remoteusers", apiQueryRemoteUser)
+
+	r.POST("/api/v1/action", apiAction)
 
 	r.Run("0.0.0.0:3000") // listen and serve on 0.0.0.0:3000
 }
 
+// utils
 // 这个需要之后再看一下修改一下
 func verify(r *http.Request) (err error) {
 	defer func() {

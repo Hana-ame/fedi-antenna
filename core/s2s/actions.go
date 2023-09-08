@@ -1,4 +1,4 @@
-package core
+package s2s
 
 import (
 	"errors"

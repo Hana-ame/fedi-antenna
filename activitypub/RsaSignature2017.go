@@ -11,16 +11,16 @@ func SignatureObj(user, host string, usTimestamp int64) *orderedmap.OrderedMap {
 		{Key: "type", Value: "RsaSignature2017"},
 		{Key: "creator", Value: APUserID(user, host)},
 		{Key: "created", Value: utils.TimestampToRFC3339(usTimestamp)},
-		{Key: "signatureValue", Value: utils.PkPem(user)},
+		{Key: "signatureValue", Value: utils.PrikeyToPubkeyPem(user)},
 	})
 	return o
 }
 
-func PublicKeyObj(user, host string) *orderedmap.OrderedMap {
+func PublicKeyObj(user, host string, pkPem string) *orderedmap.OrderedMap {
 	o := CreateOrderedMap([]*KV{
 		{"id", APUserID(user, host) + "#main-key"},
 		{"owner", APUserID(user, host)},
-		{"publicKeyPem", utils.PkPem(user)},
+		{"publicKeyPem", pkPem},
 	})
 	return o
 }

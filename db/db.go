@@ -26,4 +26,6 @@ func Init() {
 	// Migrate the schema
 	db.AutoMigrate(&Log{})
 	db.AutoMigrate(&Object{})
+	db.AutoMigrate(&User{})
+	db.AutoMigrate(&RemoteUser{})
 }

@@ -1,5 +1,5 @@
 // utils
-package core
+package s2s
 
 import (
 	"encoding/json"

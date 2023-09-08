@@ -19,6 +19,19 @@ actions 动作
 
 core 接入点
 
+### core/webfinger
+client
+通过 x@x.x 找到 webfinger object
+```go
+func FetchWebfingerObj(acct string) (o *orderedmap.OrderedMap, err error) 
+```
+server
+通过 name host 生成webfinger。大概要改了加功能。
+```go
+func CreateWebfingerObj(username, host string) (o *orderedmap.OrderedMap, err error)
+```
+接在`gin.go`里
+
 ## trivial 
 
 - main.go > verify() 修改一下其中调用的函数名，规范
@@ -54,6 +67,32 @@ url对应了资源
 
 跑一个访问3000端口的py，访问不到直接砍进程试试。
 现在会出毛病吗，不会出就不写这个了，好麻烦
+
+## curl
+
+```sh
+curl -v https://fedi.moonchan.xyz/remoteusers?acct=meromero@p1.a9z.dev
+# post user for test
+curl -v -X POST \
+-H 'Content-Type: application/json' \
+-d @script/test.json \
+https://fedi.moonchan.xyz/api/v1/users 
+```
+
+s2s测试
+```sh
+# webfinger
+curl -v https://fedi.moonchan.xyz/.well-known/webfinger?resource=acct:nanaka@fedi.moonchan.xyz
+
+# AS:Person
+curl -v \
+--header 'Accept: application/ld+json' \
+--header 'Accept: application/activity+json' \
+https://fedi.moonchan.xyz/users/Nanaka 
+
+```
+
+### TEST
 
 # log
 
@@ -170,6 +209,68 @@ note的id是独一无二的。
 难不成额外做个内部的uuid去link。不好弄吧。
 加个key做往前记录的链接之类的。
 history列表应该是本地实现吧。
+
+return的时候要不要加上status啊，覆盖率？是不是进入了正确的分支？
+
+## 09/08
+
+写到哪里了，要做本地的user返回到s2s上吧。
+
+local访问remote user通了的
+
+总之开始写s2s的user返回
+
+post user
+创建成功了吗
+request from s2s
+能被访问了吗 
+
+1. webfinger notfound
+2. post user for test
+  - 两个list没有正确marshal，需要处理的
+3. AS:Person
+  - ~~大小写出了问题~~
+  - 加type case 啥啥的好了，但是要删库重来的
+
+win下面不分大小写可能还行，但是存储的时候要分大小写。
+把privatekey pem塞到数据库里了
+
+可以了，远程能访问了
+
+- 创建user apiPostUser
+- db保存
+- webfinger 访问 user
+- s2s访问user
+
+成功了。
+
+接下来做action？
+
+## 09/07
+
+~~加了user的本地api~~ done
+- ~~也需要往core里面挪~~ done
+- ~~还没测~~ done 
+
+~~core缓存User~~ done
+- ~~api也加一个~~ done
+
+插入不同的acct（uniqe）之后报错
+会返回error的。
+TODO：但是不太懂sql会返回什么，gorm也只是一知半解。
+咋办啊。
+
+加了cache超时
+
+remote访问user
+昨晚remote访问user的互通就歇了
+
+做了localuser
+webfinger 的 server 做在哪里了
+
+返回err还算对，webfinger.CreateWebfingerObj其实没测试。希望对的
+
+
 
 ## 08/31
 
