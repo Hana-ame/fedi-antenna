@@ -2,3 +2,7 @@ log.md
 *.exe
 *.pem
 *.db
+
+script
+*.json
+*.sh

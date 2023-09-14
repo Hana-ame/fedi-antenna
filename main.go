@@ -40,7 +40,16 @@ func main() {
 
 	r.GET("/api/v1/remoteusers", apiQueryRemoteUser)
 
-	r.POST("/api/v1/action", apiAction)
+	// r.POST("/api/v1/action", apiAction) // nop
+	// mastodon api
+	r.GET("/api/v1/accounts/lookup", apiLookUp)
+	r.GET("/api/v1/accounts/:id", apiAccount)
+	r.POST("/api/v1/accounts/:id/block", apiAccountBlock)
+	r.POST("/api/v1/accounts/:id/unblock", apiAccountUnBlock)
+	r.POST("/api/v1/accounts/:id/follow", apiAccountFollow)
+	r.POST("/api/v1/accounts/:id/unfollow", apiAccountUnFollow)
+	r.POST("/api/v1/accounts/:id/mute", apiAccountMute)
+	r.POST("/api/v1/accounts/:id/unmute", apiAccountUnMute)
 
 	r.Run("0.0.0.0:3000") // listen and serve on 0.0.0.0:3000
 }

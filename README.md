@@ -63,6 +63,8 @@ url对应了资源
 
 测试的时候使用navicat读一下内容
 
+
+
 ## script
 
 跑一个访问3000端口的py，访问不到直接砍进程试试。
@@ -94,11 +96,11 @@ https://fedi.moonchan.xyz/users/Nanaka
 
 ### TEST
 
-# log
-
 从下往上读的，越靠上越近
 
 ## TODO
+
+
 ```txt
 inbox 
   +
@@ -133,16 +135,17 @@ misskey也是先是sns再是加入fedi的。
   - fetch隔壁user失败之后的问题
   - 。。。
 - user
-  - 只做了开始的部分
-  - 后面还要做修改，db会进去
+  - ~~只做了开始的部分~~
+  - ~~后面还要做修改，db会进去~~
+  - 有架子了
 - inbox还没写
   - ~~记录~~
   - 要怎么处理
   - 根据不同的内容分表？
-- **db完全没写，连参考代码都没有的。**
-  - 不会，没想过
+- **~~db完全没写，连参考代码都没有的。~~** 开始写了
+  - ~~不会，没想过~~
 - trivial
-  - utils.PkPem 的方式太傻了，要不要改到数据库里面。
+  - ~~utils.PkPem 的方式太傻了，要不要改到数据库里面。~~  改了
   - 修改远程 <- 这是在说啥
   - 人与人之间的关系独立建表？
 - action
@@ -150,6 +153,8 @@ misskey也是先是sns再是加入fedi的。
   - 至少有自己的object被访问的db
   - 还有供本地用户用的分表
   - 那么 db 还需要存这些东西
+
+### activitypub api
 
 先弄清楚所有的api
 - [x] 发note
@@ -193,6 +198,28 @@ misskey也是先是sns再是加入fedi的。
 - [x] 解除block
   - undo
 
+note的id是独一无二的。
+不知道改用时间戳还是内部的objectid
+修改的时候要怎么弄呃。
+难不成额外做个内部的uuid去link。不好弄吧。
+加个key做往前记录的链接之类的。
+history列表应该是本地实现吧。
+
+return的时候要不要加上status啊，覆盖率？是不是进入了正确的分支？
+
+
+先通过`/api/v1/accounts/lookup?acct=[Username]`查找id,直接返回obj
+`https://mona.do/api/v1/accounts/[id]`这里读取obj里的id
+local产生action是
+`https://mona.do/api/v1/accounts/[id]/[action]`
+action in `[block, unblock, follow, unfollow, mute, unmute]`
+unfollow 有一个结构体
+全都是POST
+
+#  log
+
+## 09/08
+
 设计好db之后
 再去做更多的设计
 
@@ -203,16 +230,6 @@ db怎么弄呃现在是
 其实是不是很简单，
 签名各种还要分一下是哪个用户这样的。
 
-note的id是独一无二的。
-不知道改用时间戳还是内部的objectid
-修改的时候要怎么弄呃。
-难不成额外做个内部的uuid去link。不好弄吧。
-加个key做往前记录的链接之类的。
-history列表应该是本地实现吧。
-
-return的时候要不要加上status啊，覆盖率？是不是进入了正确的分支？
-
-## 09/08
 
 写到哪里了，要做本地的user返回到s2s上吧。
 
