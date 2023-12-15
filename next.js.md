@@ -320,3 +320,44 @@ export default function RootLayout({
 ```
 
 比vue挂载在`<div id="app"></div>`上面好吧。
+
+## Navigating Between Pages
+
+- How to use the next/link component.
+- How to show an active link with the usePathname() hook.
+- How navigation works in Next.js.
+
+链接怎么做的
+
+### The <Link> component
+
+用 `<Link>` 替换 `<a>`
+
+```tsx
+import Link from 'next/link';
+
+<Link
+  key={link.name}
+  href={link.href}
+  className="flex h-[48px] grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3"
+>
+  <LinkIcon className="w-6" />
+  <p className="hidden md:block">{link.name}</p>
+</Link>
+```
+
+_懒加载呢_
+
+Futhermore, in production, whenever <Link> components appear in the browser's viewport, Next.js automatically prefetches the code for the linked route in the background. By the time the user clicks the link, the code for the destination page will already be loaded in the background, and this is what makes the page transition near-instant!
+
+看到Link时加载后面的东西。
+
+Learn more about [how navigation works](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating#how-routing-and-navigation-works).
+
+### Pattern: Showing active links
+
+Since `usePathname()` is a hook, you'll need to turn `nav-links.tsx` into a Client Component. Add React's `"use client"` directive to the top of the file, then import `usePathname()` from next/navigation:
+
+_Client Component_
+_hook_
+
