@@ -121,3 +121,113 @@ className={clsx(
 In addition to the approaches we've discussed, you can also style your Next.js application with:
 - Sass which allows you to import .css and .scss files.
 - CSS-in-JS libraries such as [styled-jsx](https://github.com/vercel/styled-jsx), [styled-components](https://github.com/vercel/next.js/tree/canary/examples/with-styled-components), and [emotion](https://github.com/vercel/next.js/tree/canary/examples/with-emotion).
+
+## Optimizing Fonts and Images
+
+- How to add custom fonts with next/font.
+- How to add images with next/image.
+- How fonts and images are optimized in Next.js.
+
+### Why optimize fonts?
+
+问题描述
+
+后加载的内容会改变布局
+
+### Adding a primary font
+
+字体有优先级
+
+_把body删掉了。会发生找不到root的error加载不出任何东西_
+
+加入了
+```css
+.__className_725fdb {
+    font-family: '__Inter_Fallback_725fdb', '__Inter_Fallback_Fallback_725fdb';
+    font-style: normal;
+}
+```
+
+### [Practice: Adding a secondary font](https://nextjs.org/learn/dashboard-app/optimizing-fonts-images#practice-adding-a-secondary-font)
+
+```log
+`next/font` error:
+Preload is enabled but no subsets were specified for font `Lusitana`. Please specify subsets or disable preloading if your intended subset can't be preloaded.
+Available subsets: `latin`
+
+https://nextjs.org/docs/messages/google-fonts-missing-subsets
+```
+
+NextFont 类
+```ts
+import { Inter, Lusitana } from 'next/font/google';
+ 
+export const inter = Inter({ subsets: ['latin'] });
+export const lusitana = Lusitana({ weight: "400", subsets: ['latin'] });
+```
+这么得到
+
+使用的时候在在class中加入`[fontInstance].className`
+
+编译出来看不懂的。
+
+[查询fonts](https://fonts.google.com/specimen/Lusitana?query=Lusitana+)
+
+### Why optimize images?
+
+问题描述：
+
+- 各种设备屏幕不一样
+- 指定不同的size
+- 不准乱动
+- lazy load
+
+### The <Image> component
+
+功能描述：
+
+- 不会乱动
+- autosize
+- lazy load by default (as they enter the view)
+- mordern formats
+
+### Adding the desktop hero image
+
+usage
+
+```tsx
+import Image from 'next/image';
+
+<Image
+  src="/hero-desktop.png"
+  width={1000}
+  height={760}
+  className="hidden md:block"
+  alt="Screenshots of the dashboard project showing desktop version"
+/>
+```
+
+### Practice: Adding the mobile hero image
+```tsx
+<Image
+  src="/hero-desktop.png"
+  width={1000}
+  height={760}
+  className="block md:hidden"
+  {/* className="hidden max-md:block"  */}
+  {/* 有个白痴这么用。 */}
+  alt="Screenshots of the dashboard project showing desktop version"
+/>
+```
+
+hidden 和 block 分别是css的显示方式
+
+_记得补基础_
+
+### Recommended reading
+There's a lot more to learn about these topics, including optimizing remote images and using local font files. If you'd like to dive deeper into fonts and images, see:
+
+- [Image Optimization Docs](https://nextjs.org/docs/app/building-your-application/optimizing/images)
+- [Font Optimization Docs](https://nextjs.org/docs/app/building-your-application/optimizing/fonts)
+- [Improving Web Performance with Images (MDN)](https://developer.mozilla.org/en-US/docs/Learn/Performance/Multimedia)
+- [Web Fonts (MDN)](https://developer.mozilla.org/en-US/docs/Learn/CSS/Styling_text/Web_fonts)

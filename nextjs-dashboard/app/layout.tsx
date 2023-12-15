@@ -1,4 +1,5 @@
 import '@/app/ui/global.css'; // add this line to import global CSS
+import { inter } from '@/app/ui/fonts'; // add this line to import fonts
 
 export default function RootLayout({
   children,
@@ -7,7 +8,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className={`${inter.className} antialiased`}>{children}</body>
+      {/* <body>{children}</body> */}
     </html>
   );
 }
