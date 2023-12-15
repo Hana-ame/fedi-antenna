@@ -83,5 +83,41 @@ it makes a trangle on it.
   className="h-0 w-0 border-b-[30px] border-l-[20px] border-r-[20px] border-b-black border-l-transparent border-r-transparent"
 />
 ```
+this is about **[tailwind](https://tailwindcss.com/)**
 
-this is aboutl **tailwind**
+### CSS Modules
+
+```css
+.shape {
+  height: 0;
+  width: 0;
+  border-bottom: 30px solid black;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+}
+```
+原理是四周的border在遇到其他border时会按对角线平分。
+显示出来是三角形
+
+this makes modules's visiable scope
+
+### Using the clsx library to toggle class names
+
+输入一个Object:
+- value truly 时, key加入class
+输入一个Array:
+- 当中truly的变量会加入class
+- 可以嵌套
+```tsx
+className={clsx(
+  'inline-flex items-center rounded-full px-2 py-1 text-xs',
+  {
+    'bg-gray-100 text-gray-500': status === 'pending',
+    'bg-green-500 text-white': status === 'paid',
+  },
+)}
+```
+### Other styling solutions
+In addition to the approaches we've discussed, you can also style your Next.js application with:
+- Sass which allows you to import .css and .scss files.
+- CSS-in-JS libraries such as [styled-jsx](https://github.com/vercel/styled-jsx), [styled-components](https://github.com/vercel/next.js/tree/canary/examples/with-styled-components), and [emotion](https://github.com/vercel/next.js/tree/canary/examples/with-emotion).
