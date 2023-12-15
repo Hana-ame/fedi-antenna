@@ -1,28 +1,47 @@
-# fedi-antenna
+# fedi-antenna/front/next-js/learn-1
 
-心血来潮的能够加入Fediverse的单人实例
+[the documents](https://nextjs.org/docs)
+[react reference](https://react.dev/reference/react)
 
-## params
+lesson one is dashboard
 
-|variable||
-|---|---|
-|user| 就是用户名|
-|user.json| activityStream，其他实例会来获取的东西|
-|privateKey| 自己存好|
-|authorization| 大概放在cookie里面校验用|
+https://nextjs.org/learn/dashboard-app
 
-## interface
-|path||
-|---|---|
-|/users/:user|user.json|
-|/users/:user/inbox|inbox，没啥好讲的|
-|/users/:user/outbox|接受post，校验使用cookie?|
-|/users/:user/followers||
-|/users/:user/following||
-|/users/:user/collection/featured||
-|/inbox|shared inbox|
-|.well-known/webfinger?resource=acct::user@:host|webfinger|
+## Creating a new project
 
-## 访问别人
 
-是不是还没写了。
+
+
+
+# Q
+
+here records every questiong from oldest to latest.
+**bond part** means this part is very not sure.
+
+----
+
+in [Creating a new project](./README.md#creating-a-new-project)
+why this command does not work
+```sh
+npm create-next-app@latest nextjs-dashboard --example "https://github.com/vercel/next-learn/tree/main/dashboard/starter-example"
+```
+**maybe something idk about npx and npm**
+
+----
+
+in [Creating a new project](./README.md#creating-a-new-project)
+what is the meaning of exmaple
+See [starter example](https://github.com/vercel/next-learn/tree/main/dashboard/starter-example)
+
+----
+
+in [Folder structure](./next.js.md#folder-structure)
+how the `*.config.js` works.
+
+----
+
+in The project
+why then entry point is `page.tsx`
+
+----
+

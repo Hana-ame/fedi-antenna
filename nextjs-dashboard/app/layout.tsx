@@ -1,3 +1,5 @@
+import '@/app/ui/global.css'; // add this line to import global CSS
+
 export default function RootLayout({
   children,
 }: {
