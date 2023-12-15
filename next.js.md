@@ -16,6 +16,8 @@
 
 located at fedi-antenna -b frontend/next-js/readme
 
+[docs](https://nextjs.org/docs)
+
 all follows https://nextjs.org/learn/dashboard-app/getting-started
 
 ## Getting Started
@@ -231,3 +233,90 @@ There's a lot more to learn about these topics, including optimizing remote imag
 - [Font Optimization Docs](https://nextjs.org/docs/app/building-your-application/optimizing/fonts)
 - [Improving Web Performance with Images (MDN)](https://developer.mozilla.org/en-US/docs/Learn/Performance/Multimedia)
 - [Web Fonts (MDN)](https://developer.mozilla.org/en-US/docs/Learn/CSS/Styling_text/Web_fonts)
+
+## Creating Layouts and Pages
+
+- Create the dashboard routes using file-system routing.
+- Understand the role of folders and files when creating new route segments.
+- Create a nested layout that can be shared between multiple dashboard pages.
+- Understand what colocation, partial rendering, and the root layout are.
+
+能跟着路径走真的是
+
+### Nested routing
+
+You can create separate UIs for each route using `layout.tsx` and `page.tsx` files.
+
+`page.tsx` is a special Next.js file that exports a React component, and it's required for the route to be accessible. In your application, you already have a page file: `/app/page.tsx` - this is the home page associated with the route `/`.
+
+To create a nested route, you can nest folders inside each other and add `page.tsx` files inside them. For example:
+
+![Diagram showing how adding a folder called dashboard creates a new route '/dashboard'](https://nextjs.org/_next/image?url=%2Flearn%2Fdark%2Fdashboard-route.png&w=3840&q=75&dpl=dpl_9VWEnshqwJ4TWYcNesdqAEpT4iWx)
+
+`/app/dashboard/page.tsx` is associated with the `/dashboard` path. Let's create the page to see how it works!
+
+**`page.tsx`会被导出为这个path的组件**
+
+### Creating the dashboard page
+
+By having a special name for page files, Next.js allows you to colocate UI components, test files, and other related code with your routes. Only the content inside the page file will be publicly accessible. For example, the /ui and /lib folders are colocated inside the /app folder along with your routes.
+
+说你可以把东西丢一起。
+
+### [Practice: Creating the dashboard pages](https://nextjs.org/learn/dashboard-app/creating-layouts-and-pages#practice-creating-the-dashboard-pages)
+
+创建文件夹
+创建`page.tsx`
+```tsx
+export default function Page() {
+  return <></>;
+}
+```
+
+### Creating the dashboard layout
+
+```tsx
+import SideNav from '@/app/ui/dashboard/sidenav';
+ 
+export default function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
+      <div className="w-full flex-none md:w-64">
+        <SideNav />
+      </div>
+      <div className="flex-grow p-6 md:overflow-y-auto md:p-12">{children}</div>
+    </div>
+  );
+}
+```
+
+children是这个和子文件夹的`page.tsx`导出的组件
+
+![Folder structure with dashboard layout nesting the dashboard pages as children](https://nextjs.org/_next/image?url=%2Flearn%2Fdark%2Fshared-layout.png&w=3840&q=75&dpl=dpl_9VWEnshqwJ4TWYcNesdqAEpT4iWx)
+
+One benefit of using layouts in Next.js is that on navigation, only the page components update while the layout won't re-render. This is called [partial rendering](https://nextjs.org/docs/app/building-your-application/routing/linking-and-navigating#3-partial-rendering):
+
+记得 partial rendering 是大坑。
+
+### Root layout
+
+This is called a root layout and is required. Any UI you add to the root layout will be shared across all pages in your application. You can use the root layout to modify your <html> and <body> tags, and add metadata (you'll learn more about metadata in a later chapter).
+
+```tsx
+import '@/app/ui/global.css';
+import { inter } from '@/app/ui/fonts';
+ 
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="en">
+      <body className={`${inter.className} antialiased`}>{children}</body>
+    </html>
+  );
+}
+```
+
+比vue挂载在`<div id="app"></div>`上面好吧。
