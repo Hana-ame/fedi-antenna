@@ -1,3 +1,26 @@
+## 链接太多的解决方法
+
+```sql
+select * from pg_stat_activity;
+```
+
+```sql
+show max_connections;
+```
+
+```sql
+SELECT
+ pg_terminate_backend(pid)
+FROM
+ pg_stat_activity
+WHERE
+ datname = 
+'<TARGET_DB_NAME>'
+AND
+ leader_pid 
+IS NULL
+;
+```
 
 follow 
 

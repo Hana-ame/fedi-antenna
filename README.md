@@ -9,9 +9,17 @@ https://nextjs.org/learn/dashboard-app
 
 ## Creating a new project
 
+## typescript
 
+需要补一下
 
+`Omit<First, Second>`
 
+从`First`中省略掉`Second`
+
+https://www.typescriptlang.org/docs/handbook/utility-types.html
+
+去这里看。
 
 # Q
 

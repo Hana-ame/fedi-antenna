@@ -454,3 +454,32 @@ queryRaw都拉出了什么东西啊。
 
 参考`app/lib/data.ts`
 自己改了的部分
+
+## Static and Dynamic Rendering
+
+- What static rendering is and how it can improve your application's performance.
+- What dynamic rendering is and when to use it.
+- Different approaches to make your dashboard dynamic.
+- Simulate a slow data fetch to see what happens.
+
+### What is Static Rendering?
+
+就是静态资源
+
+### What is Dynamic Rendering?
+With dynamic rendering, content is rendered on the server for each user at request time (when the user visits the page). There are a couple of benefits of dynamic rendering:
+
+- Real-Time Data - Dynamic rendering allows your application to display real-time or frequently updated data. This is ideal for applications where data changes often.
+- User-Specific Content - It's easier to serve personalized content, such as dashboards or user profiles, and update the data based on user interaction.
+- Request Time Information - Dynamic rendering allows you to access information that can only be known at request time, such as cookies or the URL search parameters.
+
+为啥cookie和param要在request的时候才知道。
+
+### Making the dashboard dynamic
+
+_`noCache()`是啥_
+
+### Simulating a Slow Data Fetch
+
+会卡在加载的时候
+
