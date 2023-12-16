@@ -18,6 +18,14 @@ located at fedi-antenna -b frontend/next-js/readme
 
 [docs](https://nextjs.org/docs)
 
+later
+https://nextjs.org/learn/react-foundations
+
+routing
+https://nextjs.org/docs/app/building-your-application/routing/route-handlers
+https://nextjs.org/docs/app/api-reference/file-conventions/route
+https://nextjs.org/docs/pages/building-your-application/routing/api-routes
+
 all follows https://nextjs.org/learn/dashboard-app/getting-started
 
 ## Getting Started
@@ -346,7 +354,7 @@ import Link from 'next/link';
 </Link>
 ```
 
-_懒加载呢_
+~~_懒加载呢_~~
 
 Futhermore, in production, whenever <Link> components appear in the browser's viewport, Next.js automatically prefetches the code for the linked route in the background. By the time the user clicks the link, the code for the destination page will already be loaded in the background, and this is what makes the page transition near-instant!
 
@@ -358,6 +366,91 @@ Learn more about [how navigation works](https://nextjs.org/docs/app/building-you
 
 Since `usePathname()` is a hook, you'll need to turn `nav-links.tsx` into a Client Component. Add React's `"use client"` directive to the top of the file, then import `usePathname()` from next/navigation:
 
+https://nextjs.org/docs/app/api-reference/functions/use-pathname
+
 _Client Component_
 _hook_
 
+## Setting Up Your Database
+
+Before you can continue working on your dashboard, you'll need some data. In this chapter, you'll be setting up a PostgreSQL database using @vercel/postgres. If you're already familiar with PostgreSQL and would prefer to use your own provider, you can skip this chapter and set it up on your own. Otherwise, let's continue!
+
+为啥使用postgres
+最近流行这个么
+
+- Push your project to GitHub.
+- Set up a Vercel account and link your GitHub repo for instant previews and deployments.
+- Create and link your project to a Postgres database.
+- Seed the database with initial data.
+
+跳过
+
+```json
+  "seed": "node -r dotenv/config ./scripts/seed.js"
+```
+```ts
+const { db } = require('@vercel/postgres');
+```
+
+难绷
+
+## Fetching Data
+
+- Learn about some approaches to fetching data: APIs, ORMs, SQL, etc.
+- How Server Components can help you access back-end resources more securely.
+- What network waterfalls are.
+- How to implement parallel data fetching using a JavaScript Pattern.
+
+### Choosing how to fetch data
+
+#### API layer
+
+In Next.js, you can create API endpoints using [Route Handlers](https://nextjs.org/docs/app/building-your-application/routing/route-handlers).
+
+是接收。
+
+#### Database queries
+
+When you're creating a full-stack application, you'll also need to write logic to interact with your database. For [relational databases](https://aws.amazon.com/relational-database/) like Postgres, you can do this with SQL, or an [ORM](https://vercel.com/docs/storage/vercel-postgres/using-an-orm#) like [Prisma](https://www.prisma.io/).
+
+#### Using Server Components to fetch data
+
+By default, Next.js applications use React Server Components. Fetching data with Server Components is a relatively new approach and there are a few benefits of using them:
+
+- Server Components support promises, providing a simpler solution for asynchronous tasks like data fetching. You can use async/await syntax without reaching out for useEffect, useState or data fetching libraries.
+- Server Components execute on the server, so you can keep expensive data fetches and logic on the server and only send the result to the client.
+- As mentioned before, since Server Components execute on the server, you can query the database directly without an additional API layer.
+
+**默认是server组件**
+**这个是next.js的概念**
+
+_怎么编译的_
+_放在什么地方_
+
+#### Using SQL
+
+**extra**
+
+```sh
+npm install prisma @prisma/client
+```
+
+[prisma](https://vercel.com/docs/storage/vercel-postgres/using-an-orm#prisma)
+
+see [prostgress.md](postgres.md)
+
+#### Fetching data for the dashboard overview page
+
+**stopping here**
+
+应该用prisma的rawquery很容易替换sql
+但还没试。
+
+不是
+哥
+你怎么把组件里面注释掉了。
+
+queryRaw都拉出了什么东西啊。
+
+参考`app/lib/data.ts`
+自己改了的部分

@@ -9,19 +9,30 @@ npm config set proxy http://127.0.0.1:10809
 npm config set https-proxy http://127.0.0.1:10809
 ```
 
-## npm and npx
+## postgres
 
-for some reason i don't even know what is `npm` and what is `npx`
+pg for raw
+https://node-postgres.com/
 
-i don't know why 
-```sh
-npx create-next-app@latest nextjs-dashboard --use-npm --example "https://github.com/vercel/next-learn/tree/main/dashboard/starter-example"
+prisma for orm
+https://www.prisma.io/docs/getting-started/quickstart
+
+## 
+
+```log
+(node:22576) Warning: To load an ES module, set "type": "module" in the package.json or use the .mjs extension.
+(Use `node --trace-warnings ...` to show where the warning was created)
+C:\workplace\fedi\next-js\learn-1\nextjs-dashboard\scripts\seed.js:2
+import { PrismaClient } from '@prisma/client'
+^^^^^^
 ```
-and why 
+
+## test
 ```sh
-npm create-next-app@latest nextjs-dashboard --example "https://github.com/vercel/next-learn/tree/main/dashboard/starter-example"
+npm install -g ts-node
 ```
-doesn't work
+
+
 
 ## npx
 
