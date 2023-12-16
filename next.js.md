@@ -839,3 +839,46 @@ In this chapter, you learned how to use Server Actions to mutate data. You also 
 
 You can also read more about [security with Server Actions](https://nextjs.org/blog/security-nextjs-server-components-actions) for additional learning.
 
+## Handling Errors
+
+In the previous chapter, you learned how to mutate data using Server Actions. Let's see how you can handle errors gracefully using JavaScript's `try/catch` statements and Next.js APIs.
+
+- How to use the special error.tsx file to catch errors in your route segments, and show a fallback UI to the user.
+- How to use the notFound function and not-found file to handle 404 errors (for resources that don’t exist).
+
+
+Note how redirect is being called outside of the try/catch block. This is because redirect works by throwing an error, which would be caught by the catch block. To avoid this, you can call redirect after try/catch. redirect would only be reachable if try is successful.
+
+Now, let's check what happens when an error is thrown in your Server Action. You can do this by throwing an error earlier. For example, in the deleteInvoice action, throw an error at the top of the function:
+
+重定向用throw error工作
+别放try catch块里面
+
+### Handling all errors with error.tsx
+
+There are a few things you'll notice about the code above:
+
+- "use client" - `error.tsx` needs to be a Client Component.
+- It accepts two props:
+  - error: This object is an instance of JavaScript's native [Error](https://nextjs.org/docs/app/api-reference/file-conventions/error) object.
+  - reset: This is a function to reset the error boundary. When executed, the function will try to re-render the route segment.
+  
+_很好奇左下角的提示_
+_[可能看native的Error那个有用](https://nextjs.org/docs/app/api-reference/file-conventions/error)_
+
+### Handling 404 errors with the notFound function
+
+`not-found.tsx`
+
+### Further reading
+
+To learn more about error handling in Next.js, check out the following documentation:
+
+- [Error Handling](https://nextjs.org/docs/app/building-your-application/routing/error-handling)
+- [error.js API Reference](https://nextjs.org/docs/app/api-reference/file-conventions/error)
+- [notFound() API Reference](https://nextjs.org/docs/app/api-reference/functions/not-found)
+- [not-found.js API Reference](https://nextjs.org/docs/app/api-reference/file-conventions/not-found)
+
+_都没读_
+
+

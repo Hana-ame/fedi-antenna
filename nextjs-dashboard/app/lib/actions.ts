@@ -26,11 +26,16 @@ export async function createInvoice(formData: FormData) {
   // Test it out:
   const amountInCents = amount * 100;
   const date = new Date().toISOString().split('T')[0];
-
-  await prisma.$executeRaw`
-    INSERT INTO invoices (customer_id, amount, status, date)
-    VALUES (uuid(${customerId}), ${amountInCents}, ${status}, date(${date}))
-  `;
+  try {
+    await prisma.$executeRaw`
+      INSERT INTO invoices (customer_id, amount, status, date)
+      VALUES (uuid(${customerId}), ${amountInCents}, ${status}, date(${date}))
+    `;
+  } catch (error) {
+    return {
+      message: 'Database Error: Failed to Create Invoice.',
+    };
+  }
 
   revalidatePath('/dashboard/invoices'); 
   redirect('/dashboard/invoices');
@@ -44,18 +49,29 @@ export async function updateInvoice(id: string, formData: FormData) {
   });
  
   const amountInCents = amount * 100;
- 
-  await prisma.$executeRaw`
-    UPDATE invoices
-    SET customer_id = uuid(${customerId}), amount = ${amountInCents}, status = ${status}
-    WHERE id = uuid(${id})
-  `;
+  try {
+    await prisma.$executeRaw`
+      UPDATE invoices
+      SET customer_id = uuid(${customerId}), amount = ${amountInCents}, status = ${status}
+      WHERE id = uuid(${id})
+    `;
+  } catch (error) {
+    return {
+      message: 'Database Error: Failed to Update Invoice.',
+    };
+  }
  
   revalidatePath('/dashboard/invoices');
   redirect('/dashboard/invoices');
 }
 
 export async function deleteInvoice(id: string) {
-  await prisma.$executeRaw`DELETE FROM invoices WHERE id = uuid(${id})`;
+  throw new Error('Failed to Delete Invoice');
+
+  try {
+    await prisma.$executeRaw`DELETE FROM invoices WHERE id = uuid(${id})`;
+  } catch (error) {
+    return { message: 'Database Error: Failed to Delete Invoice.' };
+  }
   revalidatePath('/dashboard/invoices');
 }
