@@ -2,6 +2,7 @@
 
 ```sql
 select * from pg_stat_activity;
+select COUNT(*) from pg_stat_activity;
 ```
 
 ```sql

@@ -723,3 +723,119 @@ _返回的东西是渲染好的_
 _啥啊。_
 _(上面那个结论不一定对的)_
 
+## Mutating Data
+
+- What React Server Actions are and how to use them to mutate data.
+- How to work with forms and Server Components.
+- Best practices for working with the native formData object, including type validation.
+- How to revalidate the client cache using the revalidatePath API.
+- How to create dynamic route segments with specific IDs.
+- How to use the React’s useFormStatus hook for optimistic updates.
+
+### What are Server Actions?
+
+直接用server component就不用搓api啦
+
+安全滴很
+
+### Using forms with Server Actions
+
+客户端关掉js也能工作
+
+### Creating an invoice
+
+Here are the steps you'll take to create a new invoice:
+
+- Create a form to capture the user's input.
+- Create a Server Action and invoke it from the form.
+- Inside your Server Action, extract the data from the formData object.
+- Validate and prepare the data to be inserted into your database.
+- Insert the data and handle any errors.
+- Revalidate the cache and redirect the user back to invoices page.
+
+我肯定要用api的
+
+#### 1. Create a new route and form
+
+#### 2. Create a Server Action
+
+Your page is a Server Component that fetches customers and passes it to the `<Form>` component. To save time, we've already created the `<Form>` component for you.
+
+> Good to know: In HTML, you'd pass a URL to the action attribute. This URL would be the destination where your form data should be submitted (usually an API endpoint).
+> However, in React, the action attribute is considered a special prop - meaning React builds on top of it to allow actions to be invoked.
+> Behind the scenes, Server Actions create a POST API endpoint. This is why you don't need to create API endpoints manually when using Server Actions.
+
+#### 3. Extract the data from formData
+
+https://developer.mozilla.org/en-US/docs/Web/API/FormData/get
+
+#### 4. Validate and prepare the data
+
+**zod会返回错误如果输入有毛病**
+
+#### 5. Inserting the data into your database
+
+#### 6. Revalidate and redirect
+
+消除缓存
+
+`revalidatePath('/dashboard/invoices');`
+
+**prisma需要插入的时候加入`uuid()`, `date()`不知道为什么**
+
+### Updating an invoice
+
+The updating invoice form is similar to the create an invoice form, except you'll need to pass the invoice id to update the record in your database. Let's see how you can get and pass the invoice id.
+
+These are the steps you'll take to update an invoice:
+
+- Create a new dynamic route segment with the invoice id.
+- Read the invoice id from the page params.
+- Fetch the specific invoice from your database.
+- Pre-populate the form with the invoice data.
+- Update the invoice data in your database.
+  
+#### 1. Create a Dynamic Route Segment with the invoice `id`
+
+建立路径
+导到路径
+
+#### 2. Read the invoice id from page params
+
+```tsx
+// ...
+
+export default async function Page({ params }: { params: { id: string } }) {
+  const id = params.id;
+  // ...
+}
+```
+
+#### 3. Fetch the specific invoice
+
+#### 4. Pass the id to the Server Action
+
+```tsx
+// Passing an id as argument won't work
+<form action={updateInvoice(id)}>
+```
+
+_可能是组件更新范围的问题?_
+_都不是function啊_
+
+### Deleting an invoice
+
+Since this action is being called in the /dashboard/invoices path, you don't need to call redirect. Calling revalidatePath will trigger a new server request and re-render the table.
+
+```ts
+revalidatePath('/dashboard/invoices');
+```
+
+在这个目录会强制刷新
+
+### Further reading
+
+In this chapter, you learned how to use Server Actions to mutate data. You also learned how to use the `revalidatePath` API to revalidate the Next.js cache and `redirect` to redirect the user to a new page.
+
+You can also read more about [security with Server Actions](https://nextjs.org/blog/security-nextjs-server-components-actions) for additional learning.
+
