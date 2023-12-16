@@ -15,7 +15,7 @@ FROM
  pg_stat_activity
 WHERE
  datname = 
-'<TARGET_DB_NAME>'
+'mydb'
 AND
  leader_pid 
 IS NULL

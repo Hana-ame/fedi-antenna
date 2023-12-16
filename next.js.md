@@ -591,3 +591,135 @@ Note: To learn more about how Partial Prerendering can be configured, see the [P
 
 具体就是用Suspense。但为啥现在不是。
 没缓存嘛
+
+## Adding Search and Pagination
+
+- Learn how to use the Next.js APIs: `searchParams`, `usePathname`, and `useRouter`.
+- Implement search and pagination using URL search params.
+
+_对哦组件要怎么传出变量_
+
+### Why use URL search params?
+
+As mentioned above, you'll be using URL search params to manage the search state. This pattern may be new if you're used to doing it with client side state.
+
+是新模式。
+_client side state是啥_
+
+There are a couple of benefits of implementing search with URL params:
+- Bookmarkable and Shareable URLs: Since the search parameters are in the URL, users can bookmark the current state of the application, including their search queries and filters, for future reference or sharing.
+- Server-Side Rendering and Initial Load: URL parameters can be directly consumed on the server to render the initial state, making it easier to handle server rendering.
+- Analytics and Tracking: Having search queries and filters directly in the URL makes it easier to track user behavior without requiring additional client-side logic.
+
+- 可以加收藏夹和分享
+- SSR 和 初始加载：这个不懂
+- 追踪
+
+草怎么和自己写的一样啊。
+反正url里面有一切。param也在url里面传
+成了成了。啥都成了。不用组件往外传了。都在url里面。(兴奋)
+
+### Adding the search functionality
+
+These are the Next.js client hooks that you'll use to implement the search functionality:
+
+- `useSearchParams` - Allows you to access the parameters of the current URL. For example, the search params for this URL /dashboard/invoices?page=1&query=pending would look like this: `{page: '1', query: 'pending'}`.
+- `usePathname` - Lets you read the current URL's pathname. For example, for the route /dashboard/invoices, usePathname would return `/dashboard/invoices`.
+- `useRouter` - Enables navigation between routes within client components programmatically. There are [multiple methods](https://nextjs.org/docs/app/api-reference/functions/use-router#userouter) you can use.
+
+- params
+- paths
+- 就是导航和vue一样
+
+Here's a quick overview of the implementation steps:
+
+- Capture the user's input.
+- Update the URL with the search params.
+- Keep the URL in sync with the input field.
+- Update the table to reflect the search query.
+
+#### 1. Capture the user's input
+
+_喷了为什么这次在F12里面啊啊啊啊_
+
+_大概是use client_
+
+#### 2. Update the URL with the search params
+
+没api啊
+挺好的
+
+- ${pathname} is the current path, in your case, "/dashboard/invoices".
+- As the user types into the search bar, params.toString() translates this input into a URL-friendly format.
+- replace(${pathname}?${params.toString()}) updates the URL with the user's search data. For example, /dashboard/- invoices?query=lee if the user searches for "Lee".
+- The URL is updated without reloading the page, thanks to Next.js's client-side navigation (which you learned about - in the chapter on navigating between pages.
+
+#### 3. Keeping the URL and input in sync
+
+>`defaultValue` vs. `value` / Controlled vs. Uncontrolled
+>If you're using state to manage the value of an input, you'd use the value attribute to make it a controlled component. This means React would manage the input's state.
+>However, since you're not using state, you can use defaultValue. This means the native input will manage its own state. This is okay since you're saving the search query to the URL instead of state.
+
+_`defaultValue`跟`value`都是啥_
+
+#### 4. Updating the table
+
+修改input会导致刷新
+
+_page的searchParams哪里来的_
+
+When to use the useSearchParams() hook vs. the searchParams prop?
+
+You might have noticed you used two different ways to extract search params. Whether you use one or the other depends on whether you're working on the client or the server.
+
+> `<Search>` is a Client Component, so you used the useSearchParams() hook to access the params from the client.
+> `<Table>` is a Server Component that fetches its own data, so you can pass the searchParams prop from the page to the component.
+> As a general rule, if you want to read the params from the client, use the useSearchParams() hook as this avoids having to go back to the server.
+
+_服务端和客户端。传参会返回服务端_
+
+#### Best practice: Debouncing
+
+装就是了
+
+```sh
+npm i use-debounce
+```
+
+### Summary
+
+Congratulations! You've just implemented search and pagination using URL Params and Next.js APIs.
+
+To summarize, in this chapter:
+
+You've handled search and pagination with URL search parameters instead of client state.
+You've fetched data on the server.
+You're using the useRouter router hook for smoother, client-side transitions.
+These patterns are different from what you may be used to when working with client-side React, but hopefully, you now better understand the benefits of using URL search params and lifting this state to the server.
+
+_你他妈敢信。react慢是因为在用SSR_
+_返回的东西是渲染好的_
+```log
+0:[
+  "development",
+  [
+    [
+      "children",
+      "dashboard",
+      "children",
+      "invoices",
+      "children",
+      "__PAGE__?{\"query\":\"de\"}",
+      [
+        "__PAGE__?{\"query\":\"de\"}",
+        {}
+      ],
+      null,
+      null
+    ]
+  ]
+]
+```
+_啥啊。_
+_(上面那个结论不一定对的)_
+
