@@ -912,3 +912,48 @@ In the code above, you're also adding the following aria labels:
 ### [Practice: Adding aria labels](https://nextjs.org/learn/dashboard-app/improving-accessibility#practice-adding-aria-labels)
 
 没做
+
+## Adding Authentication
+
+- What is authentication.
+- How to add authentication to your app using NextAuth.js.
+- How to use Middleware to redirect users and protect your routes.
+- How to use React's useFormStatus and useFormState to handle pending states and form errors.
+
+中间件
+
+### What is authentication?
+
+Authentication is a key part of many web applications today. It's how a system checks if the user is who they say they are.
+
+A secure website often uses multiple ways to check a user's identity. For instance, after entering your username and password, the site may send a verification code to your device or use an external app like Google Authenticator. This 2-factor authentication (2FA) helps increase security. Even if someone learns your password, they can't access your account without your unique token.
+
+#### Authentication vs. Authorization
+
+In web development, authentication and authorization serve different roles:
+
+- Authentication is about making sure the user is who they say they are. You're proving your identity with something you have like a username and password.
+- Authorization is the next step. Once a user's identity is confirmed, authorization decides what parts of the application they are allowed to use.
+
+So, authentication checks who you are, and authorization determines what you can do or access in the application.
+
+### [Creating the login route](https://nextjs.org/learn/dashboard-app/adding-authentication#creating-the-login-route)
+
+### [NextAuth.js](https://nextjs.org/learn/dashboard-app/adding-authentication#nextauthjs)
+
+We will be using [NextAuth.js](https://nextjs.authjs.dev/) to add authentication to your application. NextAuth.js abstracts away much of the complexity involved in managing sessions, sign-in and sign-out, and other aspects of authentication. While you can manually implement these features, the process can be time-consuming and error-prone. NextAuth.js simplifies the process, providing a unified solution for auth in Next.js applications.
+
+### [Setting up NextAuth.js](https://nextjs.org/learn/dashboard-app/adding-authentication#setting-up-nextauthjs)
+
+#### [Adding the pages option](https://nextjs.org/learn/dashboard-app/adding-authentication#adding-the-pages-option)
+
+### [Protecting your routes with Next.js Middleware](https://nextjs.org/learn/dashboard-app/adding-authentication#protecting-your-routes-with-nextjs-middleware)
+
+#### [Password hashing](https://nextjs.org/learn/dashboard-app/adding-authentication#password-hashing)
+
+#### [Adding the Credentials provider](https://nextjs.org/learn/dashboard-app/adding-authentication#adding-the-credentials-provider)
+
+#### [Adding the sign in functionality](https://nextjs.org/learn/dashboard-app/adding-authentication#adding-the-sign-in-functionality)
+
+完了跑不起来
+回头看看middleware怎么设置的为啥跑不起来
