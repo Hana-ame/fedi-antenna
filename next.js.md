@@ -579,3 +579,15 @@ _啥意思_
 Streaming and Server Components give us new ways to handle data fetching and loading states, ultimately with the goal of improving the end user experience.
 
 In the next chapter, you'll learn about Partial Prerendering, a new Next.js rendering model built with streaming in mind.
+
+## Partial Prerendering (Optional)
+
+> Partial Prerendering is an experimental feature introduced in Next.js 14. The content of this page may be updated as the feature progresses in stability. You may want to skip this chapter if you prefer to not use experimental features. This chapter is not required to complete the course.
+
+- What Partial Prerendering is.
+- How Partial Prerendering works.
+
+Note: To learn more about how Partial Prerendering can be configured, see the [Partial Prerendering (experimental) documentation](https://nextjs.org/docs/app/api-reference/next-config-js/partial-prerendering) or try the [Partial Prerendering template and demo](https://vercel.com/templates/next.js/partial-prerendering-nextjs). It's important to note that this feature is experimental and not yet ready for production deployment.
+
+具体就是用Suspense。但为啥现在不是。
+没缓存嘛
