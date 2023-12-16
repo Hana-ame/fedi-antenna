@@ -14,6 +14,7 @@ import {
 import { formatCurrency } from './utils';
 
 export async function fetchRevenue() {
+
   // Add noStore() here prevent the response from being cached.
   // This is equivalent to in fetch(..., {cache: 'no-store'}).
   noStore()
@@ -37,7 +38,11 @@ export async function fetchRevenue() {
 }
 
 export async function fetchLatestInvoices() {
+
   noStore()
+
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+
   try {
     const data = await prisma.$queryRaw<LatestInvoiceRaw[]>`
       SELECT invoices.amount, customers.name, customers.image_url, customers.email, invoices.id

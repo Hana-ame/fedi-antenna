@@ -483,3 +483,99 @@ _`noCache()`是啥_
 
 会卡在加载的时候
 
+## Streaming
+
+In the previous chapter, you made your dashboard page dynamic, however, we discussed how the slow data fetches can impact the performance of your application. Let's look at how you can improve the user experience when there are slow data requests.
+
+草所以`noCache()`是不要编译进去的意思啊。
+_所以server side和client side怎么分的_
+
+- What streaming is and when you might use it.
+- How to implement streaming with loading.tsx and Suspense.
+- What loading skeletons are.
+- What route groups are, and when you might use them.
+- Where to place Suspense boundaries in your application.
+
+### What is streaming?
+
+Streaming is a data transfer technique that allows you to break down a route into smaller "chunks" and progressively stream them from the server to the client as they become ready.
+
+![Diagram showing time with sequential data fetching and parallel data fetching](https://nextjs.org/_next/image?url=%2Flearn%2Fdark%2Fserver-rendering-with-streaming.png&w=3840&q=75&dpl=dpl_BbSpPdzv9Yrsi74LnqWRCSDNSUNs)
+
+By streaming, you can prevent slow data requests from blocking your whole page. This allows the user to see and interact with parts of the page without waiting for all the data to load before any UI can be shown to the user.
+
+![Diagram showing time with sequential data fetching and parallel data fetching](https://nextjs.org/_next/image?url=%2Flearn%2Fdark%2Fserver-rendering-with-streaming-chart.png&w=3840&q=75&dpl=dpl_BbSpPdzv9Yrsi74LnqWRCSDNSUNs)
+
+Streaming works well with React's component model, as each component can be considered a chunk.
+
+There are two ways you implement streaming in Next.js:
+
+- At the page level, with the `loading.tsx` file.
+- For specific components, with `<Suspense>`.
+Let's see how this works.
+
+### Streaming a whole page with `loading.tsx`
+
+怎么这样的。
+
+- 先返回`loading.tsx`
+- 等待`page.tsx`加载完成
+- 返回`page.tsx`
+
+A few things are happening here:
+
+loading.tsx is a special Next.js file built on top of Suspense, it allows you to create fallback UI to show as a replacement while page content loads.
+- Since <Sidebar> is static, so it's shown immediately. The user can interact with <Sidebar> while the dynamic content is loading.
+- The user doesn't have to wait for the page to finish loading before navigating away (this is called interruptable navigation).
+- Congratulations! You've just implemented streaming. But we can do more to improve the user experience. Let's show a loading skeleton instead of the Loading… text.
+
+#### Adding loading skeletons
+
+改`loading.tsx`
+
+挺好看的
+
+#### Fixing the loading skeleton bug with route groups
+
+有啥错
+
+Right now, your loading skeleton will apply to the invoices and customers pages as well.
+
+下面都能用的。
+_这个规则对`page.tsx`和`layout.tsx`是怎么工作的来着。。。_
+
+Since loading.tsx is a level higher than `/invoices/page.tsx` and `/customers/page.tsx` in the file system, it's also applied to those pages.
+
+We can change this with [Route Groups](https://nextjs.org/docs/app/building-your-application/routing/route-groups). Create a new folder called `/(overview)` inside the dashboard folder. Then, move your `loading.tsx` and `page.tsx` files inside the folder:
+
+**在`./(overview)`文件夹下的`loading.tsx`, `page.tsx`只对当前目录有效果(对子目录没效果)**
+
+_修改了。next下面的page。ts_
+
+Here, you're using a route group to ensure loading.tsx only applies to your dashboard overview page. However, you can also use route groups to separate your application into sections (e.g. (marketing) routes and (shop) routes) or by teams for larger applications.
+
+_啥意思_
+
+#### Streaming a component
+
+绷。你管这叫streaming。
+好吧你说了算
+
+难绷
+和自己悟出来的思路差不多
+
+### Grouping components
+
+为啥不好看
+我觉得挺好看
+：你觉得。。
+
+### Deciding where to place your Suspense boundaries
+
+爱咋用咋用
+
+### Looking ahead
+
+Streaming and Server Components give us new ways to handle data fetching and loading states, ultimately with the goal of improving the end user experience.
+
+In the next chapter, you'll learn about Partial Prerendering, a new Next.js rendering model built with streaming in mind.
