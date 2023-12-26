@@ -2,6 +2,43 @@
 
 心血来潮的能够加入Fediverse的单人实例
 
+webfinger
+
+activitypub
+
+(moonchan-api)
+
+mastodon
+
+都是企图自治的
+
+都是
+
+main
+
+controller
+
+core(optional, 需要调用其他数据的时候) 
+
+dao
+
+目录seemslike
+
+main.go
+```
+
+webfinger
+  controller
+  dao
+activitypub
+  controller
+  dao
+core
+  dao
+  helperfunction
+```
+
+有空把其他的文件都整合一下，现在不看。
 ## params
 
 |variable||
