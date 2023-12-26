@@ -1,3 +1,7 @@
+加入submodule需要删掉go.mod go.sum 然后修改import的path
+
+git submodule add -b back/webfinger/dev -f  git@github.com:Hana-ame/fedi-antenna.git webfinger
+
 # fedi-antenna
 
 心血来潮的能够加入Fediverse的单人实例
