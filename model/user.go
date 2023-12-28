@@ -47,8 +47,8 @@ type User struct {
 	// not sure it's possibe the emojis
 	Attachment []any `json:"attachment" gorm:"-"` // todo
 
-	SharedInbox string `json:"sharedInbox,omitempty"`
-	Endpoint *Endpoints `json:"endpoints" gorm:"-"`
+	SharedInbox string     `json:"sharedInbox,omitempty"`
+	Endpoint    *Endpoints `json:"endpoints" gorm:"-"`
 
 	// the url of Image
 	IconURL string `json:"-"`
@@ -122,17 +122,22 @@ func NewUser(name, host string) *User {
 	}
 }
 
-func (user *User) Patch() {
-	name, host := utils.ParseNameAndHost(user.ID)
-	user.Context = UserContext
-	user.Type = "Person"
-	user.Following = user.ID + "/following"
-	user.Followers = user.ID + "/followers"
-	user.Inbox = user.ID + "/inbox"
-	user.Outbox = user.ID + "/outbox"
-	user.Featured = user.ID + "/collections/featured"
-	user.FeaturedTags = user.ID + "/collections/tags"
-	user.URL = utils.ParseProfileUrl(name, host)
-	user.Devices = user.ID + "/collections/devices"
-	user.Endpoint = UserEndpoint(host)
+func (o *User) Autofill() {
+	name, host := utils.ParseNameAndHost(o.ID)
+	o.Context = UserContext
+	o.Type = "Person"
+	o.Following = o.ID + "/following"
+	o.Followers = o.ID + "/followers"
+	o.Inbox = o.ID + "/inbox"
+	o.Outbox = o.ID + "/outbox"
+	o.Featured = o.ID + "/collections/featured"
+	o.FeaturedTags = o.ID + "/collections/tags"
+	o.URL = utils.ParseProfileUrl(name, host)
+	o.Devices = o.ID + "/collections/devices"
+	o.Endpoint = UserEndpoint(host)
+}
+
+type IDType struct {
+	ID   string `json:"@id"`
+	Type string `json:"@type"`
 }
