@@ -1,3 +1,4 @@
 *.db
 
 fedi-antenna
+__debug_bin*
