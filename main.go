@@ -1,25 +1,20 @@
 package main
 
 import (
-	"net/http"
+	"log"
 
-	"github.com/Hana-ame/fedi-antenna/webfinger/actions"
-	"github.com/Hana-ame/fedi-antenna/webfinger/controller"
+	"github.com/Hana-ame/fedi-antenna/webfinger"
 	"github.com/gin-gonic/gin"
 )
-
-func Register(r *gin.Engine) {
-	r.GET("/webfinger", controller.Webfinger)
-}
 
 func main() {
 	r := gin.Default()
 
-	r.GET("/", func(c *gin.Context) {
-		c.String(http.StatusOK, "hello world")
-	})
+	webfinger.RegistPath(r)
 
-	actions.FetchWebfingerByAcct("")
+	id, err := webfinger.GetUserIdFromAcct("meromero@p1.a9z.dev")
+	log.Println(id)
+	log.Println(err)
 
-	r.Run()
+	r.Run("0.0.0.0:8080")
 }

@@ -1,5 +1,7 @@
 github.com/Hana-ame/orderedmap v0.0.0-20231210055214-0cb8a5beb203 h1:SzCAN2/RfyMNqzevRgVjQqXln+GZyEzAqO1vviI37Fo=
 github.com/Hana-ame/orderedmap v0.0.0-20231210055214-0cb8a5beb203/go.mod h1:5Ci6u/9vIB0jiJx714F1Keybe9W4nYa5MDeX+bcJs2o=
+github.com/Hana-ame/orderedmap v0.0.0-20231228012716-ef1718f07fc8 h1:9fjsn7ly91RAgT+kiA2H72453WGBpkdN9+dnnckTG9U=
+github.com/Hana-ame/orderedmap v0.0.0-20231228012716-ef1718f07fc8/go.mod h1:5Ci6u/9vIB0jiJx714F1Keybe9W4nYa5MDeX+bcJs2o=
 github.com/bytedance/sonic v1.5.0/go.mod h1:ED5hyg4y6t3/9Ku1R6dU/4KyJ48DZ4jPhfY1O2AihPM=
 github.com/bytedance/sonic v1.9.1 h1:6iJ6NqdoxCDr6mbY8h18oSO+cShGSMRGCEo7F2h0x8s=
 github.com/bytedance/sonic v1.9.1/go.mod h1:i736AoUSYt75HyZLoJW9ERYxcy6eaN6h4BZXU064P/U=

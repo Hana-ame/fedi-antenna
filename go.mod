@@ -5,7 +5,7 @@ go 1.20
 require github.com/gin-gonic/gin v1.9.1
 
 require (
-	github.com/Hana-ame/orderedmap v0.0.0-20231210055214-0cb8a5beb203 // indirect
+	github.com/Hana-ame/orderedmap v0.0.0-20231228012716-ef1718f07fc8 // indirect
 	github.com/bytedance/sonic v1.9.1 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
