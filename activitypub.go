@@ -16,8 +16,8 @@ func RegistPath(r *gin.Engine) {
 	// // https://mstdn.jp/users/meromero/statuses/110734394957749061
 	// r.GET("/users/:name/statuses/:id", controller.UsersStatuses)
 	// // s2s recv
-	// r.POST("/users/:name/inbox", controller.UsersInbox) // inbox, only on POST?
-	// r.POST("/inbox", controller.Inbox)                  // inbox
+	r.POST("/users/:name/inbox", controller.UsersInbox) // inbox, only on POST?
+	r.POST("/inbox", controller.Inbox)                  // inbox
 }
 
 var ()

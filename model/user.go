@@ -11,12 +11,12 @@ type User struct {
 	// fixed "Person"
 	Type string `json:"type" gorm:"-"`
 
-	Following    string `json:"following" gorm:"-"`
-	Followers    string `json:"followers" gorm:"-"`
-	Inbox        string `json:"inbox" gorm:"-"`
-	Outbox       string `json:"outbox" gorm:"-"`
-	Featured     string `json:"featured" gorm:"-"`
-	FeaturedTags string `json:"featuredTags" gorm:"-"`
+	Following    string `json:"following"`
+	Followers    string `json:"followers"`
+	Inbox        string `json:"inbox"`
+	Outbox       string `json:"outbox"`
+	Featured     string `json:"featured"`
+	FeaturedTags string `json:"featuredTags"`
 
 	// without @host
 	PreferredUsername string `json:"preferredUsername" gorm:"type:text collate nocase"`
@@ -45,8 +45,9 @@ type User struct {
 
 	// what is the type?
 	// not sure it's possibe the emojis
-	Attachment []any `json:"attachment" gorm:"-"`
+	Attachment []any `json:"attachment" gorm:"-"` // todo
 
+	SharedInbox string `json:"sharedInbox,omitempty"`
 	Endpoint *Endpoints `json:"endpoints" gorm:"-"`
 
 	// the url of Image
