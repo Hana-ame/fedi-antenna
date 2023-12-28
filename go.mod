@@ -4,7 +4,11 @@ go 1.20
 
 require github.com/gin-gonic/gin v1.9.1
 
-require github.com/go-fed/httpsig v1.1.0 // indirect
+require (
+	github.com/Hana-ame/httpsig v1.2.1 // indirect
+	github.com/go-fed/httpsig v1.1.0 // indirect
+	github.com/google/uuid v1.5.0 // indirect
+)
 
 require (
 	github.com/Hana-ame/orderedmap v0.0.0-20231228012716-ef1718f07fc8 // indirect

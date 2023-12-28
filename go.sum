@@ -1,3 +1,5 @@
+github.com/Hana-ame/httpsig v1.2.1 h1:g2D6fOuZoJuPKHwG3gkP4/dUr1gAujvzdtu3lmiatNM=
+github.com/Hana-ame/httpsig v1.2.1/go.mod h1:OiSkOEpZ+nno0DLX83V8BscQRhDT7p8x7bk/vlZM9MA=
 github.com/Hana-ame/orderedmap v0.0.0-20231228012716-ef1718f07fc8 h1:9fjsn7ly91RAgT+kiA2H72453WGBpkdN9+dnnckTG9U=
 github.com/Hana-ame/orderedmap v0.0.0-20231228012716-ef1718f07fc8/go.mod h1:5Ci6u/9vIB0jiJx714F1Keybe9W4nYa5MDeX+bcJs2o=
 github.com/bytedance/sonic v1.5.0/go.mod h1:ED5hyg4y6t3/9Ku1R6dU/4KyJ48DZ4jPhfY1O2AihPM=
@@ -30,6 +32,8 @@ github.com/golang/protobuf v1.5.0/go.mod h1:FsONVRAS9T7sI+LIUmWTfcYkHO4aIWwzhcaS
 github.com/google/go-cmp v0.5.5 h1:Khx7svrCpmxxtHBq5j2mp/xVjsi8hQMfNLvJFAlrGgU=
 github.com/google/go-cmp v0.5.5/go.mod h1:v8dTdLbMG2kIc/vJvl+f65V22dbkXbowE6jgT/gNBxE=
 github.com/google/gofuzz v1.0.0/go.mod h1:dBl0BpW6vV/+mYPU4Po3pmUjxk6FQPldtuIdl/M65Eg=
+github.com/google/uuid v1.5.0 h1:1p67kYwdtXjb0gL0BPiP1Av9wiZPo5A8z2cWkTZ+eyU=
+github.com/google/uuid v1.5.0/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/jinzhu/inflection v1.0.0 h1:K317FqzuhWc8YvSVlFMCCUb36O/S9MCKRDI7QkRKD/E=
 github.com/jinzhu/inflection v1.0.0/go.mod h1:h+uFLlag+Qp1Va5pdKtLDYj+kHp5pxUVkryuEj+Srlc=
 github.com/jinzhu/now v1.1.5 h1:/o9tlHleP7gOFmsnYNz3RGnqzefHA47wQpKrrdTIwXQ=
