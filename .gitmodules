@@ -2,3 +2,7 @@
 	path = Tools
 	url = https://github.com/Hana-ame/Tools.git
 	branch = go
+[submodule "webfinger"]
+	path = webfinger
+	url = git@github.com:Hana-ame/fedi-antenna.git
+	branch = back/webfinger
