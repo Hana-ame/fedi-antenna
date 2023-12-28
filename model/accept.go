@@ -15,7 +15,7 @@ var AcceptContext = "https://www.w3.org/ns/activitystreams"
 
 func (o *Accept) Autofill() {
 	o.Context = AcceptContext
-	o.Type = "Accpet"
+	o.Type = "Accept"
 	o.Actor = o.Object.GetObject()
 	o.ObjectID = o.Object.GetID()
 	o.Object.ClearContext()
