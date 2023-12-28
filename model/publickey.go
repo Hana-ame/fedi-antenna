@@ -2,15 +2,6 @@ package model
 
 import "github.com/Hana-ame/fedi-antenna/core/utils"
 
-type Signature struct {
-	Type    string `json:"type"`
-	Creator string `json:"creator"`
-
-	// TimestampToRFC3339
-	Created        string `json:"created"`
-	SignatureValue string `json:"signatureValue"`
-}
-
 type PublicKey struct {
 	ID string `json:"id"`
 

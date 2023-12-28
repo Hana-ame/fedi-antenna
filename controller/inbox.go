@@ -7,7 +7,7 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/Hana-ame/fedi-antenna/core"
+	core "github.com/Hana-ame/fedi-antenna/core/handler"
 	"github.com/Hana-ame/fedi-antenna/core/sign"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 	"github.com/Hana-ame/orderedmap"
@@ -29,7 +29,7 @@ func UsersInbox(c *gin.Context) {
 	b, _ = json.Marshal(o)
 	log.Println(string(b))
 
-	// verify 
+	// verify
 	if err := sign.Verify(c.Request); err != nil {
 		log.Println(err)
 		return
@@ -39,7 +39,7 @@ func UsersInbox(c *gin.Context) {
 	encoded := base64.StdEncoding.EncodeToString([]byte(sha256[:]))
 	if digest != encoded {
 		log.Println("digest != encoded")
-		return 
+		return
 	}
 	// end of verify
 
