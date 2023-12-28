@@ -13,4 +13,5 @@ func RegistPath(r *gin.Engine) {
 var (
 	// methods
 	FetchWebfingerByAcct = actions.FetchWebfingerByAcct
+	GetUserIdFromAcct    = actions.GetUserIdFromAcct
 )
