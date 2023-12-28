@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"github.com/Hana-ame/fedi-antenna/core"
+	core "github.com/Hana-ame/fedi-antenna/core/handler"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 
 	"github.com/Hana-ame/fedi-antenna/webfinger/model"
