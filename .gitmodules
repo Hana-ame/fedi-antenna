@@ -10,3 +10,7 @@
 	path = core
 	url = git@github.com:Hana-ame/fedi-antenna.git
 	branch = back/core
+[submodule "activitypub"]
+	path = activitypub
+	url = git@github.com:Hana-ame/fedi-antenna.git
+	branch = back/activitypub
