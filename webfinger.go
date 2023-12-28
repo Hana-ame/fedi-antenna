@@ -1,5 +1,5 @@
 package core
 
-func IsAccountExist(acct string) bool {
+func IsAccountExist(acct, host string) bool {
 	return true // mock
 }
