@@ -3,6 +3,8 @@ package utils
 import (
 	"log"
 	"strings"
+
+	"github.com/Hana-ame/orderedmap"
 )
 
 // parse
@@ -38,4 +40,30 @@ func ParseAcctStr(user, host string) (acct string) {
 // "meromero", "p1.a9z.dev"	=> "https://p1.a9z.dev/.well-known/webfinger?resource=acct:meromero@p1.a9z.dev"
 func ParseWebfingerUrl(username, host string) string {
 	return `https://` + host + `/.well-known/webfinger?resource=acct:` + username + `@` + host
+}
+
+// Parse UserId from webfinger
+func ParseUserId(webfingerObj *orderedmap.OrderedMap) string {
+	if links, ok := webfingerObj.Get("links"); !ok {
+		return ""
+	} else {
+		if arr, ok := links.([]any); !ok {
+			return ""
+		} else {
+			for _, li := range arr {
+				if lo, ok := li.(orderedmap.OrderedMap); ok {
+					key, ok := lo.Get("rel")
+					if ok && key == "self" {
+						id, ok := lo.Get("href")
+						if !ok {
+							return ""
+						} else {
+							return id.(string)
+						}
+					}
+				}
+			}
+		}
+	}
+	return "" // never
 }
