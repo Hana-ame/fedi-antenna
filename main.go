@@ -3,8 +3,8 @@ package main
 import (
 	"net/http"
 
-	"github.com/Hana-ame/fedi-antenna/actions"
-	"github.com/Hana-ame/fedi-antenna/controller"
+	"github.com/Hana-ame/fedi-antenna/webfinger/actions"
+	"github.com/Hana-ame/fedi-antenna/webfinger/controller"
 	"github.com/gin-gonic/gin"
 )
 
