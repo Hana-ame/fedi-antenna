@@ -58,6 +58,9 @@ func (o *Undo) GetType() string {
 	return o.Type
 }
 
+func (o *Undo) GetActor() string {
+	return o.Object.GetActor()
+}
 func (o *Undo) GetObject() string {
 	return o.Object.GetObject()
 }
