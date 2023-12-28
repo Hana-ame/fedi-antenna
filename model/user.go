@@ -3,7 +3,7 @@ package model
 import "github.com/Hana-ame/fedi-antenna/core/utils"
 
 type User struct {
-	Context []any `json:"@context" gorm:"-"`
+	Context any `json:"@context,omitempty" gorm:"-"`
 
 	// it is a url
 	ID string `json:"id" gorm:"primarykey"`
@@ -37,11 +37,11 @@ type User struct {
 	Published string `json:"published"`
 
 	// also a url
-	Devices string `json:"devices"`
+	Devices     string     `json:"devices"`
+	AlsoKnownAs []string   `json:"alsoKnownAs,omitempty" gorm:"serializer:json"`
+	PublicKey   *PublicKey `json:"publicKey" gorm:"foreignKey:Owner;references:ID"`
 
-	PublicKey *PublicKey `json:"publicKey" gorm:"foreignKey:Owner;references:ID"`
-
-	Tag []string `json:"tag" gorm:"-"` // todo
+	Tag []*Tag `json:"tag" gorm:"-"` // todo
 
 	// what is the type?
 	// not sure it's possibe the emojis

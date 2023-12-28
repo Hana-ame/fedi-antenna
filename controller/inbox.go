@@ -8,7 +8,6 @@ import (
 	"net/http"
 
 	core "github.com/Hana-ame/fedi-antenna/core/handler"
-	"github.com/Hana-ame/fedi-antenna/core/sign"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 	"github.com/Hana-ame/orderedmap"
 	"github.com/gin-gonic/gin"
@@ -30,7 +29,7 @@ func UsersInbox(c *gin.Context) {
 	log.Println(string(b))
 
 	// verify
-	if err := sign.Verify(c.Request); err != nil {
+	if err := Verify(c.Request); err != nil {
 		log.Println(err)
 		return
 	}
@@ -45,7 +44,7 @@ func UsersInbox(c *gin.Context) {
 
 	core.Inbox(b, name)
 
-	c.JSON(http.StatusNotImplemented, gin.H{"error": "StatusNotImplemented"})
+	c.JSON(http.StatusAccepted, gin.H{"error": "StatusNotImplemented"})
 
 }
 
@@ -62,7 +61,7 @@ func Inbox(c *gin.Context) {
 	b, _ = json.Marshal(o)
 	log.Println(string(b))
 
-	if err := sign.Verify(c.Request); err != nil {
+	if err := Verify(c.Request); err != nil {
 		log.Println(err)
 	}
 

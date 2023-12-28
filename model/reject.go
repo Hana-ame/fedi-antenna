@@ -2,17 +2,18 @@ package model
 
 import "github.com/Hana-ame/fedi-antenna/core/utils"
 
-type Block struct {
+type Reject struct {
 	Context any    `json:"@context,omitempty" gorm:"-"`
-	ID      string `json:"id" gorm:"primarykey"`
 	Type    string `json:"type" gorm:"-"`
+	Actor   string `json:"actor"`
 
-	// activitypub ID / url
-	Actor  string `json:"actor"`
-	Object string `json:"object"`
+	ObjectID string   `json:"-"`
+	Object   Sendable `json:"object" gorm:"foreignKey:ObjectID;references:ID"`
+
+	ID string `json:"id" gorm:"primarykey"`
 }
 
-var BlockContext = []any{
+var RejectContext = []any{
 	"https://www.w3.org/ns/activitystreams",
 	"https://w3id.org/security/v1",
 	utils.NewMapFromKV([]*utils.KV{
@@ -38,27 +39,9 @@ var BlockContext = []any{
 	}),
 }
 
-func (o *Block) Autofill() {
-	o.Context = BlockContext
-	o.Type = "Block"
-}
-
-func (o *Block) GetID() string {
-	return o.ID
-}
-
-func (o *Block) GetType() string {
-	return o.Type
-}
-
-func (o *Block) GetActor() string {
-	return o.Actor
-}
-
-func (o *Block) GetObject() string {
-	return o.Object
-}
-
-func (o *Block) ClearContext() {
-	o.Context = nil
+func (o *Reject) Autofill() {
+	o.Context = RejectContext
+	o.Type = "Reject"
+	o.Actor = o.Object.GetObject()
+	o.ObjectID = o.Object.GetID()
 }

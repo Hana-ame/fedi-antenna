@@ -3,12 +3,13 @@ package model
 import "github.com/Hana-ame/fedi-antenna/core/utils"
 
 type Follow struct {
-	Context []any  `json:"@context" gorm:"-"`
+	Context any    `json:"@context,omitempty" gorm:"-"`
 	ID      string `json:"id" gorm:"primarykey"`
 	Type    string `json:"type" gorm:"-"`
 
 	// activitypub ID / url
-	Actor string `json:"Actor"`
+	Actor  string `json:"actor"`
+	Object string `json:"object"`
 }
 
 var FollowContext = []any{
@@ -42,6 +43,22 @@ func (o *Follow) Autofill() {
 	o.Type = "Follow"
 }
 
-func (o *Follow) getID() string {
+func (o *Follow) GetID() string {
 	return o.ID
+}
+
+func (o *Follow) GetType() string {
+	return o.Type
+}
+
+func (o *Follow) GetActor() string {
+	return o.Actor
+}
+
+func (o *Follow) GetObject() string {
+	return o.Object
+}
+
+func (o *Follow) ClearContext() {
+	o.Context = nil
 }

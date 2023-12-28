@@ -7,10 +7,10 @@ import (
 	"github.com/Hana-ame/fedi-antenna/activitypub/model"
 )
 
-// fetch user by ID
+// fetch remote user by ID
 // ID is a valid url
 func FetchUserByID(id string) (user *model.User, err error) {
-	resp, err := fetch(http.MethodGet, id, nil, nil)
+	resp, err := Fetch(http.MethodGet, id, nil, nil)
 	if err != nil {
 		return
 	}

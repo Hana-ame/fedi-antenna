@@ -2,20 +2,15 @@ package model
 
 import "github.com/Hana-ame/fedi-antenna/core/utils"
 
-type Undoable interface {
-	getID() string
-	getActor() string // activitypub ID / url
-}
-
 // no need to save to db
 type Undo struct {
-	Context []any  `json:"@context" gorm:"-"`
+	Context any    `json:"@context,omitempty" gorm:"-"`
 	Type    string `json:"type" gorm:"-"`
 	ID      string `json:"id" gorm:"primarykey"`
 	Actor   string `json:"actor"`
 
 	ObjectID string   `json:"-"`
-	Object   Undoable `json:"object" gorm:"foreignKey:ObjectID;references:ID"`
+	Object   Sendable `json:"object" gorm:"-"`
 
 	// RFC
 	Published string `json:"pbulished"`
@@ -50,9 +45,19 @@ var UndoContext = []any{
 func (o *Undo) Autofill() {
 	o.Context = UndoContext
 	o.Type = "Undo"
-	o.Actor = o.Object.getActor()
-	o.ID = o.Object.getID() + "/undo"
+	o.ID = o.Object.GetID() + "/undo"
+	o.Actor = o.Object.GetActor()
+	o.ObjectID = o.Object.GetID()
 	if o.Published == "" {
 		o.Published = utils.MicroSecondToRFC3339(utils.Now())
 	}
+	o.Object.ClearContext()
+}
+
+func (o *Undo) GetType() string {
+	return o.Type
+}
+
+func (o *Undo) GetObject() string {
+	return o.Object.GetObject()
 }
