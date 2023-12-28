@@ -7,7 +7,7 @@ import (
 )
 
 func RegistPath(r *gin.Engine) {
-	r.GET("/webfinger", controller.Webfinger)
+	r.GET("/.well-known/webfinger", controller.Webfinger)
 }
 
 var (
