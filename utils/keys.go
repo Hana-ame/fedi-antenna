@@ -53,3 +53,23 @@ func MarshalPublicKey(publicKey *rsa.PublicKey) string {
 	)
 	return string(publicPem)
 }
+
+// parse pem string to public key
+func ParsePublicKey(publicKey string) (*rsa.PublicKey, error) {
+	block, _ := pem.Decode([]byte(publicKey))
+	pk, err := x509.ParsePKIXPublicKey(block.Bytes)
+	if err != nil {
+		return nil, err
+	}
+	return pk.(*rsa.PublicKey), nil
+}
+
+// parse pem string to private key
+func ParsePrivateKey(privateKey string) (*rsa.PrivateKey, error) {
+	block, _ := pem.Decode([]byte(privateKey))
+	pk, err := x509.ParsePKCS8PrivateKey(block.Bytes)
+	if err != nil {
+		return nil, err
+	}
+	return pk.(*rsa.PrivateKey), nil
+}
