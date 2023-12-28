@@ -2,6 +2,7 @@ package actions
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/Hana-ame/fedi-antenna/activitypub/actions"
@@ -48,6 +49,7 @@ func Follow(actor, object string) error {
 	}
 	_ = user
 	_ = resp // todo?
-
+	fmt.Printf("%s", body)
+	
 	return nil
 }

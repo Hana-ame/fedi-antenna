@@ -1,15 +1,15 @@
 package actions
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
-	"github.com/Hana-ame/fedi-antenna/Tools/myfetch"
 	"github.com/Hana-ame/fedi-antenna/activitypub/actions"
-	"github.com/Hana-ame/fedi-antenna/activitypub/model"
 	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
 	"github.com/Hana-ame/fedi-antenna/core"
 	"github.com/Hana-ame/fedi-antenna/core/dao"
+	"github.com/Hana-ame/fedi-antenna/core/utils"
 )
 
 func UndoFollow(actor, id string) error {
@@ -22,7 +22,8 @@ func UndoFollow(actor, id string) error {
 	if o.Actor != actor {
 		return fmt.Errorf("UndoFollow: %s != %s", o.Actor, actor)
 	}
-
+	o.Autofill()
+	o.ClearContext()
 	if err := Undo(o); err != nil {
 		return err
 	}
@@ -39,7 +40,8 @@ func UndoBlock(actor, id string) error {
 	if o.Actor != actor {
 		return fmt.Errorf("UndoBlock: %s != %s", o.Actor, actor)
 	}
-
+	o.Autofill()
+	o.ClearContext()
 	if err := Undo(o); err != nil {
 		return err
 	}
@@ -50,13 +52,14 @@ func UndoBlock(actor, id string) error {
 // all activitypub id url strings
 func Undo(object activitypub.Sendable) error {
 
-	o := &model.Undo{
+	o := &activitypub.Undo{
 		Object: object,
 	}
 	o.Autofill()
 	dao.Create(o)
+	// dao.Delete(object)
 
-	body, err := myfetch.BuildJsonReader(o)
+	body, err := json.Marshal(o)
 	if err != nil {
 		return err
 	}
@@ -65,12 +68,23 @@ func Undo(object activitypub.Sendable) error {
 	if err != nil {
 		return err
 	}
-	resp, err := actions.Fetch(http.MethodPost, user.Inbox, nil, body)
+	local, err := core.ReadActivitypubUserByID(o.GetActor())
+	if err != nil {
+		return err
+	}
+	pk, err := utils.ParsePrivateKey(local.PublicKey.PrivateKeyPem)
+	if err != nil {
+		return err
+	}
+	resp, err := actions.FetchWithSign(
+		pk, local.PublicKey.ID,
+		http.MethodPost, user.Inbox, nil, body,
+	)
 	if err != nil {
 		return err
 	}
 
 	_ = resp // todo?
-
+	fmt.Printf("%s", body)
 	return nil
 }
