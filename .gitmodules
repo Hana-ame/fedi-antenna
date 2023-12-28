@@ -6,3 +6,7 @@
 	path = webfinger
 	url = git@github.com:Hana-ame/fedi-antenna.git
 	branch = back/webfinger
+[submodule "core"]
+	path = core
+	url = git@github.com:Hana-ame/fedi-antenna.git
+	branch = back/core
