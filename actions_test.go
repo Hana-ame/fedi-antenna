@@ -10,9 +10,9 @@ import (
 
 // pass 231228
 func TestFollow(t *testing.T) {
+	fmt.Println("donotca1che")
 	actor := "https://fedi.moonchan.xyz/users/test1"
 	object := "https://p1.a9z.dev/users/9a3qtdtypj"
-	// object := "https://p1.a9z.dev/users/9a3qtdtypj"
 	err := actions.Follow(actor, object)
 	// log.Println(err)
 	_ = err
@@ -20,15 +20,22 @@ func TestFollow(t *testing.T) {
 
 func TestUndo(t *testing.T) {
 	actor := "https://fedi.moonchan.xyz/users/test1"
-	object := "https://fedi.moonchan.xyz/objects/follow/a15d7b20-c5c0-4f88-94a7-c42c75a9c7fa"
+	object := "https://fedi.moonchan.xyz/objects/follow/0f8de8f8-c199-45fc-bbcd-c08b843df7fe"
 	err := actions.UndoFollow(actor, object)
 	log.Println(err)
 }
 
 func TestAccept(t *testing.T) {
 	actor := "https://fedi.moonchan.xyz/users/test1"
-	object := "https://p1.a9z.dev/follows/9nt3kg7k4d"
+	object := "https://p1.a9z.dev/follows/9nt4sxsk4s"
 	fmt.Println(object)
 	err := actions.Accept(actor, object)
+	log.Println(err)
+}
+func TestReject(t *testing.T) {
+	actor := "https://fedi.moonchan.xyz/users/test1"
+	object := "https://p1.a9z.dev/follows/9nt4sxsk4s"
+	fmt.Println(object)
+	err := actions.Reject(actor, object)
 	log.Println(err)
 }
