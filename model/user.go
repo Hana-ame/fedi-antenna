@@ -8,13 +8,15 @@ type User struct {
 	// it is a url
 	ID string `json:"id" gorm:"primarykey"`
 
-	Type         string `json:"type"`
-	Following    string `json:"following"`
-	Followers    string `json:"followers"`
-	Inbox        string `json:"inbox"`
-	Outbox       string `json:"outbox"`
-	Featured     string `json:"featured"`
-	FeaturedTags string `json:"featuredTags"`
+	// fixed "Person"
+	Type string `json:"type" gorm:"-"`
+
+	Following    string `json:"following" gorm:"-"`
+	Followers    string `json:"followers" gorm:"-"`
+	Inbox        string `json:"inbox" gorm:"-"`
+	Outbox       string `json:"outbox" gorm:"-"`
+	Featured     string `json:"featured" gorm:"-"`
+	FeaturedTags string `json:"featuredTags" gorm:"-"`
 
 	// without @host
 	PreferredUsername string `json:"preferredUsername" gorm:"type:text collate nocase"`
@@ -39,11 +41,11 @@ type User struct {
 
 	PublicKey *PublicKey `json:"publicKey" gorm:"foreignKey:Owner;references:ID"`
 
-	Tag []string `json:"tag" gorm:"foreignKey:ID;references:ID"`
+	Tag []string `json:"tag" gorm:"-"` // todo
 
 	// what is the type?
 	// not sure it's possibe the emojis
-	Attachment []any `json:"attachment"`
+	Attachment []any `json:"attachment" gorm:"-"`
 
 	Endpoint *Endpoints `json:"endpoints" gorm:"-"`
 
@@ -107,7 +109,7 @@ func NewUser(name, host string) *User {
 		URL: utils.ParseProfileUrl(name, host),
 
 		Published: utils.MicroSecondToRFC3339(utils.Now()),
-		Devices:   utils.ParseActivitypubID(name, host) + "/collections/tags",
+		Devices:   utils.ParseActivitypubID(name, host) + "/collections/devices",
 		PublicKey: NewPublicKey(utils.ParseActivitypubID(name, host)),
 		Endpoint:  UserEndpoint(host),
 
@@ -117,4 +119,19 @@ func NewUser(name, host string) *User {
 			"https://twimg.moonchan.xyz/media/GB8hT5vacAAK6wa?format=png&name=medium",
 		},
 	}
+}
+
+func (user *User) Patch() {
+	name, host := utils.ParseNameAndHost(user.ID)
+	user.Context = UserContext
+	user.Type = "Person"
+	user.Following = user.ID + "/following"
+	user.Followers = user.ID + "/followers"
+	user.Inbox = user.ID + "/inbox"
+	user.Outbox = user.ID + "/outbox"
+	user.Featured = user.ID + "/collections/featured"
+	user.FeaturedTags = user.ID + "/collections/tags"
+	user.URL = utils.ParseProfileUrl(name, host)
+	user.Devices = user.ID + "/collections/devices"
+	user.Endpoint = UserEndpoint(host)
 }
