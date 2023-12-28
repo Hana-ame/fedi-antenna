@@ -16,7 +16,7 @@ func ReadActivitypubUser(name, host string) (user *activitypub.User, err error) 
 
 	err = dao.Read(user)
 	if err == nil {
-		user.Patch()
+		user.Autofill()
 		user.PublicKey = &activitypub.PublicKey{
 			Owner: user.ID,
 		}
@@ -44,7 +44,7 @@ func ReadPublicKeyByOwner(id string) (pk *activitypub.PublicKey, err error) {
 		return
 	}
 	dao.Create(user)
-	
+
 	pk = user.PublicKey
 
 	return
