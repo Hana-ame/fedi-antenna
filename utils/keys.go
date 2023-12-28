@@ -55,8 +55,8 @@ func MarshalPublicKey(publicKey *rsa.PublicKey) string {
 }
 
 // parse pem string to public key
-func ParsePublicKey(publicKey string) (*rsa.PublicKey, error) {
-	block, _ := pem.Decode([]byte(publicKey))
+func ParsePublicKey(publicKeyPem string) (*rsa.PublicKey, error) {
+	block, _ := pem.Decode([]byte(publicKeyPem))
 	pk, err := x509.ParsePKIXPublicKey(block.Bytes)
 	if err != nil {
 		return nil, err
@@ -65,8 +65,8 @@ func ParsePublicKey(publicKey string) (*rsa.PublicKey, error) {
 }
 
 // parse pem string to private key
-func ParsePrivateKey(privateKey string) (*rsa.PrivateKey, error) {
-	block, _ := pem.Decode([]byte(privateKey))
+func ParsePrivateKey(privateKeyPem string) (*rsa.PrivateKey, error) {
+	block, _ := pem.Decode([]byte(privateKeyPem))
 	pk, err := x509.ParsePKCS8PrivateKey(block.Bytes)
 	if err != nil {
 		return nil, err

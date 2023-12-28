@@ -1,6 +1,10 @@
 package utils
 
-import "strings"
+import (
+	"strings"
+
+	"github.com/google/uuid"
+)
 
 // "https://" + host + "/users/" + name
 func ParseActivitypubID(name, host string) string {
@@ -20,4 +24,8 @@ func ParseNameAndHost(activitypubID string) (name, host string) {
 		return strSlince[len(strSlince)-1], strSlince[0]
 	}
 	return "", ""
+}
+
+func GenerateObjectID(typ, host string) string {
+	return "https://" + host + "/objects/" + typ + "/" + uuid.New().String()
 }

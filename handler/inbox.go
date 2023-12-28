@@ -7,10 +7,6 @@ import (
 	"github.com/Hana-ame/fedi-antenna/core/dao"
 )
 
-func init() {
-	initHost()
-}
-
 // handlers
 
 // public interface

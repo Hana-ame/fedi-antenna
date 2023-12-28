@@ -19,6 +19,9 @@ func init() {
 	db.AutoMigrate(&activitypub.Follow{})
 	db.AutoMigrate(&activitypub.Block{})
 	db.AutoMigrate(&activitypub.PublicKey{})
+	db.AutoMigrate(&activitypub.Undo{})
+	// db.AutoMigrate(&activitypub.Accept{})
+	// db.AutoMigrate(&activitypub.Reject{})
 }
 
 func Test() {
@@ -32,12 +35,12 @@ func Create(o any) error {
 	}
 	return nil
 }
-func Read(o any) ( error) {
+func Read(o any) error {
 	tx := db.Take(o)
 	if tx.Error != nil {
-		return  tx.Error
+		return tx.Error
 	}
-	return  nil
+	return nil
 }
 func Update(o any) error {
 	tx := db.Save(o)
@@ -46,8 +49,8 @@ func Update(o any) error {
 	}
 	return nil
 }
-func Delete(o any) error{
-	tx:= db.Delete(o)
+func Delete(o any) error {
+	tx := db.Delete(o)
 	if tx.Error != nil {
 		return tx.Error
 	}

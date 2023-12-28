@@ -5,28 +5,41 @@ import (
 	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
 	"github.com/Hana-ame/fedi-antenna/core/dao"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
+	webfinger "github.com/Hana-ame/fedi-antenna/webfinger/actions"
 )
+
+var hostmap = make(map[string]string)
+
+func init() {
+	hostmap["localhost:3000"] = "fedi.moonchan.xyz"
+}
+
+// convert an altername to it's origin.
+func Host(alias string) string {
+	host, exist := hostmap[alias]
+	if exist {
+		return host
+	}
+	return alias
+}
 
 func ReadActivitypubUser(name, host string) (user *activitypub.User, err error) {
 	host = Host(host)
-
-	user = &activitypub.User{
-		ID: utils.ParseActivitypubID(name, host),
+	id, err := webfinger.GetUserIdFromAcct(utils.ParseAcctStr(name, host))
+	if err != nil {
+		return
 	}
-
-	err = dao.Read(user)
-	if err == nil {
-		user.Autofill()
-		user.PublicKey = &activitypub.PublicKey{
-			Owner: user.ID,
-		}
-		dao.Read(user.PublicKey)
-		user.Icon = &activitypub.Image{
-			URL: user.IconURL,
-		}
-		dao.Read(user.Icon)
+	user, err = ReadActivitypubUserByID(id)
+	return
+}
+func ReadActivitypubUserByID(id string) (user *activitypub.User, err error) {
+	if user, err = dao.ReadActivitypubUser(id); err == nil {
+		return
 	}
-
+	if user, err = actions.FetchUserByID(id); err != nil {
+		return
+	}
+	dao.Create(user)
 	return
 }
 
