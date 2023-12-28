@@ -6,3 +6,4 @@ git submodule add -b back/activitypub -f git@github.com:Hana-ame/fedi-antenna.gi
 ```
 
 why it not checkouted to a branch. there must be something wrong
+
