@@ -8,15 +8,9 @@ import (
 	webfinger "github.com/Hana-ame/fedi-antenna/webfinger/actions"
 )
 
-var hostmap = make(map[string]string)
-
-func init() {
-	hostmap["localhost:3000"] = "fedi.moonchan.xyz"
-}
-
 // convert an altername to it's origin.
 func Host(alias string) string {
-	host, exist := hostmap[alias]
+	host, exist := utils.AliasMap[alias]
 	if exist {
 		return host
 	}

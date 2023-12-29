@@ -9,8 +9,8 @@ func ReadActivitypubUser(id string) (user *activitypub.User, err error) {
 		ID: id,
 	}
 
-	tx := db.Preload("PublicKey").Preload("Image").Take(user)
+	tx := db.Preload("Icon").Preload("PublicKey").Take(user) // it should be the foreign key's var name
 	err = tx.Error
-	
+
 	return
 }

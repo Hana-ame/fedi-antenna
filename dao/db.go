@@ -1,9 +1,8 @@
 package dao
 
 import (
-	"log"
-
 	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
+	core "github.com/Hana-ame/fedi-antenna/core/model"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -20,12 +19,10 @@ func init() {
 	db.AutoMigrate(&activitypub.Block{})
 	db.AutoMigrate(&activitypub.PublicKey{})
 	db.AutoMigrate(&activitypub.Undo{})
-	// db.AutoMigrate(&activitypub.Accept{})
-	// db.AutoMigrate(&activitypub.Reject{})
-}
+	db.AutoMigrate(&activitypub.Accept{})
+	db.AutoMigrate(&activitypub.Reject{})
 
-func Test() {
-	log.Println("")
+	db.AutoMigrate(&core.FediStatus{})
 }
 
 func Create(o any) error {
