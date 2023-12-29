@@ -41,14 +41,14 @@ type User struct {
 	AlsoKnownAs []string   `json:"alsoKnownAs,omitempty" gorm:"serializer:json"`
 	PublicKey   *PublicKey `json:"publicKey" gorm:"foreignKey:Owner;references:ID"`
 
+	// the icon / images in :name:
 	Tag []*Tag `json:"tag" gorm:"-"` // todo
 
 	// what is the type?
-	// not sure it's possibe the emojis
 	Attachment []any `json:"attachment" gorm:"-"` // todo
 
-	SharedInbox string     `json:"sharedInbox,omitempty"`
-	Endpoint    *Endpoints `json:"endpoints" gorm:"-"`
+	SharedInbox string            `json:"sharedInbox,omitempty"`
+	Endpoint    map[string]string `json:"endpoints" gorm:"-"`
 
 	// the url of Image
 	IconURL string `json:"-"`
@@ -88,12 +88,6 @@ var UserContext = []any{
 	}),
 }
 
-func UserEndpoint(host string) *Endpoints {
-	return &Endpoints{
-		SharedInbox: "https://" + host + "/inbox",
-	}
-}
-
 func NewUser(name, host string) *User {
 	return &User{
 		Context:           UserContext,
@@ -112,7 +106,7 @@ func NewUser(name, host string) *User {
 		Published: utils.MicroSecondToRFC3339(utils.Now()),
 		Devices:   utils.ParseActivitypubID(name, host) + "/collections/devices",
 		PublicKey: NewPublicKey(utils.ParseActivitypubID(name, host)),
-		Endpoint:  UserEndpoint(host),
+		Endpoint:  map[string]string{"SharedInbox": host + "/inbox"},
 
 		Icon: &Image{
 			"Image",
@@ -134,7 +128,7 @@ func (o *User) Autofill() {
 	o.FeaturedTags = o.ID + "/collections/tags"
 	o.URL = utils.ParseProfileUrl(name, host)
 	o.Devices = o.ID + "/collections/devices"
-	o.Endpoint = UserEndpoint(host)
+	o.Endpoint = map[string]string{"SharedInbox": host + "/inbox"}
 }
 
 type IDType struct {

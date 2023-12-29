@@ -6,11 +6,12 @@ type Accept struct {
 	Actor   string `json:"actor"`
 
 	ObjectID string   `json:"-"`
-	Object   Sendable `json:"object" gorm:"foreignKey:ObjectID;references:ID"`
+	Object   Sendable `json:"object" gorm:"-"`
 
 	ID string `json:"id" gorm:"primarykey"`
 }
 
+// dunno, from mastodon
 var AcceptContext = "https://www.w3.org/ns/activitystreams"
 
 func (o *Accept) Autofill() {

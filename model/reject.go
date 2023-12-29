@@ -13,6 +13,7 @@ type Reject struct {
 	ID string `json:"id" gorm:"primarykey"`
 }
 
+// dunno, from misskey
 var RejectContext = []any{
 	"https://www.w3.org/ns/activitystreams",
 	"https://w3id.org/security/v1",

@@ -2,6 +2,7 @@ package actions
 
 import (
 	"encoding/json"
+	"fmt"
 	"net/http"
 
 	"github.com/Hana-ame/fedi-antenna/activitypub/model"
@@ -18,6 +19,6 @@ func FetchUserByID(id string) (user *model.User, err error) {
 	if err != nil {
 		return
 	}
-
+	fmt.Printf("%+v\n", user)
 	return
 }
