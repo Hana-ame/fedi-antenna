@@ -21,3 +21,6 @@ Used
   - Tag
 - Follow
 - Block
+- Note
+  - Mention
+  - Collection

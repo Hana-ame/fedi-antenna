@@ -106,7 +106,7 @@ func NewUser(name, host string) *User {
 		Published: utils.MicroSecondToRFC3339(utils.Now()),
 		Devices:   utils.ParseActivitypubID(name, host) + "/collections/devices",
 		PublicKey: NewPublicKey(utils.ParseActivitypubID(name, host)),
-		Endpoint:  map[string]string{"SharedInbox": host + "/inbox"},
+		Endpoint:  map[string]string{"sharedInbox": "https://" + host + "/inbox"},
 
 		Icon: &Image{
 			"Image",
@@ -128,7 +128,7 @@ func (o *User) Autofill() {
 	o.FeaturedTags = o.ID + "/collections/tags"
 	o.URL = utils.ParseProfileUrl(name, host)
 	o.Devices = o.ID + "/collections/devices"
-	o.Endpoint = map[string]string{"SharedInbox": host + "/inbox"}
+	o.Endpoint = map[string]string{"sharedInbox": "https://" + host + "/inbox"}
 }
 
 type IDType struct {
