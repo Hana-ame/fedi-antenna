@@ -7,8 +7,8 @@ type Reject struct {
 	Type    string `json:"type" gorm:"-"`
 	Actor   string `json:"actor"`
 
-	ObjectID string   `json:"-"`
-	Object   Sendable `json:"object" gorm:"-"`
+	ObjectID string     `json:"-"`
+	Object   Rejectable `json:"object" gorm:"-"`
 
 	ID string `json:"id" gorm:"primarykey"`
 }

@@ -11,7 +11,7 @@ import (
 func Users(c *gin.Context) {
 	name := c.Param("name")
 	host := c.Request.Host
-	o, err := core.ReadActivitypubUser(name, host)
+	o, err := core.ReadActivitypubUser(name, host, true)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

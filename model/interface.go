@@ -11,3 +11,11 @@ type Sendable interface {
 	//
 	ClearContext()
 }
+
+type Acceptable interface{
+	Sendable
+}
+
+type Rejectable interface{
+	Sendable
+}
