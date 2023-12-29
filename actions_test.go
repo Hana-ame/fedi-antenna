@@ -12,7 +12,7 @@ import (
 func TestFollow(t *testing.T) {
 	fmt.Println("donotca1che")
 	actor := "https://fedi.moonchan.xyz/users/test1"
-	object := "https://p1.a9z.dev/users/9a3qtdtypj"
+	object := "https://mastdn.social/users/misRoute"
 	err := actions.Follow(actor, object)
 	// log.Println(err)
 	_ = err
@@ -27,7 +27,7 @@ func TestUndo(t *testing.T) {
 
 func TestAccept(t *testing.T) {
 	actor := "https://fedi.moonchan.xyz/users/test1"
-	object := "https://p1.a9z.dev/follows/9nt4sxsk4s"
+	object := "https://mastdn.social/f5da99f0-e6f3-430b-9abb-ad4a0b6bc208"
 	fmt.Println(object)
 	err := actions.Accept(actor, object)
 	log.Println(err)

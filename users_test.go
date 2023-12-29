@@ -9,7 +9,7 @@ import (
 
 func TestUser(t *testing.T) {
 	id := "https://fedi.moonchan.xyz/users/test1"
-	user, err := core.ReadActivitypubUserByID(id)
+	user, err := core.ReadActivitypubUserByID(id, true)
 	fmt.Println(user)
 	fmt.Println(err)
 }
