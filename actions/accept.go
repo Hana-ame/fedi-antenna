@@ -39,11 +39,11 @@ func Accept(actor, object string) error {
 		return err
 	}
 
-	user, err := core.ReadActivitypubUserByID(followObj.GetActor())
+	user, err := core.ReadActivitypubUserByID(followObj.GetActor(), false)
 	if err != nil {
 		return err
 	}
-	local, err := core.ReadActivitypubUserByID(followObj.GetObject())
+	local, err := core.ReadActivitypubUserByID(followObj.GetObject(), true)
 	if err != nil {
 		return err
 	}

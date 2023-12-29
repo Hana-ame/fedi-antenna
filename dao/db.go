@@ -11,7 +11,6 @@ var db, _ = gorm.Open(sqlite.Open("gorm.db"), &gorm.Config{})
 
 func init() {
 	db.AutoMigrate(&activitypub.User{})
-	db.AutoMigrate(&activitypub.Endpoints{})
 	db.AutoMigrate(&activitypub.IDType{})
 	db.AutoMigrate(&activitypub.Image{})
 	db.AutoMigrate(&activitypub.PublicKey{})
