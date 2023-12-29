@@ -30,6 +30,12 @@ func ReadActivitypubUser(name, host string, isLocal bool) (user *activitypub.Use
 }
 func ReadActivitypubUserByID(id string, isLocal bool) (user *activitypub.User, err error) {
 	if user, err = dao.ReadActivitypubUser(id); err == nil {
+		// this will lead to hell...
+		// local user and remote user should be in different tables.
+		if isLocal {
+			user.Autofill()
+		}
+		user.Type = "Person"
 		return
 	}
 	if isLocal {
