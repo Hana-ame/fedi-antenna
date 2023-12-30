@@ -1,5 +1,10 @@
 package utils
 
+var (
+	AliasMap = make(map[string]string)
+	InboxMap = make(map[string]string)
+)
+
 func MergeMaps(maps ...map[string]string) map[string]string {
 
 	// delete nils

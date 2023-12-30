@@ -28,11 +28,11 @@ func Follow(actor, object string) error {
 		return err
 	}
 
-	user, err := core.ReadActivitypubUserByID(o.GetObject())
+	user, err := core.ReadActivitypubUserByID(o.GetObject(), false)
 	if err != nil {
 		return err
 	}
-	local, err := core.ReadActivitypubUserByID(o.GetActor())
+	local, err := core.ReadActivitypubUserByID(o.GetActor(), true)
 	if err != nil {
 		return err
 	}
@@ -50,6 +50,6 @@ func Follow(actor, object string) error {
 	_ = user
 	_ = resp // todo?
 	fmt.Printf("%s", body)
-	
+
 	return nil
 }

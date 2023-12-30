@@ -9,18 +9,8 @@ func ReadActivitypubUser(id string) (user *activitypub.User, err error) {
 		ID: id,
 	}
 
-	err = Read(user)
-	if err == nil {
-		user.Autofill()
-		user.PublicKey = &activitypub.PublicKey{
-			Owner: user.ID,
-		}
-		Read(user.PublicKey)
-		user.Icon = &activitypub.Image{
-			URL: user.IconURL,
-		}
-		Read(user.Icon)
-	}
+	tx := db.Preload("Icon").Preload("PublicKey").Take(user) // it should be the foreign key's var name
+	err = tx.Error
 
 	return
 }

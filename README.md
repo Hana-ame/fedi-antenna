@@ -9,3 +9,17 @@ webfinger
     dao.ReadAccount()
 ```
 like that
+
+### core/actions: handle local attemptions.
+                                     => core                 -> 
+local/controller => **core/actions** => activitypub/actions  -> core/dao
+                                     => webfinger/actions    -> 
+
+### core/dao: handle all data visits
+core/actions -> core -> activitypub/actions => **core/dao**
+
+### core/handler
+activitypub/controller => **core/handler**
+webfinger/controller   =>                    
+
+### core
