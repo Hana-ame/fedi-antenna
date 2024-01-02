@@ -7,3 +7,21 @@ git submodule add -b back/activitypub -f git@github.com:Hana-ame/fedi-antenna.gi
 
 why it not checkouted to a branch. there must be something wrong
 
+
+main 
+=>
+`activitypub/controller`
+`webfinger/controller`
+=>
+`core/handler`
+`core/action`
+=>
+`core`
+=>
+`activitypub/action`
+`webfinger/action`
+=>
+`core/dao`
+==============>
+`core/utils`
+`tools/*`
