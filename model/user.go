@@ -119,16 +119,36 @@ func NewUser(name, host string) *User {
 func (o *User) Autofill() {
 	name, host := utils.ParseNameAndHost(o.ID)
 	o.Context = UserContext
-	o.Type = "Person"
-	o.Following = o.ID + "/following"
-	o.Followers = o.ID + "/followers"
-	o.Inbox = o.ID + "/inbox"
-	o.Outbox = o.ID + "/outbox"
-	o.Featured = o.ID + "/collections/featured"
-	o.FeaturedTags = o.ID + "/collections/tags"
-	o.URL = utils.ParseProfileUrl(name, host)
-	o.Devices = o.ID + "/collections/devices"
-	o.Endpoint = map[string]string{"sharedInbox": "https://" + host + "/inbox"}
+	if o.Type == "" {
+		o.Type = "Person"
+	}
+	if o.Following == "" {
+		o.Following = o.ID + "/following"
+	}
+	if o.Followers == "" {
+		o.Followers = o.ID + "/followers"
+	}
+	if o.Inbox == "" {
+		o.Inbox = o.ID + "/inbox"
+	}
+	if o.Outbox == "" {
+		o.Outbox = o.ID + "/outbox"
+	}
+	if o.Featured == "" {
+		o.Featured = o.ID + "/collections/featured"
+	}
+	if o.FeaturedTags == "" {
+		o.FeaturedTags = o.ID + "/collections/tags"
+	}
+	if o.URL == "" {
+		o.URL = utils.ParseProfileUrl(name, host)
+	}
+	if o.Devices == "" {
+		o.Devices = o.ID + "/collections/devices"
+	}
+	if o.Endpoint == nil {
+		o.Endpoint = map[string]string{"sharedInbox": "https://" + host + "/inbox"}
+	}
 }
 
 type IDType struct {

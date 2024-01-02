@@ -29,10 +29,11 @@ func FetchWithSign(
 		return nil, err
 	}
 
-	return fetchWithSign(
+	resp, err := fetchWithSign(
 		pk, pk.ID,
 		method, url, header, body,
 	)
+	return resp, err
 
 }
 
