@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/Hana-ame/fedi-antenna/Tools/myfetch"
+	"github.com/Hana-ame/fedi-antenna/core/dao"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 )
 
@@ -16,7 +17,26 @@ func Fetch(method, url string, header map[string]string, body io.Reader) (*http.
 	return myfetch.Fetch(method, url, header, body)
 }
 
+// pubKeyOwner is ID with out '#main-key'
 func FetchWithSign(
+	pubKeyOwner string,
+	method, url string, header map[string]string, body []byte,
+) (
+	*http.Response, error,
+) {
+	pk, err := dao.ReadPublicKeyByOwner(pubKeyOwner)
+	if err != nil {
+		return nil, err
+	}
+
+	return fetchWithSign(
+		pk, pk.ID,
+		method, url, header, body,
+	)
+
+}
+
+func fetchWithSign(
 	privateKey crypto.PrivateKey, pubKeyID string,
 	method, url string, header map[string]string, body []byte,
 ) (
