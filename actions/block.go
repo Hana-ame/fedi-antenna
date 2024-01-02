@@ -29,7 +29,7 @@ func Block(actor, object string) error {
 	if err != nil {
 		return err
 	}
-	user, err := core.ReadActivitypubUserByID(object, false)
+	user, err := core.ReadActivitypubUserByID(object)
 	if err != nil {
 		return err
 	}

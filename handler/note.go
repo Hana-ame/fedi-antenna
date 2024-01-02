@@ -2,4 +2,4 @@ package handler
 
 //
 
-func Note()
+func Note() {}

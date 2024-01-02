@@ -40,5 +40,9 @@ handlers / actions provide the abstruct methods fot handling the data recived fr
 
 如果可以试着把core中的大部分文件夹当作动作名词。会怎么样。
 
+  controller
 handle 用作接受并且返回
-action 用作
+action 用作主动动作且发射
+(core) 用作可靠的查询方式
+  action
+dao 用作本地的查询方式

@@ -40,7 +40,7 @@ func Reject(actor, object string) error {
 		return err
 	}
 
-	user, err := core.ReadActivitypubUserByID(followObj.GetActor(), false)
+	user, err := core.ReadActivitypubUserByID(followObj.GetActor())
 	if err != nil {
 		return err
 	}

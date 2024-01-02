@@ -1,8 +1,6 @@
 package core
 
 import (
-	"fmt"
-
 	"github.com/Hana-ame/fedi-antenna/activitypub/actions"
 	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
 	"github.com/Hana-ame/fedi-antenna/core/dao"
@@ -41,28 +39,21 @@ func ReadPublicKeyByOwner(id string) (pk *activitypub.PublicKey, err error) {
 	return
 }
 
-func ReadActivitypubUser(name, host string, isLocal bool) (user *activitypub.User, err error) {
+func ReadActivitypubUser(name, host string) (user *activitypub.User, err error) {
 	host = Host(host)
 	id, err := webfinger.GetUserIdFromAcct(utils.ParseAcctStr(name, host))
 	if err != nil {
 		return
 	}
-	user, err = ReadActivitypubUserByID(id, isLocal)
+	user, err = ReadActivitypubUserByID(id)
 	return
 }
 
-func ReadActivitypubUserByID(id string, isLocal bool) (user *activitypub.User, err error) {
+func ReadActivitypubUserByID(id string) (user *activitypub.User, err error) {
 	if user, err = dao.ReadActivitypubUser(id); err == nil {
 		// this will lead to hell...
 		// local user and remote user should be in different tables.
-		if isLocal {
-			user.Autofill()
-		}
 		user.Type = "Person"
-		return
-	}
-	if isLocal {
-		fmt.Printf("%s", "not found")
 		return
 	}
 	if user, err = actions.FetchUserByID(id); err != nil {

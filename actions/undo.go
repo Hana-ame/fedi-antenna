@@ -63,7 +63,7 @@ func Undo(object activitypub.Sendable) error {
 		return err
 	}
 
-	user, err := core.ReadActivitypubUserByID(o.GetObject(), false)
+	user, err := core.ReadActivitypubUserByID(o.GetObject())
 	if err != nil {
 		return err
 	}
