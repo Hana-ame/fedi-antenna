@@ -7,9 +7,11 @@ import (
 	"gorm.io/gorm"
 )
 
-var db, _ = gorm.Open(sqlite.Open("gorm.db"), &gorm.Config{})
+var db *gorm.DB
 
 func init() {
+	db, _ = gorm.Open(sqlite.Open("gorm.db"), &gorm.Config{})
+
 	db.AutoMigrate(&activitypub.User{})
 	db.AutoMigrate(&activitypub.IDType{})
 	db.AutoMigrate(&activitypub.Image{})
