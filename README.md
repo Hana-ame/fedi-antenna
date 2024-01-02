@@ -1,7 +1,5 @@
 # core
 
-c
-
 this works as the middle layer for the project
 
 ## webfinger
@@ -41,3 +39,6 @@ handlers / actions provide the abstruct methods fot handling the data recived fr
 
 
 如果可以试着把core中的大部分文件夹当作动作名词。会怎么样。
+
+handle 用作接受并且返回
+action 用作

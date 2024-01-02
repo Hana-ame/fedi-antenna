@@ -44,16 +44,9 @@ func Reject(actor, object string) error {
 	if err != nil {
 		return err
 	}
-	local, err := core.ReadActivitypubUserByID(actor, true)
-	if err != nil {
-		return err
-	}
-	pk, err := utils.ParsePrivateKey(local.PublicKey.PrivateKeyPem)
-	if err != nil {
-		return err
-	}
+
 	resp, err := actions.FetchWithSign(
-		pk, local.PublicKey.ID,
+		actor,
 		http.MethodPost, user.Inbox, nil, body,
 	)
 	if err != nil {

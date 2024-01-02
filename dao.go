@@ -19,36 +19,6 @@ func Host(alias string) string {
 	return alias
 }
 
-func ReadActivitypubUser(name, host string, isLocal bool) (user *activitypub.User, err error) {
-	host = Host(host)
-	id, err := webfinger.GetUserIdFromAcct(utils.ParseAcctStr(name, host))
-	if err != nil {
-		return
-	}
-	user, err = ReadActivitypubUserByID(id, isLocal)
-	return
-}
-func ReadActivitypubUserByID(id string, isLocal bool) (user *activitypub.User, err error) {
-	if user, err = dao.ReadActivitypubUser(id); err == nil {
-		// this will lead to hell...
-		// local user and remote user should be in different tables.
-		if isLocal {
-			user.Autofill()
-		}
-		user.Type = "Person"
-		return
-	}
-	if isLocal {
-		fmt.Printf("%s", "not found")
-		return
-	}
-	if user, err = actions.FetchUserByID(id); err != nil {
-		return
-	}
-	dao.Create(user)
-	return
-}
-
 // find in local
 // if not found then fetch from remote
 func ReadPublicKeyByOwner(id string) (pk *activitypub.PublicKey, err error) {
@@ -68,5 +38,36 @@ func ReadPublicKeyByOwner(id string) (pk *activitypub.PublicKey, err error) {
 
 	pk = user.PublicKey
 
+	return
+}
+
+func ReadActivitypubUser(name, host string, isLocal bool) (user *activitypub.User, err error) {
+	host = Host(host)
+	id, err := webfinger.GetUserIdFromAcct(utils.ParseAcctStr(name, host))
+	if err != nil {
+		return
+	}
+	user, err = ReadActivitypubUserByID(id, isLocal)
+	return
+}
+
+func ReadActivitypubUserByID(id string, isLocal bool) (user *activitypub.User, err error) {
+	if user, err = dao.ReadActivitypubUser(id); err == nil {
+		// this will lead to hell...
+		// local user and remote user should be in different tables.
+		if isLocal {
+			user.Autofill()
+		}
+		user.Type = "Person"
+		return
+	}
+	if isLocal {
+		fmt.Printf("%s", "not found")
+		return
+	}
+	if user, err = actions.FetchUserByID(id); err != nil {
+		return
+	}
+	dao.Create(user)
 	return
 }

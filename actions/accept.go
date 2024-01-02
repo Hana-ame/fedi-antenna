@@ -43,16 +43,9 @@ func Accept(actor, object string) error {
 	if err != nil {
 		return err
 	}
-	local, err := core.ReadActivitypubUserByID(followObj.GetObject(), true)
-	if err != nil {
-		return err
-	}
-	pk, err := utils.ParsePrivateKey(local.PublicKey.PrivateKeyPem)
-	if err != nil {
-		return err
-	}
+
 	_, err = actions.FetchWithSign(
-		pk, local.PublicKey.ID,
+		followObj.GetObject(),
 		http.MethodPost, user.Inbox, nil, body,
 	)
 	if err != nil {
@@ -60,7 +53,7 @@ func Accept(actor, object string) error {
 	}
 
 	// _ = resp // todo?
-	_ = user
-	fmt.Printf("%s", body)
+	// _ = user
+	// fmt.Printf("%s", body)
 	return nil
 }

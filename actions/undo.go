@@ -9,7 +9,6 @@ import (
 	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
 	"github.com/Hana-ame/fedi-antenna/core"
 	"github.com/Hana-ame/fedi-antenna/core/dao"
-	"github.com/Hana-ame/fedi-antenna/core/utils"
 )
 
 func UndoFollow(actor, id string) error {
@@ -68,16 +67,9 @@ func Undo(object activitypub.Sendable) error {
 	if err != nil {
 		return err
 	}
-	local, err := core.ReadActivitypubUserByID(o.GetActor(), true)
-	if err != nil {
-		return err
-	}
-	pk, err := utils.ParsePrivateKey(local.PublicKey.PrivateKeyPem)
-	if err != nil {
-		return err
-	}
+
 	resp, err := actions.FetchWithSign(
-		pk, local.PublicKey.ID,
+		o.GetActor(),
 		http.MethodPost, user.Inbox, nil, body,
 	)
 	if err != nil {
@@ -85,6 +77,6 @@ func Undo(object activitypub.Sendable) error {
 	}
 
 	_ = resp // todo?
-	fmt.Printf("%s", body)
+	// fmt.Printf("%s", body)
 	return nil
 }

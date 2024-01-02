@@ -2,7 +2,6 @@ package actions
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/Hana-ame/fedi-antenna/activitypub/actions"
@@ -32,16 +31,9 @@ func Follow(actor, object string) error {
 	if err != nil {
 		return err
 	}
-	local, err := core.ReadActivitypubUserByID(o.GetActor(), true)
-	if err != nil {
-		return err
-	}
-	pk, err := utils.ParsePrivateKey(local.PublicKey.PrivateKeyPem)
-	if err != nil {
-		return err
-	}
+
 	resp, err := actions.FetchWithSign(
-		pk, local.PublicKey.ID,
+		o.GetActor(),
 		http.MethodPost, user.Inbox, nil, body,
 	)
 	if err != nil {
@@ -49,7 +41,7 @@ func Follow(actor, object string) error {
 	}
 	_ = user
 	_ = resp // todo?
-	fmt.Printf("%s", body)
+	// fmt.Printf("%s", body)
 
 	return nil
 }

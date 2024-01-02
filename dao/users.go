@@ -14,3 +14,17 @@ func ReadActivitypubUser(id string) (user *activitypub.User, err error) {
 
 	return
 }
+
+// find in local
+// if not found then fetch from remote
+func ReadPublicKeyByOwner(id string) (pk *activitypub.PublicKey, err error) {
+	pk = &activitypub.PublicKey{
+		Owner: id,
+	}
+	err = Read(pk)
+	if err == nil {
+		return
+	}
+
+	return
+}
