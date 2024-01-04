@@ -3,8 +3,8 @@ package controller
 import (
 	"net/http"
 
+	"github.com/Hana-ame/fedi-antenna/antenna/handler"
 	"github.com/Hana-ame/fedi-antenna/antenna/model"
-	handler "github.com/Hana-ame/fedi-antenna/core/handler/antenna"
 	"github.com/gin-gonic/gin"
 )
 
