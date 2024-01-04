@@ -1,8 +1,8 @@
 package controller
 
 import (
-	handler "github.com/Hana-ame/fedi-antenna/core/handler/mastodon"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
+	"github.com/Hana-ame/fedi-antenna/mastodon/handler"
 	"github.com/Hana-ame/fedi-antenna/mastodon/model"
 	"github.com/gin-gonic/gin"
 )
