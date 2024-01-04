@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"log"
 	"strconv"
 
 	"github.com/Hana-ame/fedi-antenna/activitypub/actions"
@@ -42,10 +43,14 @@ func Note(actor string, o *model.Status) error {
 	note.Autofill()
 
 	if err := dao.Create(note); err != nil {
+		log.Println(err)
 		return err
 	}
 
-	err := actions.CreateNote(note)
+	if err := actions.CreateNote(note); err != nil {
+		log.Println(err)
+		return err
+	}
 
-	return err
+	return nil
 }
