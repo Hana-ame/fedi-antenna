@@ -7,7 +7,7 @@ import (
 	"log"
 	"net/http"
 
-	handler "github.com/Hana-ame/fedi-antenna/core/handler/activitypub"
+	"github.com/Hana-ame/fedi-antenna/activitypub/handler"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 	"github.com/Hana-ame/orderedmap"
 	"github.com/gin-gonic/gin"
