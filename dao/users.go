@@ -4,6 +4,7 @@ import (
 	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
 )
 
+// activitypub.User
 func ReadActivitypubUser(id string) (user *activitypub.User, err error) {
 	user = &activitypub.User{
 		ID: id,

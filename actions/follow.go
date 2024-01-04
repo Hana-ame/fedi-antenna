@@ -11,6 +11,9 @@ import (
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 )
 
+// only for local user follow another user
+// actor is the activityID of yourself.
+// object is the activityID of object.
 // all activitypub id url strings
 func Follow(actor, object string) error {
 	_, host := utils.ParseNameAndHost(actor)
@@ -41,7 +44,7 @@ func Follow(actor, object string) error {
 	}
 	_ = user
 	_ = resp // todo?
-	// fmt.Printf("%s", body)
+	// log.Printf("%s", body)
 
 	return nil
 }

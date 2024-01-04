@@ -4,8 +4,8 @@ import activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
 
 type User struct {
 	// meta
-	Email    string `json:"email"`
-	PassHash string `json:"passhash"`
+	Email      string `json:"email"`
+	PasswdHash string `json:"-"`
 
 	// it is a url
 	ID string `json:"id" gorm:"primarykey"`

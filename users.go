@@ -8,15 +8,6 @@ import (
 	webfinger "github.com/Hana-ame/fedi-antenna/webfinger/actions"
 )
 
-// convert an altername to it's origin.
-func Host(alias string) string {
-	host, exist := utils.AliasMap[alias]
-	if exist {
-		return host
-	}
-	return alias
-}
-
 // find in local
 // if not found then fetch from remote
 func ReadPublicKeyByOwner(id string) (pk *activitypub.PublicKey, err error) {

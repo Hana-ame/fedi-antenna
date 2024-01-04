@@ -54,6 +54,6 @@ func Accept(actor, object string) error {
 
 	// _ = resp // todo?
 	// _ = user
-	// fmt.Printf("%s", body)
+	// log.Printf("%s", body)
 	return nil
 }

@@ -77,6 +77,6 @@ func Undo(object activitypub.Sendable) error {
 	}
 
 	_ = resp // todo?
-	// fmt.Printf("%s", body)
+	// log.Printf("%s", body)
 	return nil
 }

@@ -1,5 +1,17 @@
 # core
 
+
+|||
+|---|---|
+|handler|which handle a verified request from activitypub/mastodon/antenna|
+|action|which perform a reliable activitypub action|
+|(root)|which provide a reliable query form all datas|
+|dao|which provide a direct way to query local datas|
+
+====
+Decriped
+
+
 this works as the middle layer for the project
 
 ## webfinger

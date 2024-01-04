@@ -24,6 +24,7 @@ func init() {
 	db.AutoMigrate(&activitypub.Reject{})
 
 	db.AutoMigrate(&core.FediStatus{})
+	db.AutoMigrate(&core.User{})
 }
 
 func Create(o any) error {
