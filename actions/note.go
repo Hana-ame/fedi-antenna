@@ -2,6 +2,7 @@ package actions
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/Hana-ame/fedi-antenna/activitypub/actions"
@@ -25,6 +26,7 @@ func CreateNote(note activitypub.Creatable) error {
 			http.MethodPost, endpoint, nil, body,
 		)
 		if err != nil {
+			log.Println(err)
 			return err
 		}
 	}

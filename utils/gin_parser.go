@@ -17,3 +17,11 @@ func (p *Parser) PostForm(key string, value *string) error {
 	}
 	return nil
 }
+
+// return &s
+func ParseStringToPointer(s string, emptyIsNil bool) *string {
+	if emptyIsNil && s == "" {
+		return nil
+	}
+	return &s
+}

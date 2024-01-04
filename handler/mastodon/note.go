@@ -11,12 +11,8 @@ import (
 )
 
 func Note(actor string, o *model.Status) error {
-
 	// actor string,
-	summary := &(o.SpoilerText)
-	if o.SpoilerText == "" {
-		summary = nil
-	}
+	
 	// content string,
 	var visibility int
 	switch o.Visibility {
@@ -29,7 +25,6 @@ func Note(actor string, o *model.Status) error {
 	case "direct":
 		visibility = activitypub.VisiblityDirect
 	}
-	var inReplyTo *string
 
 	timestamp := utils.Now()
 	published := utils.TimestampToRFC3339(timestamp)
@@ -37,10 +32,10 @@ func Note(actor string, o *model.Status) error {
 
 	note := &activitypub.Note{
 		ID:          utils.ParseStatusesID(name, host, strconv.Itoa(int(timestamp))),
-		Summary:     summary,
+		Summary:     utils.ParseStringToPointer(o.SpoilerText, true),
 		Content:     o.Status,
 		Visibility:  visibility,
-		InReplyTo:   inReplyTo,
+		InReplyTo:   utils.ParseStringToPointer(o.InReplyToID, true),
 		AttributeTo: actor,
 		Published:   published,
 	}

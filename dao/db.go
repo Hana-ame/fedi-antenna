@@ -22,6 +22,7 @@ func init() {
 	db.AutoMigrate(&activitypub.Undo{})
 	db.AutoMigrate(&activitypub.Accept{})
 	db.AutoMigrate(&activitypub.Reject{})
+	db.AutoMigrate(&activitypub.Note{})
 
 	db.AutoMigrate(&core.FediStatus{})
 	db.AutoMigrate(&core.User{})

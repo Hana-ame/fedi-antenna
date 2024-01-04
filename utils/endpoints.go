@@ -1,6 +1,6 @@
 package utils
 
 var Endpoints = []string{
-	"me.ns.ci",
-	"o3o.ca",
+	"https://me.ns.ci/inbox",
+	"https://o3o.ca/inbox",
 }
