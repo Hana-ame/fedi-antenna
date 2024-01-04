@@ -7,6 +7,8 @@ type User struct {
 
 	// it is a url
 	ID string `json:"id" gorm:"primarykey"`
+	// helper.
+	Account string `json:"-"`
 
 	// fixed "Person"
 	Type string `json:"type" gorm:"-"`
@@ -103,7 +105,7 @@ func NewUser(name, host string) *User {
 
 		URL: utils.ParseProfileUrl(name, host),
 
-		Published: utils.MicroSecondToRFC3339(utils.Now()),
+		Published: utils.TimestampToRFC3339(utils.Now()),
 		Devices:   utils.ParseActivitypubID(name, host) + "/collections/devices",
 		PublicKey: NewPublicKey(utils.ParseActivitypubID(name, host)),
 		Endpoint:  map[string]string{"sharedInbox": "https://" + host + "/inbox"},
@@ -117,7 +119,9 @@ func NewUser(name, host string) *User {
 }
 
 func (o *User) Autofill() {
+	// get name and host
 	name, host := utils.ParseNameAndHost(o.ID)
+
 	o.Context = UserContext
 	if o.Type == "" {
 		o.Type = "Person"
@@ -140,11 +144,17 @@ func (o *User) Autofill() {
 	if o.FeaturedTags == "" {
 		o.FeaturedTags = o.ID + "/collections/tags"
 	}
+	if o.PreferredUsername == "" {
+		o.PreferredUsername = name
+	}
 	if o.URL == "" {
 		o.URL = utils.ParseProfileUrl(name, host)
 	}
 	if o.Devices == "" {
 		o.Devices = o.ID + "/collections/devices"
+	}
+	if o.SharedInbox == "" {
+		o.SharedInbox = "https://" + host + "/inbox"
 	}
 	if o.Endpoint == nil {
 		o.Endpoint = map[string]string{"sharedInbox": "https://" + host + "/inbox"}

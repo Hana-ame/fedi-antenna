@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"crypto"
 	"io"
+	"log"
 	"net/http"
 	"time"
 
@@ -24,13 +25,20 @@ func FetchWithSign(
 ) (
 	*http.Response, error,
 ) {
-	pk, err := dao.ReadPublicKeyByOwner(pubKeyOwner)
+	pkObj, err := dao.ReadPublicKeyByOwner(pubKeyOwner)
 	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	pk, err := utils.ParsePrivateKey(pkObj.PrivateKeyPem)
+	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 
 	resp, err := fetchWithSign(
-		pk, pk.ID,
+		pk, pkObj.ID,
 		method, url, header, body,
 	)
 	return resp, err
@@ -45,6 +53,7 @@ func fetchWithSign(
 ) {
 	r, err := http.NewRequest(method, url, bytes.NewReader(body))
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 	header = utils.MergeMaps(header, map[string]string{
@@ -57,10 +66,12 @@ func fetchWithSign(
 	}
 	err = Sign(privateKey, pubKeyID, r, body)
 	if err != nil {
+		log.Println(err)
 		return nil, err
 	}
 	resp, err := myfetch.FetchWithRequest(r)
 	if err != nil {
+		log.Println(err)
 		return resp, err
 	}
 	return resp, nil

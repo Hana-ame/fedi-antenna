@@ -5,7 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RegistPath(r *gin.Engine) {
+func RegisterPath(r *gin.Engine) {
 	// s2s send
 	r.GET("/users/:name", controller.Users)
 	// r.GET("/users/:name/outbox", controller.UsersOutbox)

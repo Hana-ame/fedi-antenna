@@ -12,7 +12,7 @@ import (
 func Users(c *gin.Context) {
 	name := c.Param("name")
 	host := c.Request.Host
-	o, err := dao.ReadActivitypubUser(utils.ParseAcctStr(name, host))
+	o, err := dao.ReadActivitypubUser(utils.ParseActivitypubID(name, host))
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return

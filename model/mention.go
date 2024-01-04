@@ -8,5 +8,9 @@ type Mention struct {
 	Href string `json:"href"`
 
 	// @username@host.domain
-	Name string `json:"name"`
+	Name string `json:"name" gorm:"primarykey"`
+}
+
+func (o *Mention) Autofill() {
+	o.Type = TypeMention
 }

@@ -49,7 +49,7 @@ func (o *Undo) Autofill() {
 	o.Actor = o.Object.GetActor()
 	o.ObjectID = o.Object.GetID()
 	if o.Published == "" {
-		o.Published = utils.MicroSecondToRFC3339(utils.Now())
+		o.Published = utils.TimestampToRFC3339(utils.Now())
 	}
 	o.Object.ClearContext()
 }

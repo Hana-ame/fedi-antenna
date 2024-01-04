@@ -2,15 +2,14 @@ package actions
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
-	"github.com/Hana-ame/fedi-antenna/activitypub/model"
+	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
 )
 
 // fetch remote user by ID
 // ID is a valid url
-func FetchUserByID(id string) (user *model.User, err error) {
+func FetchUserByID(id string) (user *activitypub.User, err error) {
 	resp, err := Fetch(http.MethodGet, id, nil, nil)
 	if err != nil {
 		return
@@ -19,6 +18,8 @@ func FetchUserByID(id string) (user *model.User, err error) {
 	if err != nil {
 		return
 	}
-	fmt.Printf("%+v\n", user)
+
+	user.IconURL = user.Icon.URL
+	// log.Printf("%+v\n", user)
 	return
 }

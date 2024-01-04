@@ -7,7 +7,7 @@ import (
 	"log"
 	"net/http"
 
-	core "github.com/Hana-ame/fedi-antenna/core/handler"
+	handler "github.com/Hana-ame/fedi-antenna/core/handler/activitypub"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 	"github.com/Hana-ame/orderedmap"
 	"github.com/gin-gonic/gin"
@@ -42,7 +42,7 @@ func UsersInbox(c *gin.Context) {
 	}
 	// end of verify
 
-	core.Inbox(b, name)
+	handler.Inbox(b, name)
 
 	c.JSON(http.StatusAccepted, gin.H{"error": "StatusNotImplemented"})
 
