@@ -1,7 +1,7 @@
 package core
 
 import (
-	"github.com/Hana-ame/fedi-antenna/activitypub/actions"
+	actions "github.com/Hana-ame/fedi-antenna/activitypub/fetch"
 	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
 	"github.com/Hana-ame/fedi-antenna/core/dao"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
