@@ -6,9 +6,9 @@ import (
 	"strconv"
 	"testing"
 
+	"github.com/Hana-ame/fedi-antenna/activitypub/actions"
 	"github.com/Hana-ame/fedi-antenna/activitypub/model"
 	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
-	"github.com/Hana-ame/fedi-antenna/core/actions"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 )
 
@@ -54,8 +54,8 @@ func TestNote(t *testing.T) {
 	name, host := utils.ParseNameAndHost(actor)
 	note := &activitypub.Note{
 		ID:          utils.ParseStatusesID(name, host, strconv.Itoa(int(timestamp))),
-		Summary:     utils.ParseStringToPointer("o.SpoilerText", true),
-		Content:     "1",
+		Summary:     utils.ParseStringToPointer("", true),
+		Content:     "123",
 		Visibility:  model.VisiblityPublic,
 		InReplyTo:   utils.ParseStringToPointer("", true),
 		AttributeTo: actor,
