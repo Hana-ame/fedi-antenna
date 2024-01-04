@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func RegistPath(r *gin.Engine) {
+func RegisterPath(r *gin.Engine) {
 	r.GET("/.well-known/webfinger", controller.Webfinger)
 }
 
