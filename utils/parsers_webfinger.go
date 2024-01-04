@@ -15,7 +15,7 @@ import (
 func ParseUserAndHost(acct string) (user, host string) {
 	acct = strings.TrimPrefix(acct, "@")
 	arr := strings.Split(acct, "@")
-	if len(arr) != 2 {
+	if len(arr) < 2 {
 		log.Println("the format of acct is incorrect:" + acct)
 		return
 	}

@@ -9,10 +9,12 @@ func MergeMaps(maps ...map[string]string) map[string]string {
 
 	// delete nils
 	for p0, p1 := 0, 0; ; p1++ {
+		// break here, because should do side effect
 		if p1 >= len(maps) {
 			maps = maps[:p0]
 			break
 		}
+
 		if maps[p0] == nil {
 			maps[p0], maps[p1] = maps[p1], maps[p0]
 		}
