@@ -5,44 +5,36 @@ import (
 	"strconv"
 
 	"github.com/Hana-ame/fedi-antenna/activitypub/actions"
-	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
 	"github.com/Hana-ame/fedi-antenna/core/dao"
+	core "github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
-	"github.com/Hana-ame/fedi-antenna/mastodon/model"
+	"github.com/Hana-ame/fedi-antenna/core/utils/convert"
+	mastodon "github.com/Hana-ame/fedi-antenna/mastodon/model"
 )
 
-func Note(actor string, o *model.Status) error {
+func Note(actor string, o *mastodon.Status) error {
 	// actor string,
 
-	// content string,
-	var visibility int
-	switch o.Visibility {
-	case "public":
-		visibility = activitypub.VisiblityPublic
-	case "unlisted":
-		visibility = activitypub.VisiblityUnlisted
-	case "private":
-		visibility = activitypub.VisiblityPrivate
-	case "direct":
-		visibility = activitypub.VisiblityDirect
-	}
-
 	timestamp := utils.Now()
-	published := utils.TimestampToRFC3339(timestamp)
+	// published := utils.TimestampToRFC3339(timestamp)
 	name, host := utils.ParseNameAndHost(actor)
+	id := utils.ParseStatusesID(name, host, strconv.Itoa(int(timestamp)))
 
-	note := &activitypub.Note{
-		ID:          utils.ParseStatusesID(name, host, strconv.Itoa(int(timestamp))),
-		Summary:     utils.ParseStringToPointer(o.SpoilerText, true),
-		Content:     o.Status,
-		Visibility:  visibility,
-		InReplyTo:   utils.ParseStringToPointer(o.InReplyToID, true),
+	localNote := &core.LocalNote{
+		ID:          id,
 		AttributeTo: actor,
-		Published:   published,
+		Status:      o.Status,
+		MediaIDs:    o.MediaIDs,
+		InReplyToID: o.InReplyToID,
+		Sensitive:   o.Sensitive,
+		SpoilerText: o.SpoilerText,
+		Visibility:  o.Visibility,
+		Published:   timestamp,
 	}
-	note.Autofill()
 
-	if err := dao.Create(note); err != nil {
+	note := convert.ToActivityPubNote(localNote)
+
+	if err := dao.Create(localNote); err != nil {
 		log.Println(err)
 		return err
 	}
