@@ -21,13 +21,14 @@ type Create struct {
 }
 
 const (
-	VisiblityPublic = 1 << iota
-	VisiblityUnlisted
-	VisiblityPrivate
-	VisiblityDirect
-	VisiblityIsolate
-
-	TypeCreate = "Create"
+	VisiblityPublic          = "public"
+	VisiblityUnlisted        = "unlisted"
+	VisiblityPrivate         = "private"
+	VisiblityDirect          = "direct"
+	VisiblityIsolatePublic   = "isolate,public"
+	VisiblityIsolateUnlisted = "isolate,unlisted"
+	VisiblityIsolatePrivate  = "isolate,private"
+	VisiblityIsolateDirect   = "isolate,direct"
 )
 
 var (

@@ -1,45 +1,36 @@
 package handler
 
 import (
-	"encoding/json"
+	"fmt"
+	"log"
 
 	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
+	"github.com/Hana-ame/orderedmap"
 )
 
 // handlers
 
 // public interface
-func Inbox(b []byte, user string) error {
-	var m map[string]any
-	if err := json.Unmarshal(b, &m); err != nil {
-		return err
+func Inbox(o *orderedmap.OrderedMap, user string) error {
+	v, ok := o.Get("type")
+	if !ok {
+		log.Printf("inbox do not have type : %+v", o)
+		return fmt.Errorf("inbox do not have type : %+v", o)
 	}
-
-	if v, ok := m["type"]; v == "Create" && ok {
-		var o *activitypub.Create
-		if err := json.Unmarshal(b, &o); err != nil {
-			return err
-			return Create(o)
-		}
-	} else if v, ok := m["type"]; v == "Follow" && ok {
-		var o *activitypub.Follow
-		if err := json.Unmarshal(b, &o); err != nil {
-			return err
-		}
+	s := v.(string)
+	switch s {
+	case activitypub.TypeCreate:
+		return Create(o)
+	case activitypub.TypeFollow:
 		return Follow(o)
-	} else if v, ok := m["type"]; v == "Block" && ok {
-		var o *activitypub.Block
-		if err := json.Unmarshal(b, &o); err != nil {
-			return err
-		}
+	case activitypub.TypeBlock:
 		return Block(o)
-	} else if v, ok := m["type"]; v == "Undo" && ok {
-		var o *activitypub.Undo
-		if err := json.Unmarshal(b, &o); err != nil {
-			return err
-		}
+	case activitypub.TypeUndo:
 		return Undo(o)
+	default:
+		log.Printf("inbox have unknown type : %+v", s)
+		return fmt.Errorf("inbox have unknown type : %+v", s)
 	}
 
-	return nil
+	// return nil
 }

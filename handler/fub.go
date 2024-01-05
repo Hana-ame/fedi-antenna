@@ -1,21 +1,21 @@
 package handler
 
 import (
-	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
 	"github.com/Hana-ame/fedi-antenna/core/dao"
+	"github.com/Hana-ame/orderedmap"
 )
 
-func Follow(o *activitypub.Follow) error {
+func Follow(o *orderedmap.OrderedMap) error {
 	err := dao.Create(o)
 	return err
 }
 
-func Undo(o *activitypub.Undo) error {
-	err := dao.Delete(o.Object)
+func Undo(o *orderedmap.OrderedMap) error {
+	err := dao.Delete(o)
 	return err
 }
 
-func Block(o *activitypub.Block) error {
+func Block(o *orderedmap.OrderedMap) error {
 	err := dao.Create(o)
 	return err
 }

@@ -8,7 +8,7 @@ type User struct {
 	// it is a url
 	ID string `json:"id" gorm:"primarykey"`
 	// helper.
-	Account string `json:"-"`
+	// Account string `json:"-"`
 
 	// fixed "Person"
 	Type string `json:"type" gorm:"-"`

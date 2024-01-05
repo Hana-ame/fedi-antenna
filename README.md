@@ -1,39 +1,21 @@
-## actions
+# back/activitipub
 
-actions in submodule give a way directly to access the remote resources.
-they are supposed to make a request, and not so reliable thus (should it leave a log? do it after the porject is done.)
+most of functions are here
 
-## model
+## data flow
+` inbound -> controller -> handler -> actions -> fetch -> outbound
 
-that provide the model of activitypub
+` inbound -> controller -> handler -> core/dao
+`                                     core
 
-though there is plenty of 
+## models
 
+users are saved as cache.
+publickey are saved as cache.
+image are saved as cache.
 
-Createable
-- note(Create)
-Sendable
-- Block(Unblock)
-- Follow(Unfollow)
-Acceptable
-- Follow(Accpet)
-Recectable
-- Follow(Reject)
-Deleteable
-- ???(Delete)
+notes are saved @core/localnote
+fub are saved @core/localrelation
+fav/ret/mention are saved @core/localnotify
 
-Used
-- User
-  - PublicKey
-  - Image
-  - Tag
-- Follow
-- Block
-- Note
-  - Mention
-  - Collection
-
-## (root)
-
-that provide a useful method to regist to the gin.Router
-and it is the only one
+reject/undo means delete in db.

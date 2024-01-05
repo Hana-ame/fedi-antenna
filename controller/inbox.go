@@ -42,7 +42,7 @@ func UsersInbox(c *gin.Context) {
 	}
 	// end of verify
 
-	handler.Inbox(b, name)
+	handler.Inbox(o, name)
 
 	c.JSON(http.StatusAccepted, gin.H{"error": "StatusNotImplemented"})
 

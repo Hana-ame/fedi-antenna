@@ -1,6 +1,8 @@
 package handler
 
-import activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
+import (
+	"github.com/Hana-ame/orderedmap"
+)
 
 // todo
-func Create(o *activitypub.Create) error { return nil }
+func Create(o *orderedmap.OrderedMap) error { return nil }

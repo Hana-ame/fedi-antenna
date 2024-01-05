@@ -26,7 +26,7 @@ type Note struct {
 	// user's activitypub ID / url
 	AttributeTo string `json:"attributeTo"`
 
-	Visibility int      `json:"-"`
+	Visibility string   `json:"-"`
 	To         []string `json:"to" gorm:"-"`
 	Cc         []string `json:"cc" gorm:"-"`
 
@@ -72,6 +72,7 @@ var NoteContext = []any{
 	}),
 }
 
+// not viewed
 func (o *Note) Autofill() {
 	// o.Context = NoteContext
 	o.Type = TypeNote
@@ -101,7 +102,10 @@ func (o *Note) Autofill() {
 	case VisiblityPrivate:
 		o.To = []string{endpointFollower(name, host)}
 	case VisiblityDirect:
+	default:
+		o.Visibility = utils.ParseVisibility(o.To, o.Cc)
 	}
+
 }
 
 func (o *Note) ClearContext() {
