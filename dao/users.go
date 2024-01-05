@@ -38,6 +38,7 @@ func ReadPublicKeyByOwner(id string) (pk *activitypub.PublicKey, err error) {
 	return
 }
 
+// the most direct way to read local user's privateKey
 func ReadPrivateKeyByOwner(id string) (pk *rsa.PrivateKey, err error) {
 	lu := &core.LocalUser{
 		ID: id,

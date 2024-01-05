@@ -21,7 +21,7 @@ type LocalUser struct {
 	Discoverable              bool `json:"discoverable"`
 
 	// TimestampToRFC3339
-	Published string `json:"published"`
+	Published int64 `json:"published"`
 
 	AlsoKnownAs []string `json:"alsoKnownAs,omitempty" gorm:"serializer:json"`
 

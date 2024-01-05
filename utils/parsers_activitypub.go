@@ -41,12 +41,12 @@ func ParseTypeFromObjectID(id string) (typ, host string) {
 	return arr[2], arr[0]
 }
 
-// "https://" + host + "/users/" + name + "/statues/" + id
-func ParseStatusesID(name, host, id string) ( statusesID string) {
-	return "https://" + host + "/users/" + name + "/statues/" + id
+// "https://" + host + "/users/" + name + "/statuses/" + id
+func ParseStatusesID(name, host, id string) (statusesID string) {
+	return "https://" + host + "/users/" + name + "/statuses/" + id
 }
 
-// "https://" + host + "/users/" + name + "/statues/" + timestamp
+// "https://" + host + "/users/" + name + "/statuses/" + timestamp
 func ParseStatusesNameHostTimestamp(statusesID string) (name, host, timestamp string) {
 	statusesID = strings.TrimPrefix(statusesID, "https://")
 	arr := strings.Split(statusesID, "/")
@@ -57,6 +57,26 @@ func ParseStatusesNameHostTimestamp(statusesID string) (name, host, timestamp st
 }
 
 // "https://" + host + "/@" + name + "/" + timestamp
-func ParseStatusesURL(name, host, timestamp string) (statusesID string ){
+func ParseStatusesURL(name, host, timestamp string) (statusesID string) {
 	return "https://" + host + "/@" + name + "/" + timestamp
+}
+
+func ParseVisibility(to, cc []string) string {
+	publicStream := "https://www.w3.org/ns/activitystreams#Public"
+	for _, v := range to {
+		if v == publicStream {
+			return "public"
+		}
+	}
+	for _, v := range cc {
+		if v == publicStream {
+			return "unlisted"
+		}
+	}
+	for _, v := range to {
+		if strings.HasSuffix(v, "follower") || strings.HasSuffix(v, "followers") {
+			return "private"
+		}
+	}
+	return "direct"
 }
