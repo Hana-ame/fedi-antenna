@@ -1,8 +1,6 @@
 package model
 
-import activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
-
-type User struct {
+type LocalUser struct {
 	// meta
 	Email      string `json:"email"`
 	PasswdHash string `json:"-"`
@@ -27,8 +25,11 @@ type User struct {
 
 	AlsoKnownAs []string `json:"alsoKnownAs,omitempty" gorm:"serializer:json"`
 
-	PublicKey *activitypub.PublicKey `json:"publicKey" gorm:"foreignKey:Owner;references:ID"`
+	PublicKeyPem  string
+	PrivateKeyPem string
 
-	// the url of Image
+	// the url of Image, avatar
 	IconURL string `json:"-"`
+	// the url of Image, background
+	ImageURL string `json:"-"`
 }
