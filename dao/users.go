@@ -1,7 +1,12 @@
 package dao
 
 import (
+	"crypto/rsa"
+	"log"
+
 	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
+	core "github.com/Hana-ame/fedi-antenna/core/model"
+	"github.com/Hana-ame/fedi-antenna/core/utils"
 )
 
 // activitypub.User
@@ -18,6 +23,7 @@ func ReadActivitypubUser(id string) (user *activitypub.User, err error) {
 	return
 }
 
+// what is it???
 // find in local
 // if not found then fetch from remote
 func ReadPublicKeyByOwner(id string) (pk *activitypub.PublicKey, err error) {
@@ -29,5 +35,22 @@ func ReadPublicKeyByOwner(id string) (pk *activitypub.PublicKey, err error) {
 		return
 	}
 
+	return
+}
+
+func ReadPrivateKeyByOwner(id string) (pk *rsa.PrivateKey, err error) {
+	lu := &core.LocalUser{
+		ID: id,
+	}
+	err = Read(lu)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	pk, err = utils.ParsePrivateKey(lu.PrivateKeyPem)
+	if err != nil {
+		log.Println(err)
+		return
+	}
 	return
 }
