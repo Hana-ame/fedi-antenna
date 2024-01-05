@@ -25,24 +25,22 @@ func FetchWithSign(
 ) (
 	*http.Response, error,
 ) {
-	pkObj, err := dao.ReadPublicKeyByOwner(pubKeyOwner)
-	if err != nil {
-		log.Println(err)
-		return nil, err
-	}
-
-	pk, err := utils.ParsePrivateKey(pkObj.PrivateKeyPem)
+	pk, err := dao.ReadPrivateKeyByOwner(pubKeyOwner)
 	if err != nil {
 		log.Println(err)
 		return nil, err
 	}
 
 	resp, err := fetchWithSign(
-		pk, pkObj.ID,
+		pk, pubKeyOwner+"#main-key",
 		method, url, header, body,
 	)
-	return resp, err
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
 
+	return resp, err
 }
 
 func fetchWithSign(
