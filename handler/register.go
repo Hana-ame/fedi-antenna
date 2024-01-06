@@ -18,7 +18,7 @@ func Register(o *model.Register) error {
 		PasswdHash:        tools.Hash(o.Passwd, os.Getenv("SALT")),
 		ID:                id,
 		PreferredUsername: o.Username,
-		Published:         utils.TimestampToRFC3339(utils.Now()),
+		Published:         utils.Now(),
 		PrivateKeyPem:     utils.MarshalPrivateKey(pk),
 		PublicKeyPem:      utils.MarshalPublicKey(&pk.PublicKey),
 	}
