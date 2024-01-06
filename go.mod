@@ -2,16 +2,14 @@ module github.com/Hana-ame/fedi-antenna
 
 go 1.20
 
-require github.com/gin-gonic/gin v1.9.1
-
 require (
-	github.com/Hana-ame/httpsig v1.2.1 // indirect
-	github.com/go-fed/httpsig v1.1.0 // indirect
-	github.com/google/uuid v1.5.0 // indirect
+	github.com/Hana-ame/httpsig v1.2.1
+	github.com/gin-gonic/gin v1.9.1
+	github.com/google/uuid v1.5.0
 )
 
 require (
-	github.com/Hana-ame/orderedmap v0.0.0-20231228012716-ef1718f07fc8 // indirect
+	github.com/Hana-ame/orderedmap v0.0.0-20240106085855-280cc19a9b81
 	github.com/bytedance/sonic v1.9.1 // indirect
 	github.com/chenzhuoyu/base64x v0.0.0-20221115062448-fe3a3abad311 // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
@@ -40,6 +38,6 @@ require (
 	golang.org/x/text v0.9.0 // indirect
 	google.golang.org/protobuf v1.30.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
-	gorm.io/driver/sqlite v1.5.4 // indirect
-	gorm.io/gorm v1.25.5 // indirect
+	gorm.io/driver/sqlite v1.5.4
+	gorm.io/gorm v1.25.5
 )

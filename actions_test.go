@@ -14,10 +14,7 @@ import (
 
 // pass 231228
 func TestFollow(t *testing.T) {
-	Init()
-
-	fmt.Println("donotca122123123che")
-	actor := "https://fedi.moonchan.xyz/users/test3"
+	actor := "https://fedi.moonchan.xyz/users/test5"
 	object := "https://me.ns.ci/users/cocoon"
 	err := actions.Follow(actor, object)
 	log.Println(err)
@@ -32,22 +29,22 @@ func TestUndo(t *testing.T) {
 }
 
 func TestAccept(t *testing.T) {
-	actor := "https://fedi.moonchan.xyz/users/test3"
-	object := "https://me.ns.ci/90f85e45-8b2f-4849-91b0-e60819e885ca"
+	actor := "https://fedi.moonchan.xyz/users/test5"
+	object := "https://me.ns.ci/users/cocoon"
 	fmt.Println(object)
 	err := actions.Accept(actor, object)
 	log.Println(err)
 }
 func TestReject(t *testing.T) {
-	actor := "https://fedi.moonchan.xyz/users/test1"
-	object := "https://p1.a9z.dev/follows/9nt4sxsk4s"
+	actor := "https://fedi.moonchan.xyz/users/test5"
+	object := "https://me.ns.ci/users/cocoon"
 	fmt.Println(object)
 	err := actions.Reject(actor, object)
 	log.Println(err)
 }
 
 func TestNote(t *testing.T) {
-	actor := utils.ParseActivitypubID("test3", "fedi.moonchan.xyz")
+	actor := utils.ParseActivitypubID("test5", "fedi.moonchan.xyz")
 
 	timestamp := utils.Now()
 	published := utils.TimestampToRFC3339(timestamp)
@@ -55,7 +52,7 @@ func TestNote(t *testing.T) {
 	note := &activitypub.Note{
 		ID:          utils.ParseStatusesID(name, host, strconv.Itoa(int(timestamp))),
 		Summary:     utils.ParseStringToPointer("", true),
-		Content:     "123",
+		Content:     "你们能不能去死啊，吵死了",
 		Visibility:  model.VisiblityPublic,
 		InReplyTo:   utils.ParseStringToPointer("", true),
 		AttributeTo: actor,

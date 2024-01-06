@@ -1,51 +1,83 @@
 # 
-**stack**
-将localuser修改到新表当中
-在修改core当中的部分
+
+### **stack**
+~~很明显undo是需要把所有的东西都存一遍的。~~
+mastodon做follow，unfollow，block，unblock，like(+undo)，announce(+undo)的接口
+在mastodon加入了Account。给webfinger和联系什么的加上键，查找方式
+ap侧主动的功能好像很完全了，去测ap侧被动的部分，在那之前去把mastodon写好
+core的逻辑可能需要适当修改一下。
+
+### **cases**
+
+#### antenna
+- [x] 注册 - 查看 localuser 表
+#### mastodon
+- [x] 发嘟 - 查看 local notes 表
+- [x] 发嘟 - fedi
+  - [ ] 多个服务器。
+- [ ] follow / accept / reject - 查看 local notifies 表
+- [ ] like / undo - 查看 local notifies 表
+- [ ] announce / undo - 查看 local notifies 表
+#### webfinger
+- [x] 查询user id
+#### activitypub
+- [x] 查询user
+- [x] follow / undo - 查看 local notifies 表
+- [ ] follow / accept / reject - 查看 local notifies 表
+- [x] block / undo - 查看 local notifies 表
+- [x] like / undo - 查看 local notifies 表
+- [x] announce / undo - 查看 local notifies 表
+- [ ] create note - 查看 local notifies 表
+#### actions
 
 
-**todo**
 
+### **todo**
 先把activitypub的action和controller搓出来
 action先mock了。要加处理用的闭包线程的
 activitypub/controller还没测试
-- [ ] 哦，controller改成orderedmap了还没写完了。
-  - [ ] 访问本地的时候没有去local user这个库。
+- [x] 哦，controller改成orderedmap了还没写完了。
+  - [x] 访问本地的时候没有去local user这个库。
   - [x] attribute to 没显示
+  - [ ] 再跑一下createnote，然后可以抓fav和reblog了
+    - [x] 流程为 create， f， accept， note， 
+    - [ ] fav/ret
   - 虽然乱七八糟的但是还是正常能够fub
-写完之后测试：
+- [ ] gorm只update非空的键
+写完之后测试：(我在写什么??)
 - [ ] user是否通的。
 - [ ] fub是否通的。
 
+- [ ] 再把mastodon的api搓出来
 
+### **points**
 
-再把mastodon的api搓出来
+去submodule的readme看。
 
-要干啥来着
-- [x] pretty还没安装好，可能是死了
-- [x] note的接受和发送
-  - [x] 发送
-  - [ ] 接受
-  - [ ] 删除
-  - [ ] 编辑
-- [ ] FUB
-  - [ ] 估计要改db
-- [ ] 喜欢
-  - [ ] 发送
-  - [ ] **接受** 
-- [ ] 转发
-  - [ ] 发送
-  - [ ] **接受**
-- [ ] @
-  - [ ] 发送
-  - [ ] 接受
-- [ ] 注册的mastodon实现(这个是不是不在api里啊)
+### **known issue**
+- [x] 新建的user不设置icon的时候会取出image表中的任意一条。
+  - 有修改未验证
+  - 从postman里面看应该好了
+- [x] undo报错没object
+  - 是修改了getordefault的问题
+- [ ] 直接取消关注会有一个reject但是object是空白的情况
 
-- [ ] 挪
-  - [ ] publickey可以往core挪
-  - [ ] user已经往core挪了
+- [ ] httpsig
+  - [ ] 删除未知的user时会有一个null，不管可能也不要紧。
+- [ ] action
+- [ ] 当重复接受到follow等actions时
+- [ ] 当发送action没有成功时/成功时怎么处理
 
+### **done**
+- [x] webfinger
+  - [ ] also known as
+- [ ] antenna
+  - [x] register
+- [ ] activitypub
+- [ ] mastodon
+  - [x] post notes
 
+### console log
 
 ```sh
 git submodule add -b back/webfinger -f git@github.com:Hana-ame/fedi-antenna.git webfinger --depth 1
@@ -62,6 +94,10 @@ git submodule foreach --recursive 'git stash list'
 
 why it not checkouted to a branch. there must be something wrong
 
+
+## structure
+
+not up to date.
 
 main 
 =>
