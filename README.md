@@ -6,4 +6,9 @@ some are reuse back/mastodon
 
 ## implements
 
-- regist
+- [x] regist
+- [ ] edit user
+
+## notes
+
+注册时在ap users表里面存了一个备份。
