@@ -32,12 +32,12 @@ func Note(actor string, o *mastodon.Status) error {
 		Published:    timestamp,
 	}
 
-	note := convert.ToActivityPubNote(localNote)
-
 	if err := dao.Create(localNote); err != nil {
 		log.Println(err)
 		return err
 	}
+
+	note := convert.ToActivityPubNote(localNote)
 
 	if err := actions.CreateNote(note); err != nil {
 		log.Println(err)

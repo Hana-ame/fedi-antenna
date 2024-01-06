@@ -14,7 +14,7 @@ func Post_a_new_status(c *gin.Context) {
 
 	// todo
 	// should get real id
-	id := utils.ParseActivitypubID("test3", "fedi.moonchan.xyz")
+	id := utils.ParseActivitypubID("test5", "fedi.moonchan.xyz")
 
 	handler.Note(id, o)
 }
