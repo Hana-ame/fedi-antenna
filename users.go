@@ -1,6 +1,8 @@
 package core
 
 import (
+	"log"
+
 	actions "github.com/Hana-ame/fedi-antenna/activitypub/fetch"
 	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
 	"github.com/Hana-ame/fedi-antenna/core/dao"
@@ -21,6 +23,7 @@ func ReadPublicKeyByOwner(id string) (pk *activitypub.PublicKey, err error) {
 	var user *activitypub.User
 	user, err = actions.FetchUserByID(id)
 	if err != nil {
+		log.Println(err)
 		return
 	}
 	dao.Create(user)
@@ -34,6 +37,7 @@ func ReadActivitypubUser(name, host string) (user *activitypub.User, err error) 
 	host = Host(host)
 	id, err := webfinger.GetUserIdFromAcct(utils.ParseAcctStr(name, host))
 	if err != nil {
+		log.Println(err)
 		return
 	}
 	user, err = ReadActivitypubUserByID(id)
@@ -48,6 +52,7 @@ func ReadActivitypubUserByID(id string) (user *activitypub.User, err error) {
 		return
 	}
 	if user, err = actions.FetchUserByID(id); err != nil {
+		log.Println(err)
 		return
 	}
 	dao.Create(user)

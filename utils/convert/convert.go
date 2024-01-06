@@ -15,7 +15,7 @@ func ToActivityPubNote(o *core.LocalNote) *activitypub.Note {
 		Content:     o.Status,
 		Visibility:  o.Visibility,
 		InReplyTo:   utils.ParseStringToPointer(o.InReplyToID, true),
-		AttributeTo: o.AttributeTo,
+		AttributeTo: o.AttributedTo,
 		Published:   utils.TimestampToRFC3339(o.Published),
 	}
 	note.Autofill()

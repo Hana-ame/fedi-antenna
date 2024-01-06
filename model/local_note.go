@@ -4,7 +4,7 @@ package model
 type LocalNote struct {
 	ID string `gorm:"primarykey"`
 	// : actor,
-	AttributeTo string
+	AttributedTo string
 
 	Status      string   `json:"status"`
 	MediaIDs    []string `json:"media_ids" gorm:"serializer:json"`
