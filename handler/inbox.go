@@ -5,6 +5,7 @@ import (
 	"log"
 
 	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
+	"github.com/Hana-ame/fedi-antenna/core/utils"
 	"github.com/Hana-ame/orderedmap"
 )
 
@@ -24,6 +25,8 @@ func Inbox(o *orderedmap.OrderedMap, user, host string, err error) error {
 	switch s {
 	case activitypub.TypeCreate:
 		return Create(o)
+	case activitypub.TypeDelete:
+		return Delete(o)
 	case activitypub.TypeFollow:
 		return Follow(o)
 	case activitypub.TypeBlock:
@@ -56,5 +59,18 @@ func Create(o *orderedmap.OrderedMap) error {
 	default:
 		log.Printf("create object have unknown type : %+v\n", s)
 		return fmt.Errorf("create object have unknown type : %+v", s)
+	}
+}
+
+func Delete(o *orderedmap.OrderedMap) error {
+	id, typ := utils.ParseObjectIDAndType(o)
+	switch typ {
+	case activitypub.TypeNote:
+		return DeleteNote(id)
+	case activitypub.TypePerson:
+		return DeletePerson(id)
+	default:
+		log.Printf("create object have unknown type : %+v\n", o)
+		return fmt.Errorf("create object have unknown type : %+v", o)
 	}
 }

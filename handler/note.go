@@ -27,3 +27,11 @@ func CreateNote(o *orderedmap.OrderedMap) error {
 	err := dao.Create(n)
 	return err
 }
+
+func DeleteNote(id string) error {
+	n := &model.LocalNote{
+		ID:           id,
+	}
+	err := dao.Delete(n)
+	return err
+}
