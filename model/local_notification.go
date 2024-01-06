@@ -1,6 +1,6 @@
 package model
 
-type LocalNotify struct {
+type LocalNotification struct {
 	// statuses's ID in url
 	ID string `gorm:"primarykey"`
 	// activitypub ID in url, actor is sender

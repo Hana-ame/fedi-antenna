@@ -3,6 +3,7 @@ package utils
 import (
 	"strings"
 
+	"github.com/Hana-ame/orderedmap"
 	"github.com/google/uuid"
 )
 
@@ -79,4 +80,19 @@ func ParseVisibility(to, cc []string) string {
 		}
 	}
 	return "direct"
+}
+
+func ParseObjectIDAndType(o *orderedmap.OrderedMap) (id, typ string) {
+	if object, ok := o.Get("object"); ok {
+		if s, ok := object.(string); ok {
+			return s, "Person"
+		} else if o, ok := object.(orderedmap.OrderedMap); ok {
+			if id, ok := o.Get("id"); ok {
+				if s, ok := id.(string); ok {
+					return s, "Note"
+				}
+			}
+		}
+	}
+	return
 }

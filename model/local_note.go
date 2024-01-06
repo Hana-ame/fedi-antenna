@@ -18,4 +18,6 @@ type LocalNote struct {
 
 	// utils.Now()
 	Published int64
+
+	DeletedAt int64
 }

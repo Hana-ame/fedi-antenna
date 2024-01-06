@@ -32,4 +32,6 @@ type LocalUser struct {
 	IconURL string `json:"-"`
 	// the url of Image, background
 	ImageURL string `json:"-"`
+
+	DeletedAt int64
 }
