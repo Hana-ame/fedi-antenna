@@ -18,7 +18,7 @@ import (
 )
 
 func main() {
-	Init()
+	// Init()
 
 	r := gin.Default()
 
@@ -30,6 +30,7 @@ func main() {
 	r.Run("0.0.0.0:3000")
 }
 
+// that will work in debug mode.
 func init() {
 	Init()
 }
