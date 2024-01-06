@@ -30,7 +30,7 @@ func Follow(actor, object string) error {
 		return err
 	}
 
-	user, err := core.ReadActivitypubUserByID(o.GetObject())
+	user, err := core.ReadActivitypubUserByID(o.Object)
 	if err != nil {
 		return err
 	}

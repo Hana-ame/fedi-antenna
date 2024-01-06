@@ -55,10 +55,10 @@ func (o *Block) GetActor() string {
 	return o.Actor
 }
 
-func (o *Block) GetObject() string {
-	return o.Object
-}
-
 func (o *Block) ClearContext() {
 	o.Context = nil
+}
+
+func (o *Block) GetEndpoint() string {
+	return o.Object
 }

@@ -6,10 +6,12 @@ import (
 	"net/http"
 
 	"github.com/Hana-ame/fedi-antenna/activitypub/fetch"
-	"github.com/Hana-ame/fedi-antenna/activitypub/model"
+	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
 	"github.com/Hana-ame/fedi-antenna/core"
 	"github.com/Hana-ame/fedi-antenna/core/dao"
+	model "github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
+	"github.com/Hana-ame/fedi-antenna/core/utils/convert"
 )
 
 // all activitypub id url strings
@@ -17,19 +19,27 @@ func Reject(actor, object string) error {
 	_, host := utils.ParseNameAndHost(actor)
 	id := utils.GenerateObjectID("reject", host)
 
-	followObj := &model.Follow{
-		ID: object,
+	lr := &model.LocalRelation{
+		Actor:  object,
+		Object: actor,
 	}
-	dao.Read(&followObj)
-	followObj.Autofill()
+	if err := dao.Read(&lr); err != nil {
+		return err
+	}
+	if lr.Type != activitypub.TypeFollow { // should not.
+		return fmt.Errorf("lr.Type != activitypub.TypeFollow")
+	}
+	follow := convert.ToActivityPubFollow(lr)
+	follow.Autofill()
 
-	if actor != followObj.GetObject() {
-		return fmt.Errorf("%s != %s", actor, followObj.GetObject())
+	if actor != follow.Object { // never.
+		return fmt.Errorf("%s != %s", actor, follow.Object)
 	}
 
-	o := &model.Reject{
+	o := &activitypub.Reject{
 		ID:     id,
-		Object: followObj,
+		Actor:  actor,
+		Object: follow,
 	}
 	o.Autofill()
 
@@ -40,7 +50,7 @@ func Reject(actor, object string) error {
 		return err
 	}
 
-	user, err := core.ReadActivitypubUserByID(followObj.GetActor())
+	user, err := core.ReadActivitypubUserByID(follow.GetActor())
 	if err != nil {
 		return err
 	}

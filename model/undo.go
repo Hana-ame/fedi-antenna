@@ -9,8 +9,8 @@ type Undo struct {
 	ID      string `json:"id" gorm:"primarykey"`
 	Actor   string `json:"actor"`
 
-	ObjectID string   `json:"-"`
-	Object   Sendable `json:"object" gorm:"-"`
+	ObjectID string `json:"-"`
+	Object   any    `json:"object" gorm:"-"`
 
 	// RFC
 	Published string `json:"pbulished"`
@@ -45,13 +45,13 @@ var UndoContext = []any{
 func (o *Undo) Autofill() {
 	o.Context = UndoContext
 	o.Type = "Undo"
-	o.ID = o.Object.GetID() + "/undo"
-	o.Actor = o.Object.GetActor()
-	o.ObjectID = o.Object.GetID()
+	o.ID = o.Object.(Object).GetID() + "/undo"
+	o.Actor = o.Object.(Object).GetActor()
+	o.ObjectID = o.Object.(Object).GetID()
 	if o.Published == "" {
 		o.Published = utils.TimestampToRFC3339(utils.Now())
 	}
-	o.Object.ClearContext()
+	o.Object.(Object).ClearContext()
 }
 
 func (o *Undo) GetType() string {
@@ -59,8 +59,22 @@ func (o *Undo) GetType() string {
 }
 
 func (o *Undo) GetActor() string {
-	return o.Object.GetActor()
+	return o.Object.(Object).GetActor()
 }
-func (o *Undo) GetObject() string {
-	return o.Object.GetObject()
+
+func (o *Undo) GetEndpoint() string {
+	return o.Object.(Object).GetEndpoint()
+}
+
+type Object interface {
+	// id of itself
+	GetID() string
+
+	// id of user object
+	GetActor() string
+
+	GetEndpoint() string
+
+	//
+	ClearContext()
 }

@@ -7,7 +7,6 @@ import (
 
 	"github.com/Hana-ame/fedi-antenna/activitypub/fetch"
 	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
-	"github.com/Hana-ame/fedi-antenna/core"
 	"github.com/Hana-ame/fedi-antenna/core/dao"
 )
 
@@ -49,7 +48,7 @@ func UndoBlock(actor, id string) error {
 }
 
 // all activitypub id url strings
-func Undo(object activitypub.Sendable) error {
+func Undo(object activitypub.Object) error {
 
 	o := &activitypub.Undo{
 		Object: object,
@@ -63,14 +62,9 @@ func Undo(object activitypub.Sendable) error {
 		return err
 	}
 
-	user, err := core.ReadActivitypubUserByID(o.GetObject())
-	if err != nil {
-		return err
-	}
-
 	resp, err := fetch.FetchWithSign(
 		o.GetActor(),
-		http.MethodPost, user.Inbox, nil, body,
+		http.MethodPost, o.GetEndpoint(), nil, body,
 	)
 	if err != nil {
 		return err

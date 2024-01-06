@@ -4,7 +4,9 @@ import (
 	"net/http"
 
 	"github.com/Hana-ame/fedi-antenna/core/dao"
+	core "github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
+	"github.com/Hana-ame/fedi-antenna/core/utils/convert"
 	"github.com/gin-gonic/gin"
 )
 
@@ -12,13 +14,14 @@ import (
 func Users(c *gin.Context) {
 	name := c.Param("name")
 	host := c.Request.Host
-	o, err := dao.ReadActivitypubUser(utils.ParseActivitypubID(name, host))
-	if err != nil {
+	lu := &core.LocalUser{
+		ID: utils.ParseActivitypubID(name, host),
+	}
+	if err := dao.Read(lu); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	if o == nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "not found"})
-	}
+	o := convert.ToActivityPubUser(lu)
+
 	c.JSON(http.StatusOK, o)
 }

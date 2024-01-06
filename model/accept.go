@@ -5,8 +5,8 @@ type Accept struct {
 	Type    string `json:"type" gorm:"-"`
 	Actor   string `json:"actor"`
 
-	ObjectID string     `json:"-"`
-	Object   Acceptable `json:"object" gorm:"-"`
+	ObjectID string  `json:"-"`
+	Object   *Follow `json:"object" gorm:"foreignKey:ObjectID;references:ID"`
 
 	ID string `json:"id" gorm:"primarykey"`
 }
@@ -17,7 +17,11 @@ var AcceptContext = "https://www.w3.org/ns/activitystreams"
 func (o *Accept) Autofill() {
 	o.Context = AcceptContext
 	o.Type = "Accept"
-	o.Actor = o.Object.GetObject()
-	o.ObjectID = o.Object.GetID()
+	if o.Actor == "" {
+		o.Actor = o.Object.Object
+	}
+	if o.ObjectID == "" && o.Object != nil {
+		o.ObjectID = o.Object.GetID()
+	}
 	o.Object.ClearContext()
 }

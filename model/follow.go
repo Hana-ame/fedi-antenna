@@ -55,7 +55,7 @@ func (o *Follow) GetActor() string {
 	return o.Actor
 }
 
-func (o *Follow) GetObject() string {
+func (o *Follow) GetEndpoint() string {
 	return o.Object
 }
 

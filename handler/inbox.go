@@ -33,6 +33,14 @@ func Inbox(o *orderedmap.OrderedMap, user, host string, err error) error {
 		return Block(o)
 	case activitypub.TypeUndo:
 		return Undo(o)
+	case activitypub.TypeReject:
+		return Reject(o)
+	case activitypub.TypeAccept:
+		return Accept(o)
+	case activitypub.TypeLike:
+		return Like(o)
+	case activitypub.TypeAnnounce:
+		return Announce(o)
 	default:
 		log.Printf("inbox have unknown type : %+v", s)
 		return fmt.Errorf("inbox have unknown type : %+v", s)
@@ -62,6 +70,28 @@ func Create(o *orderedmap.OrderedMap) error {
 	}
 }
 
+func Undo(o *orderedmap.OrderedMap) error {
+	oo, ok := o.GetOrDefault("object", *orderedmap.New()).(orderedmap.OrderedMap)
+	if !ok {
+		log.Printf("not exist attribute object in undo object: %+v\n", o)
+		return fmt.Errorf("not exist attribute object in undo object: %+v", o)
+	}
+	s, ok := oo.GetOrDefault("type", "unknown").(string)
+	if !ok {
+		log.Printf("undo object do not have type : %+v\n", o)
+		return fmt.Errorf("undo object do not have type : %+v", o)
+	}
+	switch s {
+	case activitypub.TypeBlock, activitypub.TypeFollow:
+		return UndoRelation(&oo)
+	case activitypub.TypeAnnounce, activitypub.TypeLike:
+		return UndoNotify(&oo)
+	default:
+		log.Printf("undo object have unknown type : %+v\n", o)
+		return fmt.Errorf("undo object have unknown type : %+v", o)
+	}
+}
+
 func Delete(o *orderedmap.OrderedMap) error {
 	id, typ := utils.ParseObjectIDAndType(o)
 	switch typ {
@@ -70,7 +100,7 @@ func Delete(o *orderedmap.OrderedMap) error {
 	case activitypub.TypePerson:
 		return DeletePerson(id)
 	default:
-		log.Printf("create object have unknown type : %+v\n", o)
-		return fmt.Errorf("create object have unknown type : %+v", o)
+		log.Printf("delete object have unknown type : %+v\n", o)
+		return fmt.Errorf("delete object have unknown type : %+v", o)
 	}
 }

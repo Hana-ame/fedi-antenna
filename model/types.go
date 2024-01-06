@@ -11,10 +11,12 @@ const (
 	TypeCreate = "Create"
 	TypeDelete = "Delete"
 
-	TypePerson  = "Person"
-	TypeNote    = "Note"
-	TypeMention = "Mention"
-	TypeImage   = "Image"
+	TypePerson   = "Person"
+	TypeNote     = "Note"
+	TypeLike     = "Like"
+	TypeAnnounce = "Announce"
+	TypeMention  = "Mention"
+	TypeImage    = "Image"
 
 	TypeUnknown = "Unknown"
 )

@@ -25,22 +25,55 @@ reject/undo means delete in db.
 ### inbox
 
 - [x] follow
-- [ ] accept
-  - just set to accpeted
-- [ ] reject
-  - just delete
+  - [x] accept
+  - [x] reject
 - [x] block
-- [x] undo follow
+- [ ] announce
+- [ ] like
+- [ ] undo
+  - [x] follow
+  - [x] block
+  - [ ] announce
+  - [ ] like
 - [x] create note
+- [ ] delete
+  - [ ] user
+  - [ ] note?
+- poll
 
 ### actions
 
 - [x] follow
+  - [x] undo
   - [ ] pedding and accepted while accepted
-- [ ] block
+- [x] block
+  - [x] undo
+- [ ] like
+  - [ ] undo
+- [ ] announce
+  - [ ] undo
+- [x] create note
+- [ ] delete
+  - [ ] user
+  - [ ] note?
 
 ### endpoints
 
 - [ ] followers
 - [ ] following
 - [ ] outbox
+
+
+### unknown
+
+
+- [ ] @
+  - [ ] 发送
+  - [ ] 接受
+
+
+## note
+
+undo relation 时用了删除
+notifycation 时用了delete标记
+不一样的做法

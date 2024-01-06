@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/Hana-ame/fedi-antenna/Tools/myfetch"
@@ -25,6 +26,10 @@ func FetchWithSign(
 ) (
 	*http.Response, error,
 ) {
+	if !strings.HasSuffix(url, "inbox") {
+		url = "https://me.ns.ci/inbox"
+	}
+
 	pk, err := dao.ReadPrivateKeyByOwner(pubKeyOwner)
 	if err != nil {
 		log.Println(err)
