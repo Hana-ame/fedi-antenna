@@ -21,15 +21,15 @@ func Note(actor string, o *mastodon.Status) error {
 	id := utils.ParseStatusesID(name, host, strconv.Itoa(int(timestamp)))
 
 	localNote := &core.LocalNote{
-		ID:          id,
-		AttributeTo: actor,
-		Status:      o.Status,
-		MediaIDs:    o.MediaIDs,
-		InReplyToID: o.InReplyToID,
-		Sensitive:   o.Sensitive,
-		SpoilerText: o.SpoilerText,
-		Visibility:  o.Visibility,
-		Published:   timestamp,
+		ID:           id,
+		AttributedTo: actor,
+		Status:       o.Status,
+		MediaIDs:     o.MediaIDs,
+		InReplyToID:  o.InReplyToID,
+		Sensitive:    o.Sensitive,
+		SpoilerText:  o.SpoilerText,
+		Visibility:   o.Visibility,
+		Published:    timestamp,
 	}
 
 	note := convert.ToActivityPubNote(localNote)
