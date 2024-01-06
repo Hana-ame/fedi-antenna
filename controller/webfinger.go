@@ -9,6 +9,7 @@ import (
 	"github.com/Hana-ame/fedi-antenna/core/dao"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 
+	core "github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/webfinger/model"
 )
 
@@ -24,7 +25,10 @@ func Webfinger(c *gin.Context) {
 	acct := strings.TrimPrefix(resource, "acct:")
 	username, host := utils.ParseUserAndHost(acct)
 	// 判断是否存在 not used
-	if user, err := dao.ReadActivitypubUser(utils.ParseActivitypubID(username, host)); err != nil {
+	user := &core.LocalUser{
+		ID: utils.ParseActivitypubID(username, host),
+	}
+	if err := dao.Read(user); err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "not found"})
 	} else {
 		_ = user
