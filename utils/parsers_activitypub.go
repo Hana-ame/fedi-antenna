@@ -82,6 +82,7 @@ func ParseVisibility(to, cc []string) string {
 	return "direct"
 }
 
+// kari
 func ParseObjectIDAndType(o *orderedmap.OrderedMap) (id, typ string) {
 	if object, ok := o.Get("object"); ok {
 		if s, ok := object.(string); ok {
@@ -95,4 +96,28 @@ func ParseObjectIDAndType(o *orderedmap.OrderedMap) (id, typ string) {
 		}
 	}
 	return
+}
+
+// kari
+func ParseTheOnlyUserFromToAndCc(to []string, cc []string) string {
+	var userID string
+	for _, s := range to {
+		if strings.Contains(s, "/users/") {
+			if userID == "" {
+				userID = s
+			} else {
+				return ""
+			}
+		}
+	}
+	for _, s := range cc {
+		if strings.Contains(s, "/users/") {
+			if userID == "" {
+				userID = s
+			} else {
+				return ""
+			}
+		}
+	}
+	return userID
 }

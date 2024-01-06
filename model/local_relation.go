@@ -24,4 +24,9 @@ const (
 const (
 	RelationStatusPadding  = "padding"
 	RelationStatusAccepted = "accepted"
+	RelationStatusRejected = "rejected"
+
+	RelationStatusBlock = "block"
+
+	RelationStatusUndo = "undo"
 )

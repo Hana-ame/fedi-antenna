@@ -27,7 +27,11 @@ func ToActivityPubUser(o *core.LocalUser) *activitypub.User {
 	icon := &activitypub.Image{
 		URL: o.IconURL,
 	}
-	dao.Read(icon)
+	if o.IconURL == "" {
+		icon = nil
+	} else {
+		dao.Read(icon)
+	}
 
 	user := &activitypub.User{
 		ID:                        o.ID,
@@ -40,11 +44,18 @@ func ToActivityPubUser(o *core.LocalUser) *activitypub.User {
 		PublicKey:                 &activitypub.PublicKey{ID: o.ID + "#main-key", Owner: o.ID, PublicKeyPem: o.PublicKeyPem},
 		Tag:                       nil,
 		Attachment:                nil,
-		SharedInbox:               "",
-		Endpoint:                  nil,
-		IconURL:                   o.IconURL,
 		Icon:                      icon,
 	}
 	user.Autofill()
 	return user
+}
+
+func ToActivityPubFollow(o *core.LocalRelation) *activitypub.Follow {
+	follow := &activitypub.Follow{
+		ID:     o.ID,
+		Actor:  o.Actor,
+		Object: o.Object,
+	}
+	follow.Autofill()
+	return follow
 }
