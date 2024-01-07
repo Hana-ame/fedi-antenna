@@ -3,9 +3,16 @@
 ### **stack**
 ~~很明显undo是需要把所有的东西都存一遍的。~~
 mastodon做follow，unfollow，block，unblock，like(+undo)，announce(+undo)的接口
++ 打开mastodon操作一下然后copy上去
+记得看一眼resp的返回是什么样子的。自己的返回也做一下。
++ 照着保存下来的写，gist上有一份的。
 在mastodon加入了Account。给webfinger和联系什么的加上键，查找方式
 ap侧主动的功能好像很完全了，去测ap侧被动的部分，在那之前去把mastodon写好
 core的逻辑可能需要适当修改一下。
+本质上是action需要cache，接到core上。
+local的查询在dao上。
+功能做完。
+把utils挪一下，使得各个模块能尽可能自主运作。
 
 ### **cases**
 
