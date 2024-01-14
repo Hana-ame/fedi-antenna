@@ -9,11 +9,11 @@ import (
 	"github.com/Hana-ame/fedi-antenna/core/dao"
 	core "github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
+	mastodon "github.com/Hana-ame/fedi-antenna/mastodon/controller/statuses/model"
 	"github.com/Hana-ame/fedi-antenna/mastodon/entities"
-	mastodon "github.com/Hana-ame/fedi-antenna/mastodon/model"
 )
 
-func Note(actor string, o *mastodon.Post_a_new_status) (*entities.Status, error) {
+func Note(actor, IdempotencyKey string, o *mastodon.Post_a_new_status) (*entities.Status, error) {
 	// actor string,
 
 	timestamp := utils.Now()
@@ -25,8 +25,8 @@ func Note(actor string, o *mastodon.Post_a_new_status) (*entities.Status, error)
 		ID:           id,
 		AttributedTo: actor,
 		Status:       o.Status,
-		MediaIDs:     o.MediaIDs,
-		InReplyToID:  o.InReplyToID,
+		MediaIDs:     o.MediaIds,
+		InReplyToID:  o.InReplyToId,
 		Sensitive:    o.Sensitive,
 		SpoilerText:  o.SpoilerText,
 		Visibility:   o.Visibility,
