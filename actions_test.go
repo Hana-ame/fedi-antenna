@@ -9,6 +9,7 @@ import (
 	"github.com/Hana-ame/fedi-antenna/activitypub/actions"
 	"github.com/Hana-ame/fedi-antenna/activitypub/model"
 	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
+	core "github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 )
 
@@ -32,14 +33,22 @@ func TestAccept(t *testing.T) {
 	actor := "https://fedi.moonchan.xyz/users/test5"
 	object := "https://me.ns.ci/users/cocoon"
 	fmt.Println(object)
-	err := actions.Accept(actor, object)
+	lr := &core.LocalRelation{
+		Actor:  object,
+		Object: actor,
+	}
+	err := actions.Accept(lr, true)
 	log.Println(err)
 }
 func TestReject(t *testing.T) {
 	actor := "https://fedi.moonchan.xyz/users/test5"
 	object := "https://me.ns.ci/users/cocoon"
 	fmt.Println(object)
-	err := actions.Reject(actor, object)
+	lr := &core.LocalRelation{
+		Actor:  object,
+		Object: actor,
+	}
+	err := actions.Reject(lr, true)
 	log.Println(err)
 }
 
@@ -59,7 +68,7 @@ func TestNote(t *testing.T) {
 		Published:   published,
 	}
 	note.Autofill()
-	err := actions.CreateNote(note)
+	err := actions.CreateNote(note, nil, false)
 
 	log.Printf("%s", err)
 }

@@ -1,9 +1,31 @@
 # 
 
 ### **stack**
+在写method转code的脚本。
+mastodon-parser就是托事
+db也要礼。他妈的早知道画图。
+regsign 不在mastodon这边
+- [x] note delete note
+- [x] reblog delete reblog
+- [x] like delete like
+- [x] follow unfollow
+- [ ] accept reject.
+- [ ] block unblock
+Controller
+- [ ] note delete note
+- [ ] reblog delete reblog
+- [ ] like delete like
+- [ ] follow unfollow
+- [ ] block unblock
+Handler
+you should also find the way to pull statuses, likes, and, relations.
+先做mastodon的然后上前端，能作出单机版。
 ~~很明显undo是需要把所有的东西都存一遍的。~~
 mastodon做follow，unfollow，block，unblock，like(+undo)，announce(+undo)的接口
-+ 打开mastodon操作一下然后copy上去
+草，activitypub部分也要一起写。不然难受死。
+fub的函数传参重写一下，记得side effect on local relation.
+actions 调用 fetch 未修改，之后改。
++ ~~打开mastodon操作一下然后copy上去~~
 记得看一眼resp的返回是什么样子的。自己的返回也做一下。
 + 照着保存下来的写，gist上有一份的。
 在mastodon加入了Account。给webfinger和联系什么的加上键，查找方式
