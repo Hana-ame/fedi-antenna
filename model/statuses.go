@@ -7,7 +7,7 @@ type Poll struct {
 	Multiple   bool     `json:"multiple,omitempty"`
 	HideTotals bool     `json:"hide_totals,omitempty"`
 }
-type Status struct {
+type Post_a_new_status struct {
 	Status      string   `json:"status"`
 	MediaIDs    []string `json:"media_ids"`
 	Poll        *Poll    `json:"poll"`

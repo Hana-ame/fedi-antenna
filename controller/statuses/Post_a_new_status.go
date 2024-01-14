@@ -1,6 +1,8 @@
-package controller
+package statuses
 
 import (
+	"net/http"
+
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 	"github.com/Hana-ame/fedi-antenna/mastodon/handler"
 	"github.com/Hana-ame/fedi-antenna/mastodon/model"
@@ -9,12 +11,17 @@ import (
 
 // POST /api/v1/statuses HTTP/1.1
 func Post_a_new_status(c *gin.Context) {
-	var o *model.Status
+	var o *model.Post_a_new_status
 	c.Bind(&o)
 
 	// todo
 	// should get real id
-	id := utils.ParseActivitypubID("test5", "fedi.moonchan.xyz")
+	authorizationID := utils.ParseActivitypubID("test5", "fedi.moonchan.xyz")
 
-	handler.Note(id, o)
+	err := handler.Note(authorizationID, o)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, err)
+		return
+	}
+	// return
 }
