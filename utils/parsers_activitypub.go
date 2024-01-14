@@ -18,13 +18,17 @@ func ParseProfileUrl(name, host string) string {
 }
 
 // [host, name] found from activitypubID
+// "https://" + host + "/users/" + name + "/xxx"
 func ParseNameAndHost(activitypubID string) (name, host string) {
 	activitypubID = strings.TrimPrefix(activitypubID, "https://")
 	strSlince := strings.Split(activitypubID, "/")
-	if len(strSlince) > 0 {
-		return strSlince[len(strSlince)-1], strSlince[0]
+	if len(strSlince) < 1 {
+		return
 	}
-	return "", ""
+	if (len(strSlince)) < 3 {
+		return "", strSlince[0]
+	}
+	return strSlince[2], strSlince[0]
 }
 
 // "https://" + host + "/objects/" + typ + "/" + uuid.New().String()
@@ -33,6 +37,7 @@ func GenerateObjectID(typ, host string) string {
 }
 
 // only for the query of local objects
+// https:// + host + /object/ + typ
 func ParseTypeFromObjectID(id string) (typ, host string) {
 	id = strings.TrimPrefix(id, "https://")
 	arr := strings.Split(id, "/")
@@ -51,8 +56,10 @@ func ParseStatusesID(name, host, id string) (statusesID string) {
 func ParseStatusesNameHostTimestamp(statusesID string) (name, host, timestamp string) {
 	statusesID = strings.TrimPrefix(statusesID, "https://")
 	arr := strings.Split(statusesID, "/")
-	if len(arr) < 5 {
+	if len(arr) < 3 {
 		return
+	} else if (len(arr)) < 5 {
+		return arr[2], arr[0], timestamp
 	}
 	return arr[2], arr[0], arr[4]
 }
@@ -62,6 +69,7 @@ func ParseStatusesURL(name, host, timestamp string) (statusesID string) {
 	return "https://" + host + "/@" + name + "/" + timestamp
 }
 
+// kari
 func ParseVisibility(to, cc []string) string {
 	publicStream := "https://www.w3.org/ns/activitystreams#Public"
 	for _, v := range to {

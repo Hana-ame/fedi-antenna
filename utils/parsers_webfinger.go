@@ -42,6 +42,7 @@ func ParseWebfingerUrl(username, host string) string {
 	return `https://` + host + `/.well-known/webfinger?resource=acct:` + username + `@` + host
 }
 
+// too old
 // Parse UserId from webfinger
 func ParseUserId(webfingerObj *orderedmap.OrderedMap) string {
 	if links, ok := webfingerObj.Get("links"); !ok {
