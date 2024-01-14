@@ -3,6 +3,8 @@ package controller
 import (
 	"crypto"
 	"crypto/rsa"
+	"crypto/sha256"
+	"encoding/base64"
 	"fmt"
 	"log"
 	"net/http"
@@ -11,7 +13,34 @@ import (
 	"github.com/Hana-ame/fedi-antenna/core"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 	"github.com/Hana-ame/httpsig"
+	"github.com/gin-gonic/gin"
 )
+
+func verify(c *gin.Context, body []byte) error {
+	// verify
+	if err := Verify(c.Request); err != nil {
+		log.Println(err)
+		return err
+	}
+	_, digest := parseDigest(c.GetHeader("Digest"))
+	sha256 := sha256.Sum256([]byte(body))
+	encoded := base64.StdEncoding.EncodeToString([]byte(sha256[:]))
+	if digest != encoded {
+		log.Printf("digest != encoded\n")
+		return fmt.Errorf("digest != encoded")
+	}
+	return nil
+}
+
+// signature
+// "SHA-256=8RIlimPwETDMkWQMI59d0gm9dqhzKGtX0CsEcahxxOE=" => "SHA-256", "8RIlimPwETDMkWQMI59d0gm9dqhzKGtX0CsEcahxxOE="
+func parseDigest(d string) (algorithm, digest string) {
+	arr := strings.SplitN(d, "=", 2)
+	if len(arr) != 2 {
+		return
+	}
+	return arr[0], arr[1]
+}
 
 func Verify(r *http.Request) (err error) {
 	defer func() {

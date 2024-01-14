@@ -1,16 +1,12 @@
 package controller
 
 import (
-	"crypto/sha256"
-	"encoding/base64"
 	"encoding/json"
-	"fmt"
 	"io"
 	"log"
 	"net/http"
 
 	"github.com/Hana-ame/fedi-antenna/activitypub/handler"
-	"github.com/Hana-ame/fedi-antenna/core/utils"
 	"github.com/Hana-ame/orderedmap"
 	"github.com/gin-gonic/gin"
 )
@@ -91,20 +87,4 @@ func Inbox(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, "")
-}
-
-func verify(c *gin.Context, body []byte) error {
-	// verify
-	if err := Verify(c.Request); err != nil {
-		log.Println(err)
-		return err
-	}
-	_, digest := utils.ParseDigest(c.GetHeader("Digest"))
-	sha256 := sha256.Sum256([]byte(body))
-	encoded := base64.StdEncoding.EncodeToString([]byte(sha256[:]))
-	if digest != encoded {
-		log.Printf("digest != encoded\n")
-		return fmt.Errorf("digest != encoded")
-	}
-	return nil
 }

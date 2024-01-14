@@ -3,10 +3,10 @@ package controller
 import (
 	"net/http"
 
+	"github.com/Hana-ame/fedi-antenna/core/convert"
 	"github.com/Hana-ame/fedi-antenna/core/dao"
 	core "github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
-	"github.com/Hana-ame/fedi-antenna/core/utils/convert"
 	"github.com/gin-gonic/gin"
 )
 

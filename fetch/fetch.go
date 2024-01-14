@@ -6,7 +6,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/Hana-ame/fedi-antenna/Tools/myfetch"
@@ -22,13 +21,10 @@ func Fetch(method, url string, header map[string]string, body io.Reader) (*http.
 // pubKeyOwner is ID with out '#main-key'
 func FetchWithSign(
 	pubKeyOwner string,
-	method, url string, header map[string]string, body []byte,
+	method string, endpoint string, header map[string]string, body []byte,
 ) (
 	*http.Response, error,
 ) {
-	if !strings.HasSuffix(url, "inbox") {
-		url = "https://me.ns.ci/inbox"
-	}
 
 	pk, err := dao.ReadPrivateKeyByOwner(pubKeyOwner)
 	if err != nil {
@@ -38,7 +34,7 @@ func FetchWithSign(
 
 	resp, err := fetchWithSign(
 		pk, pubKeyOwner+"#main-key",
-		method, url, header, body,
+		method, endpoint, header, body,
 	)
 	if err != nil {
 		log.Println(err)

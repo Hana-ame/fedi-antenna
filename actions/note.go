@@ -2,15 +2,25 @@ package actions
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/Hana-ame/fedi-antenna/activitypub/fetch"
 	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
+	"github.com/Hana-ame/fedi-antenna/core/convert"
+	core "github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 )
 
-func CreateNote(note activitypub.Creatable) error {
+func CreateNote(note *activitypub.Note, localnote *core.LocalNote, shouldRead bool) error {
+	if note == nil {
+		if localnote == nil {
+			log.Printf("nothing passed\n")
+			return fmt.Errorf("nothing passed")
+		}
+		note = convert.ToActivityPubNote(localnote)
+	}
 	o := &activitypub.Create{
 		Object: note,
 	}
