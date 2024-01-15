@@ -13,7 +13,7 @@ import (
 	"github.com/Hana-ame/fedi-antenna/mastodon/entities"
 )
 
-func Note(actor, IdempotencyKey string, o *mastodon.Post_a_new_status) (*entities.Status, error) {
+func Post_a_new_status(actor, IdempotencyKey string, o *mastodon.Post_a_new_status) (*entities.Status, error) {
 	// actor string,
 
 	timestamp := utils.Now()
@@ -48,6 +48,6 @@ func Note(actor, IdempotencyKey string, o *mastodon.Post_a_new_status) (*entitie
 	return nil, nil
 }
 
-func DeleteNote(actor string, localID string) (*entities.Status, error) {
+func Delete_a_status(id string, actor string) (*entities.Status, error) {
 	return nil, nil
 }

@@ -18,8 +18,7 @@ func Post_a_new_status(c *gin.Context) {
 	var data *model.Post_a_new_status
 	c.Bind(&data)
 
-	status, err := handler.Note(Authorization, IdempotencyKey, data)
-
+	status, err := handler.Post_a_new_status(Authorization, IdempotencyKey, data)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return

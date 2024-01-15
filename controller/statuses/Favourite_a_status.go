@@ -3,27 +3,24 @@ package statuses
 import (
 	"net/http"
 
-	"github.com/Hana-ame/fedi-antenna/core/utils"
 	"github.com/Hana-ame/fedi-antenna/mastodon/handler"
-	"github.com/Hana-ame/fedi-antenna/mastodon/model"
 	"github.com/gin-gonic/gin"
 )
 
 // POST /api/v1/statuses/:id/favourite HTTP/1.1
 func Favourite_a_status(c *gin.Context) {
-	var o *model.Post_a_new_status
-	c.Bind(&o)
-
-	authorizationID := utils.ParseActivitypubID("test5", "fedi.moonchan.xyz")
+	// REQUIRED String. The ID of the Status in the database.
 	id := c.Param("id")
-
-	status, err := handler.Favourite(authorizationID, id, o.Visibility)
+	// REQUIRED Provide this header with Bearer <user token> to gain authorized access to this API method.
+	Authorization := c.GetHeader("Authorization")
+	o, err := handler.Favourite_a_status(
+		id,
+		Authorization,
+	)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, err)
 		return
 	}
-
-	c.JSON(http.StatusOK, status)
+	c.JSON(http.StatusOK, o)
 	return
-
 }
