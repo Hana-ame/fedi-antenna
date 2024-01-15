@@ -1,23 +1,40 @@
-# 
+#
+
+## https://moonchan.xyz/page/
+
+mastodon entities流程
+复制entities-script.js
+复制document
+cd mastodon/entities
+node open_entity.mjs 类名
+黏贴
+保存退出
+
+mastodon methods流程
+复制method-script.js
+复制document(注意复制到Response)
+黏贴到本地controll
+如果有model，复制到model
+handler加入入口(等待之后写)
+保存退出
 
 ### **stack**
-在写method转code的脚本。
-mastodon-parser就是托事
-db也要礼。他妈的早知道画图。
-regsign 不在mastodon这边
-- [x] note delete note
-- [x] reblog delete reblog
-- [x] like delete like
-- [x] follow unfollow
-- [ ] accept reject.
-- [ ] block unblock
-Controller
+~~麻了，不让编译，还是先写好method到code的脚本把方法都填好。~~
+~~读json文件设置，这是再干吗???~~
+~~在写method转code的脚本。~~
+~~mastodon-parser就是托事~~
+db也要理。他妈的早知道画图。
+~~regsign 不在mastodon这边~~
 - [ ] note delete note
 - [ ] reblog delete reblog
 - [ ] like delete like
 - [ ] follow unfollow
 - [ ] block unblock
 Handler
+handler影响本地db，local系列
+activitypub的handler从local系列抓数据
+core的查询和涉及到的activitypub/action的方法涉及到activitypub的db，也就是缓存。
+这个缓存可能可以用redis代替，但是姑且用gorm做。
 you should also find the way to pull statuses, likes, and, relations.
 先做mastodon的然后上前端，能作出单机版。
 ~~很明显undo是需要把所有的东西都存一遍的。~~

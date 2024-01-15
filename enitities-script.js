@@ -25,8 +25,8 @@ class R {
     let captialized = this.name.split('_').map(w => {return w.charAt(0).toUpperCase() + w.slice(1).toLowerCase();}).join("").split(" ")[0]
     let type = typecasting(this.type.split(" ")[1])
     if (type === "*") type += typecasting(this.type.split(" ")[2])
-    if (type === "[]") type += () => { w = typecasting(this.type.split(" ")[3]).replace("::", "."); return  w.charAt(0).toLowerCase() + w.slice(1);}
-    if (type === "*[]") type += () => { w = typecasting(this.type.split(" ")[4]).replace("::", "."); return  w.charAt(0).toLowerCase() + w.slice(1);}
+    if (type === "[]") type += (() => { let w = typecasting(this.type.split(" ")[3]).replace("::", "."); return  w.charAt(0).toLowerCase() + w.slice(1);})()
+    if (type === "*[]") type += (() => { let w = typecasting(this.type.split(" ")[4]).replace("::", "."); return  w.charAt(0).toLowerCase() + w.slice(1);})()
     let jsonfield = `\`json:"${this.name}"\``.replace(" OPTIONAL", ",omitempty")
     fn(`${captialized} ${type} ${jsonfield}`)
   }

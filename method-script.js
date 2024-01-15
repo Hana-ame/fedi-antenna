@@ -26,8 +26,12 @@ class PARAMR {
   readline(s){
     this.describe = s
   }
-  write(){
+  getName(){
     let name = this.name.match(/\w+/g).join("_")
+    return name
+  }
+  write(){
+    let name = this.getName()
 
     let type = this.describe.split(".")[0]
     let gotype = ""
@@ -50,6 +54,7 @@ class PARAMR {
 
     switch (this.paramtype) {
       case "Headers":
+        name = name.match(/\w+/g).join("")
         writeline("// " + this.describe)
         writeline(`${name} := c.GetHeader("${this.name}")`)
         break;
@@ -78,8 +83,13 @@ class APIR {
     this.i = 0
     this.now = ""
     this.paramr = null
+    this.otherparams = []
+    this.dataformparams = []
   }
+  // api
   readline(s, i){
+    // writeline("//////"+s)
+    // meta datas
     if (i === 0){
       this.name = s
     }else if (i === 1){
@@ -88,28 +98,27 @@ class APIR {
       this.descripe = s
     }else if (i === 4){
       this.returns = s
-      
-      this.goFuncName = this.name.split(" ").join("_")
-      writeline("// " + this.methodPath)
-      writeline(`func ${this.goFuncName}(c *gin.Context) {`)
     }
 
+    // writeline("//////"+s)
     // Request or Response
     switch (s) {
       case "Request":
         this.now = s
         return
       case "Response":
+        // finally
+        this.write()
+
         this.now = s
         try{
-          if (this.paramr == null) return
+          if (this.paramr == null) break;
           this.paramr.write(writeline)
           this.paramr = null
         }catch(error){
           writeline(error.stack)
         }
-        writeline(`}`)
-        
+
         return;
       default:
         break;
@@ -124,9 +133,7 @@ class APIR {
         break;
       case "Form data parameters":
         this.paramnow = s
-        writeline(`}`)
-        writeline(`// form data parameters`)
-        writeline(`type ${this.goFuncName} struct{`)
+
         break;
       case "Path parameters":
         this.paramnow = s
@@ -139,7 +146,8 @@ class APIR {
           this.paramr = new PARAMR(this.paramnow, s)
         } else {
           this.paramr.readline(s)
-          this.paramr.write()
+          if (this.paramr.paramtype === "Form data parameters") this.dataformparams.push(this.paramr)
+          else this.otherparams.push(this.paramr)
           this.paramr = null
         }
         break;
@@ -147,6 +155,52 @@ class APIR {
     
 
     this.i++;
+  }
+  write(){        
+    writeline("package controller")
+
+    this.goFuncName = this.name.split(" ").join("_")
+    writeline("// " + this.methodPath)
+    writeline(`func ${this.goFuncName}(c *gin.Context) {`)
+    
+    for(const p of this.otherparams){
+      p.write()
+    }
+
+    if (this.dataformparams.length > 0) {
+      writeline(`var data *model.${this.goFuncName}`)
+      writeline(`c.Bind(&data)`)
+    }
+    
+	  writeline(`o, err := handler.${this.goFuncName}(`)
+    for(const p of this.otherparams){
+      writeline(`${p.getName()},`)
+    }
+    if (this.dataformparams.length > 0) {
+      writeline(`data,`)
+    }
+    writeline(`)`)
+    writeline(`if err != nil {`)
+		writeline(`  c.JSON(http.StatusInternalServerError, err)`)
+		writeline(`  return`)
+    writeline(`}`)
+
+    writeline(`c.JSON(http.StatusOK, o)`)
+    writeline(`return`)
+    writeline(`}`)
+
+    if (this.dataformparams.length == 0) return;
+
+    writeline("package model")
+    writeline(`// form data parameters`)
+    writeline(`type ${this.goFuncName} struct{`)
+    
+    for(const p of this.dataformparams){
+      p.write()
+    }
+
+    writeline(`}`)
+
   }
 }
 
@@ -159,6 +213,7 @@ function rl(s, i) {
     return
   }
   
+  // api reader entrance
   if (apir === null) {
     apir = new APIR()
     return
@@ -167,6 +222,7 @@ function rl(s, i) {
     apir.readline(s, i)
     return
   } 
+  
 };
 
 rl
