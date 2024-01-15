@@ -47,11 +47,29 @@ func Post_a_new_status(actor, IdempotencyKey string, o *mastodon.Post_a_new_stat
 	}
 
 	// mastodon
-	status := convert.LocalNoteToMastodonStatus(localNote)
+	status := convert.ToMastodonStatus(localNote, nil)
 
 	return status, nil
 }
 
 func Delete_a_status(id string, actor string) (*entities.Status, error) {
-	return nil, nil
+	name, host := utils.ParseNameAndHost(actor)
+	statusID := utils.ParseStatusesID(name, host, id)
+	ln := &core.LocalNote{
+		ID: statusID,
+	}
+	if err := dao.Read(ln); err != nil {
+		return nil, err
+	}
+
+	if err := dao.Delete(ln); err != nil {
+		return nil, err
+	}
+
+	// activitypub
+	// todo
+
+	// mastodon
+	status := convert.ToMastodonStatus(ln, nil)
+	return status, nil
 }
