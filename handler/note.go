@@ -38,6 +38,7 @@ func Post_a_new_status(actor, IdempotencyKey string, o *mastodon.Post_a_new_stat
 		return nil, err
 	}
 
+	// activitypub
 	note := convert.ToActivityPubNote(localNote)
 
 	if err := actions.CreateNote(note, nil, false); err != nil {
@@ -45,7 +46,10 @@ func Post_a_new_status(actor, IdempotencyKey string, o *mastodon.Post_a_new_stat
 		return nil, err
 	}
 
-	return nil, nil
+	// mastodon
+	status := convert.LocalNoteToMastodonStatus(localNote)
+
+	return status, nil
 }
 
 func Delete_a_status(id string, actor string) (*entities.Status, error) {

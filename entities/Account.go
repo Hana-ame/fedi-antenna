@@ -38,10 +38,10 @@ type Account struct {
 	Locked bool `json:"locked"`
 	// Type: Array of Field
 	// Description: Additional metadata attached to a profile as name-value pairs.
-	Fields []account.Field `json:"fields"`
+	Fields []*account.Field `json:"fields"`
 	// Type: Array of CustomEmoji
 	// Description: Custom emoji entities to be used when rendering the profile.
-	Emojis []CustomEmoji `json:"emojis"`
+	Emojis []*CustomEmoji `json:"emojis"`
 	// Type: Boolean
 	// Description: Indicates that the account may perform automated actions, may not be monitored, or identifies as a robot.
 	Bot bool `json:"bot"`

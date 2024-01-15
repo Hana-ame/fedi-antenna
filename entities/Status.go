@@ -14,7 +14,7 @@ type Status struct {
 	CreatedAt string `json:"created_at"`
 	// Type: Account
 	// Description: The account that authored this status.
-	Account Account `json:"account"`
+	Account *Account `json:"account"`
 	// Type: String (HTML)
 	// Description: HTML-encoded status content.
 	Content string `json:"content"`
@@ -29,19 +29,19 @@ type Status struct {
 	SpoilerText string `json:"spoiler_text"`
 	// Type: Array of MediaAttachment
 	// Description: Media that is attached to this status.
-	MediaAttachments []MediaAttachment `json:"media_attachments"`
+	MediaAttachments []*MediaAttachment `json:"media_attachments"`
 	// Type: Hash
 	// Description: The application used to post this status.
-	Application status.Application `json:"application,omitempty"`
+	Application *status.Application `json:"application,omitempty"`
 	// Type: Array of Status::Mention
 	// Description: Mentions of users within the status content.
-	Mentions []status.Mention `json:"mentions"`
+	Mentions []*status.Mention `json:"mentions"`
 	// Type: Array of Status::Tag
 	// Description: Hashtags used within the status content.
-	Tags []status.Tag `json:"tags"`
+	Tags []*status.Tag `json:"tags"`
 	// Type: Array of CustomEmoji
 	// Description: Custom emoji to be used when rendering status content.
-	Emojis []CustomEmoji `json:"emojis"`
+	Emojis []*CustomEmoji `json:"emojis"`
 	// Type: Integer
 	// Description: How many boosts this status has received.
 	ReblogsCount int `json:"reblogs_count"`
