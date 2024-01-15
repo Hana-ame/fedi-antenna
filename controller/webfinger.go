@@ -29,7 +29,7 @@ func Webfinger(c *gin.Context) {
 		ID: utils.ParseActivitypubID(username, host),
 	}
 	if err := dao.Read(user); err != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": "not found"})
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 	} else {
 		_ = user
 
@@ -42,6 +42,5 @@ func Webfinger(c *gin.Context) {
 		}
 
 		c.JSON(http.StatusOK, webfingerObj)
-
 	}
 }

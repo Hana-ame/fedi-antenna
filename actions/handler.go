@@ -13,6 +13,7 @@ func GetUserIdFromAcct(acct string) (userId string, err error) {
 			err = fmt.Errorf("%s", e)
 		}
 	}()
+
 	o, err := FetchWebfingerByAcct(acct)
 	userId = utils.ParseUserId(o)
 
