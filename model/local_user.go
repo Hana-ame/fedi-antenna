@@ -46,5 +46,6 @@ type LocalUser struct {
 	FollowersCount int
 	FollowingCount int
 
+	CreatedAt int64
 	DeletedAt int64
 }

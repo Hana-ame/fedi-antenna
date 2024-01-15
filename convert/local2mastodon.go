@@ -4,6 +4,7 @@ import (
 	"log"
 	"strconv"
 
+	"github.com/Hana-ame/fedi-antenna/core/convert"
 	"github.com/Hana-ame/fedi-antenna/core/dao"
 	core "github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
@@ -93,6 +94,138 @@ func ToMastodonAccount(lu *core.LocalUser) *entities.Account {
 		FollowingCount: lu.FollowingCount,
 	}
 	return account
+}
+
+func ToMastodonStatus(note *core.LocalNote, notify *core.LocalNotify) *entities.Status {
+	if note != nil {
+		return LocalNoteToMastodonStatus(note)
+	} else if notify != nil {
+		return LocalNotifyToMastodonStatus(notify)
+	} else {
+		return nil
+	}
+}
+
+func LocalNotifyToMastodonStatus(ln *core.LocalNotify) *entities.Status {
+	name, host, timestampString := utils.ParseStatusesIDToNameHostTimestamp(ln.ID)
+	timestamp, err := strconv.Atoi(timestampString)
+	if err != nil {
+		log.Printf("%s", err.Error())
+		return nil
+	}
+	lu := &core.LocalUser{
+		ID: utils.ParseActivitypubID(name, host),
+	}
+	if err := dao.Read(lu); err != nil {
+		log.Printf("%s", err.Error())
+		return nil
+	}
+	account := ToMastodonAccount(lu)
+
+	lr := &core.LocalNote{
+		ID: ln.Object,
+	}
+	if err := dao.Read(lr); err != nil {
+		log.Printf("%s", err.Error())
+		return nil
+	}
+
+	status := &entities.Status{
+		// Type: String (cast from an integer but not guaranteed to be a number)
+		// Description: ID of the status in the database.
+		Id: timestampString,
+		// Type: String
+		// Description: URI of the status used for federation.
+		Uri: ln.ID,
+		// Type: String (ISO 8601 Datetime)
+		// Description: The date when this status was created.
+		CreatedAt: utils.TimestampToRFC3339(int64(timestamp)),
+		// Type: Account
+		// Description: The account that authored this status.
+		Account: account,
+		// Type: String (HTML)
+		// Description: HTML-encoded status content.
+		Content: "",
+		// Type: String (Enumerable oneOf)
+		// Description: Visibility of this status.
+		Visibility: ln.Visibility,
+		// Type: Boolean
+		// Description: Is this status marked as sensitive content?
+		Sensitive: false,
+		// Type: String
+		// Description: Subject or summary line, below which status content is collapsed until expanded.
+		SpoilerText: "",
+		// Type: Array of MediaAttachment
+		// Description: Media that is attached to this status.
+		MediaAttachments: []*entities.MediaAttachment{},
+		// Type: Hash
+		// Description: The application used to post this status.
+		Application: nil,
+		// Type: Array of Status::Mention
+		// Description: Mentions of users within the status content.
+		Mentions: []*status.Mention{},
+		// Type: Array of Status::Tag
+		// Description: Hashtags used within the status content.
+		Tags: []*status.Tag{},
+		// Type: Array of CustomEmoji
+		// Description: Custom emoji to be used when rendering status content.
+		Emojis: []*entities.CustomEmoji{},
+		// Type: Integer
+		// Description: How many boosts this status has received.
+		ReblogsCount: 0,
+		// Type: Integer
+		// Description: How many favourites this status has received.
+		FavouritesCount: 0,
+		// Type: Integer
+		// Description: How many replies this status has received.
+		RepliesCount: 0,
+		// Type: NULLABLE String (URL) or null
+		// Description: A link to the status’s HTML representation.
+		Url: utils.ParseStringToPointer(ln.ID, true),
+		// Type: NULLABLE String (cast from an integer but not guaranteed to be a number) or null
+		// Description: ID of the status being replied to.
+		InReplyToId: nil,
+		// Type: NULLABLE String (cast from an integer but not guaranteed to be a number) or null
+		// Description: ID of the account that authored the status being replied to.
+		InReplyToAccountId: nil,
+		// Type: NULLABLE Status or null
+		// Description: The status being reblogged.
+		Reblog: convert.ToMastodonStatus(lr, nil),
+		// Type: NULLABLE Poll or null
+		// Description: The poll attached to the status.
+		Poll: nil,
+		// Type: NULLABLE PreviewCard or null
+		// Description: Preview card for links included within status content.
+		Card: nil,
+		// Type: NULLABLE String (ISO 639 Part 1 two-letter language code) or null
+		// Description: Primary language of this status.
+		Language: nil,
+		// Type: NULLABLE String or null
+		// Description: Plain-text source of a status. Returned instead of content when status is deleted, so the user may redraft from the source text without the client having to reverse-engineer the original text from the HTML content.
+		Text: nil,
+		// Type: NULLABLE String (ISO 8601 Datetime)
+		// Description: Timestamp of when the status was last edited.
+		EditedAt: nil,
+		// Type: Boolean
+		// Description: If the current token has an authorized user: Have you favourited this status?
+		Favourited: false,
+		// Type: Boolean
+		// Description: If the current token has an authorized user: Have you boosted this status?
+		Reblogged: false,
+		// Type: Boolean
+		// Description: If the current token has an authorized user: Have you muted notifications for this status’s conversation?
+		Muted: false,
+		// Type: Boolean
+		// Description: If the current token has an authorized user: Have you bookmarked this status?
+		Bookmarked: false,
+		// Type: Boolean
+		// Description: If the current token has an authorized user: Have you pinned this status? Only appears if the status is pinnable.
+		Pinned: false,
+		// Type: Array of FilterResult
+		// Description: If the current token has an authorized user: The filter and keywords that matched this status.
+		Filtered: nil,
+	}
+	return status
 }
 
 func LocalNoteToMastodonStatus(ln *core.LocalNote) *entities.Status {
@@ -201,4 +334,82 @@ func LocalNoteToMastodonStatus(ln *core.LocalNote) *entities.Status {
 		Filtered: nil,
 	}
 	return status
+}
+
+// 好像不该在这里。
+func ToMastodonRelationship(id, actor string) *entities.Relationship {
+	lu := &core.LocalUser{
+		ID: id,
+	}
+	if err := dao.Read(lu); err != nil {
+		log.Printf("%s", err.Error())
+		return nil
+	}
+	// actor to object
+	lra2o := &core.LocalRelation{
+		Actor:  actor,
+		Object: id,
+	}
+	if err := dao.Read(lra2o); err != nil {
+		log.Printf("%s", err.Error())
+		return nil
+	}
+	// object to actor
+	lro2a := &core.LocalRelation{
+		Actor:  id,
+		Object: actor,
+	}
+	if err := dao.Read(lro2a); err != nil {
+		log.Printf("%s", err.Error())
+		return nil
+	}
+
+	relationship := &entities.Relationship{
+		// Type: String (cast from an integer, but not guaranteed to be a number)
+		// Description: The account ID.
+		Attributes: utils.TimestampToRFC3339(lu.CreatedAt),
+		// Type: Boolean
+		// Description: Are you following this user?
+		Following: lra2o.Type == core.RelationTypeFollow && lra2o.Status == core.RelationStatusAccepted,
+		// Type: Boolean
+		// Description: Are you receiving this user’s boosts in your home timeline?
+		ShowingReblogs: true,
+		// Type: Boolean
+		// Description: Have you enabled notifications for this user?
+		Notifying: false,
+		// Type: Array of String (ISO 639-1 language two-letter code)
+		// Description: Which languages are you following from this user?
+		Languages: []string{},
+		// Type: Boolean
+		// Description: Are you followed by this user?
+		FollowedBy: lro2a.Type == core.RelationTypeFollow && lro2a.Status == core.RelationStatusAccepted,
+		// Type: Boolean
+		// Description: Are you blocking this user?
+		Blocking: lra2o.Type == core.RelationTypeBlock,
+		// Type: Boolean
+		// Description: Is this user blocking you?
+		BlockedBy: lro2a.Type == core.RelationTypeBlock,
+		// Type: Boolean
+		// Description: Are you muting this user?
+		Muting: false,
+		// Type: Boolean
+		// Description: Are you muting notifications from this user?
+		MutingNotifications: false,
+		// Type: Boolean
+		// Description: Do you have a pending follow request for this user?
+		Requested: lra2o.Type == core.RelationTypeFollow && lra2o.Status == core.RelationStatusPadding,
+		// Type: Boolean
+		// Description: Has this user requested to follow you?
+		RequestedBy: lro2a.Type == core.RelationTypeFollow && lro2a.Status == core.RelationStatusPadding,
+		// Type: Boolean
+		// Description: Are you blocking this user’s domain?
+		DomainBlocking: false,
+		// Type: Boolean
+		// Description: Are you featuring this user on your profile?
+		Endorsed: false,
+		// Type: String
+		// Description: This user’s profile bio
+		Note: lu.Summary,
+	}
+	return relationship
 }

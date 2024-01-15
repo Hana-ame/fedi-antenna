@@ -2,9 +2,9 @@ package model
 
 // form mastodon note
 type LocalNote struct {
-	// ID is a integer like which means timestamp
+	// "https://" + host + "/users/" + name + "/statuses/" + id
 	ID string `gorm:"primarykey"`
-	// actor
+	// actor "https://" + host + "/users/" + name 
 	AttributedTo string
 
 	// text, html encoded
@@ -25,6 +25,7 @@ type LocalNote struct {
 	InReplyToAccountId string
 
 	// utils.Now()
+	// also the ID for mastodon strconv.Itoa()
 	Published int64
 
 	DeletedAt int64

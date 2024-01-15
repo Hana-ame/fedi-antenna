@@ -52,14 +52,14 @@ func ParseStatusesID(name, host, id string) (statusesID string) {
 	return "https://" + host + "/users/" + name + "/statuses/" + id
 }
 
-// "https://" + host + "/users/" + name + "/statuses/" + timestamp
-func ParseStatusesNameHostTimestamp(statusesID string) (name, host, timestamp string) {
+// "https://" + host + "/users/" + name + "/statuses/" + timestamp (+ "/xxx")
+func ParseStatusesIDToNameHostTimestamp(statusesID string) (name, host, timestamp string) {
 	statusesID = strings.TrimPrefix(statusesID, "https://")
 	arr := strings.Split(statusesID, "/")
 	if len(arr) < 3 {
 		return
 	} else if (len(arr)) < 5 {
-		return arr[2], arr[0], timestamp
+		return arr[2], arr[0], ""
 	}
 	return arr[2], arr[0], arr[4]
 }
