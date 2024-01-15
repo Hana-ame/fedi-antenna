@@ -25,3 +25,11 @@ func ParseStringToPointer(s string, emptyIsNil bool) *string {
 	}
 	return &s
 }
+
+// return &s
+func ParseBoolToPointer(b bool, emptyIsNil bool) *bool {
+	if emptyIsNil && !b {
+		return nil
+	}
+	return &b
+}

@@ -3,6 +3,7 @@ package dao
 import (
 	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
 	core "github.com/Hana-ame/fedi-antenna/core/model"
+	webfinger "github.com/Hana-ame/fedi-antenna/webfinger/model"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -27,6 +28,8 @@ func init() {
 	db.AutoMigrate(&core.FediStatus{})
 
 	core.AutoMigrate(db)
+	webfinger.AutoMigrate(db)
+
 }
 
 func Create(o any) error {

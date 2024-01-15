@@ -35,7 +35,7 @@ func ReadPublicKeyByOwner(id string) (pk *activitypub.PublicKey, err error) {
 
 func ReadActivitypubUser(name, host string) (user *activitypub.User, err error) {
 	host = Host(host)
-	id, err := webfinger.GetUserIdFromAcct(utils.ParseAcctStr(name, host))
+	id, err := webfinger.GetUserIdFromAcct(utils.ParseAcctStr(name, host), false)
 	if err != nil {
 		log.Println(err)
 		return

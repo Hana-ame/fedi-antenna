@@ -5,7 +5,7 @@ type LocalUser struct {
 	Email      string `json:"email"`
 	PasswdHash string `json:"-"`
 
-	// it is a url
+	// activitypub url
 	ID string `json:"id" gorm:"primarykey"`
 
 	// without @host
@@ -32,6 +32,19 @@ type LocalUser struct {
 	IconURL string `json:"-"`
 	// the url of Image, background
 	ImageURL string `json:"-"`
+
+	// not verified
+	IsBot          bool
+	IsGroup        bool
+	IsDiscoverable bool
+	IsNoindex      bool
+	IsSuspended    bool
+	IsLimited      bool
+
+	LastSeenAt     int64
+	StatusesCount  int
+	FollowersCount int
+	FollowingCount int
 
 	DeletedAt int64
 }
