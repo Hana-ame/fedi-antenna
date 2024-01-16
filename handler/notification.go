@@ -8,7 +8,7 @@ import (
 )
 
 func Like(o *orderedmap.OrderedMap) error {
-	name, host, _ := utils.ParseStatusesNameHostTimestamp(o.GetOrDefault("object", "").(string))
+	name, host, _ := utils.ParseStatusesIDToNameHostTimestamp(o.GetOrDefault("object", "").(string))
 	ln := &model.LocalNotify{
 		ID:     o.GetOrDefault("id", "").(string),
 		Actor:  o.GetOrDefault("actor", "").(string),

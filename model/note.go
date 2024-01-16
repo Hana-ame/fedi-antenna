@@ -84,7 +84,7 @@ func (o *Note) Autofill() {
 	}
 	// for content
 	// o.Content = o.RawContent
-	name, host, timestamp := utils.ParseStatusesNameHostTimestamp(o.ID)
+	name, host, timestamp := utils.ParseStatusesIDToNameHostTimestamp(o.ID)
 	if o.AttributeTo == "" {
 		o.AttributeTo = utils.ParseActivitypubID(name, host)
 	}

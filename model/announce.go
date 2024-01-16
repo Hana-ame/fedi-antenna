@@ -25,7 +25,7 @@ func (o *Announce) Autofill() {
 	o.Context = AnnounceContext
 	o.Type = TypeAnnounce
 
-	name, host, _ := utils.ParseStatusesNameHostTimestamp(o.ID)
+	name, host, _ := utils.ParseStatusesIDToNameHostTimestamp(o.ID)
 	switch o.Visibility {
 	case VisiblityPublic:
 		o.To = EndpointPublic
@@ -53,4 +53,3 @@ func (o *Announce) GetActor() string {
 func (o *Announce) GetEndpoint() string {
 	return "https://www.w3.org/ns/activitystreams#Public"
 }
-
