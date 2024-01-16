@@ -1,10 +1,15 @@
 package model
 
+// 用来保存note的结构
+// 转mastodon格式，在mastodon访问时
+// 转activitypub格式，在发送时
+// 从mastodon格式，在收到人工发送时
+// 从activitypub格式，在inbox受到或者准备从远处拉取时
 // form mastodon note
 type LocalNote struct {
 	// "https://" + host + "/users/" + name + "/statuses/" + id
 	ID string `gorm:"primarykey"`
-	// actor "https://" + host + "/users/" + name 
+	// actor "https://" + host + "/users/" + name
 	AttributedTo string
 
 	// text, html encoded

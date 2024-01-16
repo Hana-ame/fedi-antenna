@@ -4,7 +4,6 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/Hana-ame/fedi-antenna/core/convert"
 	"github.com/Hana-ame/fedi-antenna/core/dao"
 	core "github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
@@ -190,7 +189,7 @@ func LocalNotifyToMastodonStatus(ln *core.LocalNotify) *entities.Status {
 		InReplyToAccountId: nil,
 		// Type: NULLABLE Status or null
 		// Description: The status being reblogged.
-		Reblog: convert.ToMastodonStatus(lr, nil),
+		Reblog: ToMastodonStatus(lr, nil),
 		// Type: NULLABLE Poll or null
 		// Description: The poll attached to the status.
 		Poll: nil,
