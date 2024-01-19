@@ -59,7 +59,7 @@ func TestNote(t *testing.T) {
 	published := utils.TimestampToRFC3339(timestamp)
 	name, host := utils.ParseNameAndHost(actor)
 	note := &activitypub.Note{
-		ID:          utils.ParseStatusesID(name, host, strconv.Itoa(int(timestamp))),
+		ID:          utils.ParseStatusesUri(name, host, strconv.Itoa(int(timestamp))),
 		Summary:     utils.ParseStringToPointer("", true),
 		Content:     "你们能不能去死啊，吵死了",
 		Visibility:  model.VisiblityPublic,
