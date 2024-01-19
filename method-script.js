@@ -70,6 +70,8 @@ class PARAMR {
         writeline(`${name} := c.Param("${name}")`)
         break;
       case "Query parameters":
+        writeline("// " + this.describe)
+        writeline(`${name} := c.Query("${name}")`)
         break;
       default:
         break;
@@ -189,18 +191,20 @@ class APIR {
     writeline(`return`)
     writeline(`}`)
 
-    if (this.dataformparams.length == 0) return;
+    if (this.dataformparams.length !== 0) {
 
-    writeline("package model")
-    writeline(`// form data parameters`)
-    writeline(`type ${this.goFuncName} struct{`)
-    
-    for(const p of this.dataformparams){
-      p.write()
+      writeline("package model")
+      writeline(`// form data parameters`)
+      writeline(`type ${this.goFuncName} struct{`)
+      
+      for(const p of this.dataformparams){
+        p.write()
+      }
+
+      writeline(`}`)
     }
-
-    writeline(`}`)
-
+    let arr = this.methodPath.split(" ")
+    writeline( `r.${arr[0]}("${arr[1]}",controller.${this.goFuncName})`)
   }
 }
 
