@@ -98,14 +98,17 @@ func ToMastodonStatus_Deprecated(note *core.LocalNote, notify *core.LocalNotify)
 	if note != nil {
 		// return ToMastodonStatus(note)
 	} else if notify != nil {
-		return ToMastodonReblog(notify)
+		return ToMastodonReblog(notify, false)
 	} else {
 		return nil
 	}
 	return nil
 }
 
-func ToMastodonReblog(ln *core.LocalNotify) *entities.Status {
+func ToMastodonReblog(ln *core.LocalNotify, loadReblog bool) *entities.Status {
+	if ln.Type != core.NotifyTypeAnnounce {
+		return nil
+	}
 	name, host, timestampString := utils.ParseStatusesUriToNameHostTimestamp(ln.ID)
 	timestamp, err := strconv.Atoi(timestampString)
 	if err != nil {
@@ -116,14 +119,6 @@ func ToMastodonReblog(ln *core.LocalNotify) *entities.Status {
 		Uri: utils.ParseActivitypubID(name, host),
 	}
 	if err := dao.Read(acct); err != nil {
-		log.Printf("%s", err.Error())
-		return nil
-	}
-
-	reblog := &entities.Status{
-		Uri: ln.Object,
-	}
-	if err := dao.ReadMastodonStatuses(reblog); err != nil {
 		log.Printf("%s", err.Error())
 		return nil
 	}
@@ -149,7 +144,7 @@ func ToMastodonReblog(ln *core.LocalNotify) *entities.Status {
 		Url:                utils.ParseStringToPointer(ln.ID, true),
 		InReplyToId:        nil,
 		InReplyToAccountId: nil,
-		Reblog:             reblog,
+		Reblog:             nil,
 		Poll:               nil,
 		Card:               nil,
 		Language:           nil,
@@ -162,6 +157,18 @@ func ToMastodonReblog(ln *core.LocalNotify) *entities.Status {
 		Pinned:             false,
 		Filtered:           nil,
 	}
+
+	if loadReblog {
+		reblog := &entities.Status{
+			Uri: ln.Object,
+		}
+		if err := dao.ReadMastodonStatuses(reblog); err != nil {
+			log.Printf("%s", err.Error())
+			return nil
+		}
+		status.Reblog = reblog
+	}
+
 	return status
 }
 

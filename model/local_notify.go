@@ -18,13 +18,13 @@ type LocalNotify struct {
 
 	// activitypub ID in url, for the receiver.
 	// the owner of the object
-	To string
+	// To string // ?
 
 	// reblog only, public, unlisted, private
 	Visibility string
 
 	// todo
-	DeleteAt int64
+	// DeleteAt int64
 }
 
 const (

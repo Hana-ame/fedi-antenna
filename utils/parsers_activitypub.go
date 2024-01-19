@@ -3,7 +3,7 @@ package utils
 import (
 	"strings"
 
-	"github.com/Hana-ame/orderedmap"
+	"github.com/Hana-ame/fedi-antenna/Tools/orderedmap"
 	"github.com/google/uuid"
 )
 

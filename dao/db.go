@@ -25,8 +25,6 @@ func init() {
 	db.AutoMigrate(&activitypub.Reject{})
 	db.AutoMigrate(&activitypub.Note{})
 
-	db.AutoMigrate(&core.FediStatus{})
-
 	core.AutoMigrate(db)
 	webfinger.AutoMigrate(db)
 
