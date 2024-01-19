@@ -24,62 +24,18 @@ handler加入入口(等待之后写)
 所以可能是AP
 
 绷不住了，又tm改一遍db，重写得了。
-
-
-~~card is the note that contains the previews of the link.~~
-~~正在做的：mastodon/controller <=> core.Model~~
-~~需要有很好的测试手段，因此先做出一段能跑的东西比较重要。~~
-~~然后再一步步深入。~~
-~~再去确认一下格式之类的，把mastodon fetch的api也做一下。~~
-~~relation~~
-~~toots~~
-~~notification~~
-~~account~~
-~~还有的之后~~
 找不到的话去gist存一份。不然太蛋疼了。
-convert做好了没有啊
-~~convet的部分需要做多个入口的样子。~~
-~~webfinger/controller还是往本地通。~~
-~~webfinger/action可以吃缓存。反正是会缓存所有的。~~
-~~麻了，不让编译，还是先写好method到code的脚本把方法都填好。~~
-~~读json文件设置，这是再干吗???~~
-~~在写method转code的脚本。~~
-~~mastodon-parser就是托事~~
 db也要理。他妈的早知道画图。
-~~regsign 不在mastodon这边~~
-~~发狂了，这个破转换要写到死。一出场就是要差不多写完才行啊。~~
-~~写80%才刚刚勉强能跑。我服了。~~
-补论文吧。
-- [x] note delete note
-- [x] reblog delete reblog
-转嘟的时候原帖掉了怎么办。不让转吗。接受的时候要不要做个判断。
-- [x] like delete like
-- [x] follow unfollow
-- [ ] block unblock
-Handler
-handler影响本地db，local系列
-activitypub的handler从local系列抓数据
-core的查询和涉及到的activitypub/action的方法涉及到activitypub的db，也就是缓存。
-这个缓存可能可以用redis代替，但是姑且用gorm做。
-~~you should also find the way to pull statuses, likes, and, relations.~~
-这个在mastodon里面
-先做mastodon的然后上前端，能作出单机版。
-~~很明显undo是需要把所有的东西都存一遍的。~~
-~~mastodon做follow，unfollow，block，unblock，like(+undo)，announce(+undo)的接口~~
-草，activitypub部分也要一起写。不然难受死。
-~~fub的函数传参重写一下，记得side effect on local relation.~~
-要重新写一个manager管理去那个站的request
-actions 调用 fetch 未修改，之后改。
-+ ~~打开mastodon操作一下然后copy上去~~
-记得看一眼resp的返回是什么样子的。自己的返回也做一下。
-+ 照着保存下来的写，gist上有一份的。
-在mastodon加入了Account。给webfinger和联系什么的加上键，查找方式
-ap侧主动的功能好像很完全了，去测ap侧被动的部分，在那之前去把mastodon写好
-core的逻辑可能需要适当修改一下。
-本质上是action需要cache，接到core上。
-local的查询在dao上。
-功能做完。
-把utils挪一下，使得各个模块能尽可能自主运作。
+
+本地到ap好像没做
+
+好，action有大病。
+要大改出一个能和所有fedi通信的。不会改
+先改出个和ns站通着再说。
+不然没法测ap侧。
+
+还有一个Auth。做了能做前端。
+前端似乎可以做了。做吧。
 
 ### **cases**
 
@@ -89,15 +45,17 @@ local的查询在dao上。
 - [ ] 注册 - 查看 localuser 表
 #### mastodon
 - [ ] 发嘟 - 查看 local notes 表
-- [ ] 发嘟 - fedi
+- ~~[ ] 发嘟 - fedi (暂时没做)~~
   - [ ] 多个服务器。
-- [ ] follow / accept / reject - 查看 local notifies 表
+- [ ] follow / accept / reject - 查看 local relation 表
 - [ ] like / undo - 查看 local notifies 表
 - [ ] announce / undo - 查看 local notifies 表
 #### webfinger
 - [ ] 查询user id
+  - [ ] cache
 #### activitypub
 - [ ] 查询user
+  - [ ] cache
 - [ ] follow / undo - 查看 local notifies 表
 - [ ] follow / accept / reject - 查看 local notifies 表
 - [ ] block / undo - 查看 local notifies 表
