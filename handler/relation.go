@@ -64,7 +64,7 @@ func Block(o *orderedmap.OrderedMap) error {
 func UndoRelation(o *orderedmap.OrderedMap) error {
 	switch o.GetOrDefault("type", "").(string) {
 	case model.RelationTypeBlock:
-		err := core.Unblock(o.GetOrDefault("id", "").(string), o.GetOrDefault("object", "").(string), o.GetOrDefault("actor", "").(string))
+		_, err := core.Unblock(o.GetOrDefault("id", "").(string), o.GetOrDefault("object", "").(string), o.GetOrDefault("actor", "").(string))
 		return err
 	case model.RelationTypeFollow:
 		err := core.Unfollow(o.GetOrDefault("id", "").(string), o.GetOrDefault("object", "").(string), o.GetOrDefault("actor", "").(string))
