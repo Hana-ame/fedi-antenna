@@ -22,3 +22,7 @@
 	path = mastodon
 	url = git@github.com:Hana-ame/fedi-antenna.git
 	branch = back/mastodon
+[submodule "actions"]
+	path = actions
+	url = git@github.com:Hana-ame/fedi-antenna.git
+	branch = back/actions
