@@ -9,7 +9,7 @@ type Post_a_new_status struct {
 
 	Poll Poll `json:"poll"`
 	// String. ID of the status being replied to, if status is a reply.
-	InReplyToId string `json:"in_reply_to_id"`
+	InReplyToId *string `json:"in_reply_to_id"`
 	// Boolean. Mark status and attached media as sensitive? Defaults to false.
 	Sensitive bool `json:"sensitive"`
 	// String. Text to be shown as a warning or subject before the actual content. Statuses are generally collapsed behind this field.

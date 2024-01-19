@@ -5,16 +5,17 @@ import "github.com/Hana-ame/fedi-antenna/mastodon/entities/status"
 type Status struct {
 	// Type: String (cast from an integer but not guaranteed to be a number)
 	// Description: ID of the status in the database.
-	Id string `json:"id"`
+	Id string `json:"id" gorm:"primaryKey"`
 	// Type: String
 	// Description: URI of the status used for federation.
-	Uri string `json:"uri"`
+	Uri string `json:"uri"` // activitypubID
 	// Type: String (ISO 8601 Datetime)
 	// Description: The date when this status was created.
 	CreatedAt string `json:"created_at"`
 	// Type: Account
 	// Description: The account that authored this status.
-	Account *Account `json:"account"`
+	AttributedTo string   `json:"attribute_to"`
+	Account      *Account `json:"account" gorm:"foreignKey:AttributedTo;references:Uri"`
 	// Type: String (HTML)
 	// Description: HTML-encoded status content.
 	Content string `json:"content"`
@@ -29,19 +30,19 @@ type Status struct {
 	SpoilerText string `json:"spoiler_text"`
 	// Type: Array of MediaAttachment
 	// Description: Media that is attached to this status.
-	MediaAttachments []*MediaAttachment `json:"media_attachments"`
+	MediaAttachments []*MediaAttachment `json:"media_attachments" gorm:"many2many:status_mediaattachments;"`
 	// Type: Hash
 	// Description: The application used to post this status.
-	Application *status.Application `json:"application,omitempty"`
+	Application *status.Application `json:"application,omitempty" gorm:"serializer:json"`
 	// Type: Array of Status::Mention
 	// Description: Mentions of users within the status content.
-	Mentions []*status.Mention `json:"mentions"`
+	Mentions []*status.Mention `json:"mentions" gorm:"-"`
 	// Type: Array of Status::Tag
 	// Description: Hashtags used within the status content.
-	Tags []*status.Tag `json:"tags"`
+	Tags []*status.Tag `json:"tags" gorm:"-"`
 	// Type: Array of CustomEmoji
 	// Description: Custom emoji to be used when rendering status content.
-	Emojis []*CustomEmoji `json:"emojis"`
+	Emojis []*CustomEmoji `json:"emojis" gorm:"-"`
 	// Type: Integer
 	// Description: How many boosts this status has received.
 	ReblogsCount int `json:"reblogs_count"`
@@ -65,10 +66,10 @@ type Status struct {
 	Reblog *Status `json:"reblog"`
 	// Type: NULLABLE Poll or null
 	// Description: The poll attached to the status.
-	Poll *Poll `json:"poll"`
+	Poll *Poll `json:"poll" gorm:"foreignKey:Id;references:Id"`
 	// Type: NULLABLE PreviewCard or null
 	// Description: Preview card for links included within status content.
-	Card *PreviewCard `json:"card"`
+	Card *PreviewCard `json:"card" gorm:"serializer:json"`
 	// Type: NULLABLE String (ISO 639 Part 1 two-letter language code) or null
 	// Description: Primary language of this status.
 	Language *string `json:"language"`
@@ -80,20 +81,20 @@ type Status struct {
 	EditedAt *string `json:"edited_at"`
 	// Type: Boolean
 	// Description: If the current token has an authorized user: Have you favourited this status?
-	Favourited bool `json:"favourited,omitempty"`
+	Favourited bool `json:"favourited,omitempty" gorm:"-"`
 	// Type: Boolean
 	// Description: If the current token has an authorized user: Have you boosted this status?
-	Reblogged bool `json:"reblogged,omitempty"`
+	Reblogged bool `json:"reblogged,omitempty" gorm:"-"`
 	// Type: Boolean
 	// Description: If the current token has an authorized user: Have you muted notifications for this status’s conversation?
-	Muted bool `json:"muted,omitempty"`
+	Muted bool `json:"muted,omitempty" gorm:"-"`
 	// Type: Boolean
 	// Description: If the current token has an authorized user: Have you bookmarked this status?
-	Bookmarked bool `json:"bookmarked,omitempty"`
+	Bookmarked bool `json:"bookmarked,omitempty" gorm:"-"`
 	// Type: Boolean
 	// Description: If the current token has an authorized user: Have you pinned this status? Only appears if the status is pinnable.
-	Pinned bool `json:"pinned,omitempty"`
+	Pinned bool `json:"pinned,omitempty" gorm:"-"`
 	// Type: Array of FilterResult
 	// Description: If the current token has an authorized user: The filter and keywords that matched this status.
-	Filtered []FilterResult `json:"filtered,omitempty"`
+	Filtered []FilterResult `json:"filtered,omitempty" gorm:"-"`
 }

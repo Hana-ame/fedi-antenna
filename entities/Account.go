@@ -5,7 +5,7 @@ import "github.com/Hana-ame/fedi-antenna/mastodon/entities/account"
 type Account struct {
 	// Type: String (cast from an integer, but not guaranteed to be a number)
 	// Description: The account id.
-	Id string `json:"id"`
+	Id string `json:"id" gorm:"primarykey"`
 	// Type: String
 	// Description: The username of the account, not including domain.
 	Username string `json:"username"`
@@ -15,6 +15,9 @@ type Account struct {
 	// Type: String (URL)
 	// Description: The location of the user’s profile page.
 	Url string `json:"url"`
+	// Type: String
+	// Description: URI of the status used for federation.
+	Uri string `json:"uri"` // activitypubID
 	// Type: String
 	// Description: The profile’s display name.
 	DisplayName string `json:"display_name"`
@@ -38,10 +41,10 @@ type Account struct {
 	Locked bool `json:"locked"`
 	// Type: Array of Field
 	// Description: Additional metadata attached to a profile as name-value pairs.
-	Fields []*account.Field `json:"fields"`
+	Fields []*account.Field `json:"fields" gorm:"serializer:json"`
 	// Type: Array of CustomEmoji
 	// Description: Custom emoji entities to be used when rendering the profile.
-	Emojis []*CustomEmoji `json:"emojis"`
+	Emojis []*CustomEmoji `json:"emojis" gorm:"-"`
 	// Type: Boolean
 	// Description: Indicates that the account may perform automated actions, may not be monitored, or identifies as a robot.
 	Bot bool `json:"bot"`

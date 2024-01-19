@@ -26,7 +26,8 @@ func Boost_a_status(id string, actor string, o *model.Boost_a_status) (*entities
 		return nil, err
 	}
 	name, host := utils.ParseNameAndHost(actor)
-	announceID := utils.ParseStatusesID(name, host, strconv.Itoa(int(utils.Now()))) + "/activity"
+	announceID := utils.ParseStatusesUri(name, host, strconv.Itoa(int(utils.Now()))) + "/activity"
+
 	notify := &core.LocalNotify{
 		ID:     announceID,
 		Actor:  actor,
@@ -35,13 +36,19 @@ func Boost_a_status(id string, actor string, o *model.Boost_a_status) (*entities
 
 		Visibility: o.Visibility,
 	}
+	if err := dao.Create(notify); err != nil {
+		log.Printf("%s", err.Error())
+		return nil, err
+	}
+
 	// activitypub
 	// todo
 
 	// mastodon
-	status := convert.ToMastodonStatus(nil, notify)
+	// status, err := c.ToMastodonReblog(notify, actor)
 
-	return status, nil
+	// return status, err
+	return nil, nil
 }
 
 func Undo_boost_of_a_status(id string, actor string) (*entities.Status, error) {
@@ -76,7 +83,7 @@ func Undo_boost_of_a_status(id string, actor string) (*entities.Status, error) {
 	// todo
 
 	// mastodon
-	status := convert.ToMastodonStatus(nil, notify)
+	status := convert.ToMastodonReblog(notify)
 
 	return status, nil
 }
