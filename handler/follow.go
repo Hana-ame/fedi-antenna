@@ -1,8 +1,7 @@
 package handler
 
 import (
-	"log"
-
+	c "github.com/Hana-ame/fedi-antenna/core"
 	"github.com/Hana-ame/fedi-antenna/core/convert"
 	"github.com/Hana-ame/fedi-antenna/core/dao"
 	core "github.com/Hana-ame/fedi-antenna/core/model"
@@ -13,65 +12,37 @@ import (
 
 func Follow_account(id, actor string, o *accounts.Follow_account) (*entities.Relationship, error) {
 	_, host := utils.ParseNameAndHost(actor)
-	lr := &core.LocalRelation{
-		// ID:     utils.GenerateObjectID(typ, host),
-		Actor:  actor,
-		Object: id,
-		Type:   core.RelationTypeFollow,
-		// Status: core.RelationStatusPadding,
+	objectID := utils.GenerateObjectID(core.RelationTypeFollow, host)
+	acct := &entities.Account{
+		Id: id,
 	}
-	if err := dao.Read(lr); err == nil {
-		//send again
-
+	if err := dao.Read(acct); err != nil {
 		return convert.ToMastodonRelationship(id, actor), err
 	}
-	lr.ID = utils.GenerateObjectID(core.RelationTypeFollow, host)
-	lr.Status = core.RelationStatusPadding
+	err := c.Follow(objectID, acct.Uri, actor)
 
-	// activitypub
-	// todo
-	// return if failed.
+	if err == nil {
 
-	// mastodon
-	if err := dao.Create(lr); err != nil {
-		// should not
-		log.Printf("%s", err.Error())
-		return nil, err
 	}
 
-	return convert.ToMastodonRelationship(id, actor), nil
+	return convert.ToMastodonRelationship(id, actor), err
 }
 
 func Unfollow_account(id, actor string) (*entities.Relationship, error) {
-	lr := &core.LocalRelation{
-		// ID:     utils.GenerateObjectID(typ, host),
-		Actor:  actor,
-		Object: id,
-		Type:   core.RelationTypeFollow,
-		// Status: core.RelationStatusPadding,
+	acct := &entities.Account{
+		Id: id,
 	}
-	if err := dao.Read(lr); err != nil {
-		// 不存在的情况
-		log.Printf("%s", err.Error())
+	if err := dao.Read(acct); err != nil {
 		return convert.ToMastodonRelationship(id, actor), err
 	}
 
-	// activitypub
-	// todo
-	// return if failed.
+	err := c.Unfollow("", acct.Uri, actor)
 
-	// mastodon
-	if err := dao.Delete(lr); err != nil {
-		// should not
-		log.Printf("%s", err.Error())
-		return convert.ToMastodonRelationship(id, actor), err
-	}
-	if lr.Status == core.RelationStatusAccepted {
-		dao.UpdateAccountFollowingCount(&entities.Account{Uri: lr.Actor}, -1)
-		dao.UpdateAccountFollowersCount(&entities.Account{Uri: lr.Object}, -1)
+	if err == nil {
+
 	}
 
-	return convert.ToMastodonRelationship(id, actor), nil
+	return convert.ToMastodonRelationship(id, actor), err
 }
 
 func View_pending_follow_requests(
@@ -93,64 +64,37 @@ func Accept_follow_request(
 	id,
 	actor string,
 ) (*entities.Relationship, error) {
-	lr := &core.LocalRelation{
-		// ID:     utils.GenerateObjectID(typ, host),
-		Actor:  id,
-		Object: actor,
-		Type:   core.RelationTypeFollow,
-		Status: core.RelationStatusPadding,
+	acct := &entities.Account{
+		Id: id,
 	}
-	if err := dao.Read(lr); err != nil {
-		// 不存在的情况
-		log.Printf("%s", err.Error())
+	if err := dao.Read(acct); err != nil {
 		return convert.ToMastodonRelationship(id, actor), err
 	}
 
-	// mastodon
-	lr.Status = core.RelationStatusAccepted
-	if err := dao.Update(lr); err != nil {
-		// should not
-		log.Printf("%s", err.Error())
-		return convert.ToMastodonRelationship(id, actor), err
-	}
-	if lr.Status == core.RelationStatusAccepted {
-		dao.UpdateAccountFollowingCount(&entities.Account{Uri: lr.Actor}, 1)
-		dao.UpdateAccountFollowersCount(&entities.Account{Uri: lr.Object}, 1)
+	err := c.Accept("", acct.Uri, actor)
+
+	if err == nil {
+
 	}
 
-	// activitypub
-	// todo
-	// return if failed.
-
-	return convert.ToMastodonRelationship(id, actor), nil
+	return convert.ToMastodonRelationship(id, actor), err
 }
 func Reject_follow_request(
 	id,
 	actor string,
 ) (*entities.Relationship, error) {
-	lr := &core.LocalRelation{
-		// ID:     utils.GenerateObjectID(typ, host),
-		Actor:  id,
-		Object: actor,
-		Type:   core.RelationTypeFollow,
-		Status: core.RelationStatusPadding,
+	acct := &entities.Account{
+		Id: id,
 	}
-	if err := dao.Read(lr); err != nil {
-		// 不存在的情况
-		log.Printf("%s", err.Error())
+	if err := dao.Read(acct); err != nil {
 		return convert.ToMastodonRelationship(id, actor), err
 	}
 
-	// mastodon
-	if err := dao.Delete(lr); err != nil {
-		// should not
-		log.Printf("%s", err.Error())
-		return convert.ToMastodonRelationship(id, actor), err
+	err := c.Reject("", acct.Uri, actor)
+
+	if err == nil {
+
 	}
 
-	// activitypub
-	// todo
-	// return if failed.
-
-	return convert.ToMastodonRelationship(id, actor), nil
+	return convert.ToMastodonRelationship(id, actor), err
 }

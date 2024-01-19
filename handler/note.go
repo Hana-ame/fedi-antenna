@@ -4,6 +4,7 @@ import (
 	"log"
 	"strconv"
 
+	c "github.com/Hana-ame/fedi-antenna/core"
 	"github.com/Hana-ame/fedi-antenna/core/dao"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 	mastodon "github.com/Hana-ame/fedi-antenna/mastodon/controller/statuses/model"
@@ -94,19 +95,13 @@ func Post_a_new_status(actor, IdempotencyKey string, o *mastodon.Post_a_new_stat
 		// EditedAt *string `json:"edited_at"`
 	}
 
-	if err := dao.Create(status); err != nil {
-		log.Println(err)
-		return nil, err
+	err := c.CreateStatus(status)
+
+	if err == nil {
+
 	}
 
-	// activitypub
-	// note := convert.ToActivityPubNote(localNote)
-	// go actions.CreateNote(note, nil, false)
-
-	// mastodon
-	// status := convert.ToMastodonStatus(localNote)
-
-	return status, nil
+	return status, err
 }
 
 func Delete_a_status(id string, actor string) (*entities.Status, error) {
@@ -115,22 +110,12 @@ func Delete_a_status(id string, actor string) (*entities.Status, error) {
 		Id:           id,
 		AttributedTo: actor,
 	}
-	if err := dao.Read(status); err != nil {
-		// if there is no note
-		// it is actually not found error.
-		log.Println(err)
-		return nil, err
+
+	err := c.DeleteStatus(status)
+
+	if err == nil {
+
 	}
 
-	// mastodon
-	if err := dao.Delete(status); err != nil {
-		// maybe never?
-		log.Println(err)
-		return status, err
-	}
-
-	// activitypub
-	// todo
-
-	return status, nil
+	return status, err
 }

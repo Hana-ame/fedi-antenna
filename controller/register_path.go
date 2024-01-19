@@ -11,7 +11,7 @@ func RegisterPath(r *gin.Engine) {
 	// account
 	// block
 	r.POST("/api/v1/accounts/:id/unblock", accounts.Unblock_account)
-	r.POST("/api/v1/accounts/:id/unblock", accounts.Block_account)
+	r.POST("/api/v1/accounts/:id/block", accounts.Block_account)
 	// follow
 	r.POST("/api/v1/accounts/:id/follow", accounts.Follow_account)
 	r.POST("/api/v1/accounts/:id/unfollow", accounts.Unfollow_account)

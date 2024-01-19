@@ -3,10 +3,10 @@ package handler
 import (
 	"log"
 
+	"github.com/Hana-ame/fedi-antenna/activitypub/actions"
+	c "github.com/Hana-ame/fedi-antenna/core"
 	"github.com/Hana-ame/fedi-antenna/core/dao"
-	core "github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
-
 	"github.com/Hana-ame/fedi-antenna/mastodon/entities"
 )
 
@@ -19,27 +19,15 @@ func Favourite_a_status(id string, actor string) (*entities.Status, error) {
 		log.Printf("%s", err.Error())
 		return nil, err
 	}
+
 	_, host := utils.ParseNameAndHost(actor)
+	err := c.Favourite(utils.GenerateObjectID("favourite", host), status.Uri, actor)
 
-	// 考虑一下id怎么做
-	favourite := &core.LocalNotify{
-		ID:     utils.GenerateObjectID("favourite", host),
-		Actor:  actor,
-		Object: status.Uri,
-		Type:   core.NotifyTypeLike,
+	if err == nil {
+		go actions.Like(actor, status.Uri)
 	}
 
-	// acitiviypub
-	// todo
-	//
-
-	if err := dao.Create(favourite); err != nil {
-		log.Printf("%s", err.Error())
-		return status, err
-	}
-
-	// mastodon
-	return status, nil
+	return status, err
 }
 
 func Undo_favourite_of_a_status(id string, actor string) (*entities.Status, error) {
@@ -50,25 +38,12 @@ func Undo_favourite_of_a_status(id string, actor string) (*entities.Status, erro
 		log.Printf("%s", err.Error())
 		return nil, err
 	}
-	favourite := &core.LocalNotify{
-		Actor:  actor,
-		Object: status.Uri,
-		Type:   core.NotifyTypeLike,
-	}
-	if err := dao.Read(favourite); err != nil {
-		log.Printf("%s", err.Error())
-		return nil, err
-	}
-
-	// acitiviypub
-	// todo
-	//
-
-	if err := dao.Delete(favourite); err != nil {
-		log.Printf("%s", err.Error())
-		return status, err
-	}
-
 	// mastodon
-	return status, nil
+	err := c.Unfavourite(status.Uri, actor)
+
+	if err == nil {
+		// go actions.Like(actor, status.Uri)
+	}
+
+	return status, err
 }
