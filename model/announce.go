@@ -25,7 +25,7 @@ func (o *Announce) Autofill() {
 	o.Context = AnnounceContext
 	o.Type = TypeAnnounce
 
-	name, host, _ := utils.ParseStatusesIDToNameHostTimestamp(o.ID)
+	name, host, _ := utils.ParseStatusesUriToNameHostTimestamp(o.ID)
 	switch o.Visibility {
 	case VisiblityPublic:
 		o.To = EndpointPublic
