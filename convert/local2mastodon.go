@@ -112,13 +112,6 @@ func ToMastodonReblog(ln *core.LocalNotify) *entities.Status {
 		log.Printf("%s", err.Error())
 		return nil
 	}
-	lu := &core.LocalUser{
-		AccountID: utils.ParseActivitypubID(name, host),
-	}
-	if err := dao.Read(lu); err != nil {
-		log.Printf("%s", err.Error())
-		return nil
-	}
 	acct := &entities.Account{
 		Uri: utils.ParseActivitypubID(name, host),
 	}
@@ -130,105 +123,44 @@ func ToMastodonReblog(ln *core.LocalNotify) *entities.Status {
 	reblog := &entities.Status{
 		Uri: ln.Object,
 	}
-	if err := dao.Read(reblog); err != nil {
+	if err := dao.ReadMastodonStatuses(reblog); err != nil {
 		log.Printf("%s", err.Error())
 		return nil
 	}
 
 	status := &entities.Status{
-		// Type: String (cast from an integer but not guaranteed to be a number)
-		// Description: ID of the status in the database.
-		Id: timestampString,
-		// Type: String
-		// Description: URI of the status used for federation.
-		Uri: ln.ID,
-		// Type: String (ISO 8601 Datetime)
-		// Description: The date when this status was created.
-		CreatedAt: utils.TimestampToRFC3339(int64(timestamp)),
-		// Type: Account
-		// Description: The account that authored this status.
-		Account: acct,
-		// Type: String (HTML)
-		// Description: HTML-encoded status content.
-		Content: "",
-		// Type: String (Enumerable oneOf)
-		// Description: Visibility of this status.
-		Visibility: ln.Visibility,
-		// Type: Boolean
-		// Description: Is this status marked as sensitive content?
-		Sensitive: false,
-		// Type: String
-		// Description: Subject or summary line, below which status content is collapsed until expanded.
-		SpoilerText: "",
-		// Type: Array of MediaAttachment
-		// Description: Media that is attached to this status.
-		MediaAttachments: []*entities.MediaAttachment{},
-		// Type: Hash
-		// Description: The application used to post this status.
-		Application: nil,
-		// Type: Array of Status::Mention
-		// Description: Mentions of users within the status content.
-		Mentions: []*status.Mention{},
-		// Type: Array of Status::Tag
-		// Description: Hashtags used within the status content.
-		Tags: []*status.Tag{},
-		// Type: Array of CustomEmoji
-		// Description: Custom emoji to be used when rendering status content.
-		Emojis: []*entities.CustomEmoji{},
-		// Type: Integer
-		// Description: How many boosts this status has received.
-		ReblogsCount: 0,
-		// Type: Integer
-		// Description: How many favourites this status has received.
-		FavouritesCount: 0,
-		// Type: Integer
-		// Description: How many replies this status has received.
-		RepliesCount: 0,
-		// Type: NULLABLE String (URL) or null
-		// Description: A link to the status’s HTML representation.
-		Url: utils.ParseStringToPointer(ln.ID, true),
-		// Type: NULLABLE String (cast from an integer but not guaranteed to be a number) or null
-		// Description: ID of the status being replied to.
-		InReplyToId: nil,
-		// Type: NULLABLE String (cast from an integer but not guaranteed to be a number) or null
-		// Description: ID of the account that authored the status being replied to.
+		Id:                 timestampString,
+		Uri:                ln.ID,
+		CreatedAt:          utils.TimestampToRFC3339(int64(timestamp)),
+		AttributedTo:       utils.ParseActivitypubID(name, host),
+		Account:            acct,
+		Content:            "",
+		Visibility:         ln.Visibility,
+		Sensitive:          false,
+		SpoilerText:        "",
+		MediaAttachments:   []*entities.MediaAttachment{},
+		Application:        nil,
+		Mentions:           []*status.Mention{},
+		Tags:               []*status.Tag{},
+		Emojis:             []*entities.CustomEmoji{},
+		ReblogsCount:       0,
+		FavouritesCount:    0,
+		RepliesCount:       0,
+		Url:                utils.ParseStringToPointer(ln.ID, true),
+		InReplyToId:        nil,
 		InReplyToAccountId: nil,
-		// Type: NULLABLE Status or null
-		// Description: The status being reblogged.
-		Reblog: reblog,
-		// Type: NULLABLE Poll or null
-		// Description: The poll attached to the status.
-		Poll: nil,
-		// Type: NULLABLE PreviewCard or null
-		// Description: Preview card for links included within status content.
-		Card: nil,
-		// Type: NULLABLE String (ISO 639 Part 1 two-letter language code) or null
-		// Description: Primary language of this status.
-		Language: nil,
-		// Type: NULLABLE String or null
-		// Description: Plain-text source of a status. Returned instead of content when status is deleted, so the user may redraft from the source text without the client having to reverse-engineer the original text from the HTML content.
-		Text: nil,
-		// Type: NULLABLE String (ISO 8601 Datetime)
-		// Description: Timestamp of when the status was last edited.
-		EditedAt: nil,
-		// Type: Boolean
-		// Description: If the current token has an authorized user: Have you favourited this status?
-		Favourited: false,
-		// Type: Boolean
-		// Description: If the current token has an authorized user: Have you boosted this status?
-		Reblogged: false,
-		// Type: Boolean
-		// Description: If the current token has an authorized user: Have you muted notifications for this status’s conversation?
-		Muted: false,
-		// Type: Boolean
-		// Description: If the current token has an authorized user: Have you bookmarked this status?
-		Bookmarked: false,
-		// Type: Boolean
-		// Description: If the current token has an authorized user: Have you pinned this status? Only appears if the status is pinnable.
-		Pinned: false,
-		// Type: Array of FilterResult
-		// Description: If the current token has an authorized user: The filter and keywords that matched this status.
-		Filtered: nil,
+		Reblog:             reblog,
+		Poll:               nil,
+		Card:               nil,
+		Language:           nil,
+		Text:               nil,
+		EditedAt:           nil,
+		Favourited:         false,
+		Reblogged:          false,
+		Muted:              false,
+		Bookmarked:         false,
+		Pinned:             false,
+		Filtered:           nil,
 	}
 	return status
 }

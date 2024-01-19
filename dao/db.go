@@ -60,3 +60,7 @@ func Delete(o any) error {
 	}
 	return nil
 }
+
+func DB() *gorm.DB {
+	return db
+}

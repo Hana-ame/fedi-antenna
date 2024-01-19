@@ -2,6 +2,7 @@ package utils
 
 import (
 	"fmt"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -45,4 +46,12 @@ func ParsePointerToString(ps *string, def string) string {
 		return def
 	}
 	return *ps
+}
+
+func Atoi(s string, def int) int {
+	i, e := strconv.Atoi(s)
+	if e != nil {
+		return def
+	}
+	return i
 }
