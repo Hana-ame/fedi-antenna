@@ -12,11 +12,6 @@ import (
 
 // id is the mastodon published which is timestamp in us
 func Favourite_a_status(id string, actor string) (*entities.Status, error) {
-	// published, err := strconv.Atoi(id)
-	// if err != nil {
-	// 	log.Printf("%s", err.Error())
-	// 	return nil, err
-	// }
 	status := &entities.Status{
 		Id: id,
 	}
@@ -26,10 +21,9 @@ func Favourite_a_status(id string, actor string) (*entities.Status, error) {
 	}
 	_, host := utils.ParseNameAndHost(actor)
 
-	// 考虑一下
-	favouriteID := utils.GenerateObjectID("favourite", host)
+	// 考虑一下id怎么做
 	favourite := &core.LocalNotify{
-		ID:     favouriteID,
+		ID:     utils.GenerateObjectID("favourite", host),
 		Actor:  actor,
 		Object: status.Uri,
 		Type:   core.NotifyTypeLike,
@@ -49,11 +43,6 @@ func Favourite_a_status(id string, actor string) (*entities.Status, error) {
 }
 
 func Undo_favourite_of_a_status(id string, actor string) (*entities.Status, error) {
-	// published, err := strconv.Atoi(id)
-	// if err != nil {
-	// 	log.Printf("%s", err.Error())
-	// 	return nil, err
-	// }
 	status := &entities.Status{
 		Id: id,
 	}

@@ -13,15 +13,10 @@ import (
 )
 
 func Boost_a_status(id string, actor string, o *model.Boost_a_status) (*entities.Status, error) {
-	published, err := strconv.Atoi(id)
-	if err != nil {
-		log.Printf("%s", err.Error())
-		return nil, err
+	status := &entities.Status{
+		Id: id,
 	}
-	ln := &core.LocalNote{
-		Published: int64(published),
-	}
-	if err := dao.Read(ln); err != nil {
+	if err := dao.Read(status); err != nil {
 		log.Printf("%s", err.Error())
 		return nil, err
 	}
@@ -31,7 +26,7 @@ func Boost_a_status(id string, actor string, o *model.Boost_a_status) (*entities
 	notify := &core.LocalNotify{
 		ID:     announceID,
 		Actor:  actor,
-		Object: ln.ID,
+		Object: status.Uri,
 		Type:   core.NotifyTypeAnnounce,
 
 		Visibility: o.Visibility,

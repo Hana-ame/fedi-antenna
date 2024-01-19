@@ -85,8 +85,7 @@ func Post_a_new_status(actor, IdempotencyKey string, o *mastodon.Post_a_new_stat
 		// Type: NULLABLE String (cast from an integer but not guaranteed to be a number) or null
 		// Description: ID of the account that authored the status being replied to.
 		InReplyToAccountId: inReplyToAccountId,
-		// Type: NULLABLE Status or null
-		// Description: The status being reblogged.
+
 		// Reblog *Status `json:"reblog"`
 		// Poll *Poll `json:"poll" gorm:"foreignKey:Id;references:Id"`
 		// Card *PreviewCard `json:"card" gorm:"serializer:json"`
