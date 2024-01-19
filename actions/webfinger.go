@@ -8,7 +8,7 @@ import (
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 	"github.com/Hana-ame/fedi-antenna/webfinger/model"
 
-	"github.com/Hana-ame/orderedmap"
+	"github.com/Hana-ame/fedi-antenna/Tools/orderedmap"
 )
 
 func FetchWebfingerByAcct(acct string, skipCache bool) (o *orderedmap.OrderedMap, err error) {
@@ -21,7 +21,7 @@ func FetchWebfingerByAcct(acct string, skipCache bool) (o *orderedmap.OrderedMap
 			return accountID.WebfingerObject, err
 		}
 	}
-	
+
 	username, host := utils.ParseUserAndHost(acct)
 	url := utils.ParseWebfingerUrl(username, host)
 	resp, err := myfetch.Fetch(http.MethodGet, url, nil, nil)

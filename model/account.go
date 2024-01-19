@@ -1,7 +1,7 @@
 package model
 
 import (
-	"github.com/Hana-ame/orderedmap"
+	"github.com/Hana-ame/fedi-antenna/Tools/orderedmap"
 	"gorm.io/gorm"
 )
 
