@@ -114,11 +114,14 @@ activitypub/controller还没测试
 ### console log
 
 ```sh
+git submodule add -b back/actions -f git@github.com:Hana-ame/fedi-antenna.git actions --depth 1
 git submodule add -b back/webfinger -f git@github.com:Hana-ame/fedi-antenna.git webfinger --depth 1
 git submodule add -b back/core -f git@github.com:Hana-ame/fedi-antenna.git core --depth 1 
 git submodule add -b back/activitypub -f git@github.com:Hana-ame/fedi-antenna.git activitypub --depth 1
 git submodule add -b back/antenna -f git@github.com:Hana-ame/fedi-antenna.git antenna --depth 1 
 git submodule add -b back/mastodon -f git@github.com:Hana-ame/fedi-antenna.git mastodon --depth 1 
+git submodule add -b back/actions -f git@github.com:Hana-ame/fedi-antenna.git actions --depth 1
+
 ```
 
 ```sh

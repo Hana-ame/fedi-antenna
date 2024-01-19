@@ -6,9 +6,9 @@ import (
 	"strconv"
 	"testing"
 
-	"github.com/Hana-ame/fedi-antenna/activitypub/actions"
-	"github.com/Hana-ame/fedi-antenna/activitypub/model"
-	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
+	"github.com/Hana-ame/fedi-antenna/actions"
+	"github.com/Hana-ame/fedi-antenna/actions/model"
+	activitypub "github.com/Hana-ame/fedi-antenna/actions/model"
 	core "github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 )
