@@ -48,14 +48,14 @@ func ParseTypeFromObjectID(id string) (typ, host string) {
 }
 
 // "https://" + host + "/users/" + name + "/statuses/" + id
-func ParseStatusesID(name, host, id string) (statusesID string) {
+func ParseStatusesUri(name, host, id string) (statusesUri string) {
 	return "https://" + host + "/users/" + name + "/statuses/" + id
 }
 
 // "https://" + host + "/users/" + name + "/statuses/" + timestamp (+ "/xxx")
-func ParseStatusesIDToNameHostTimestamp(statusesID string) (name, host, timestamp string) {
-	statusesID = strings.TrimPrefix(statusesID, "https://")
-	arr := strings.Split(statusesID, "/")
+func ParseStatusesUriToNameHostTimestamp(statusesUri string) (name, host, timestamp string) {
+	statusesUri = strings.TrimPrefix(statusesUri, "https://")
+	arr := strings.Split(statusesUri, "/")
 	if len(arr) < 3 {
 		return
 	} else if (len(arr)) < 5 {

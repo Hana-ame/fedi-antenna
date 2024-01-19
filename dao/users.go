@@ -7,6 +7,7 @@ import (
 	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
 	core "github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
+	"github.com/Hana-ame/fedi-antenna/mastodon/entities"
 )
 
 // activitypub.User
@@ -41,7 +42,7 @@ func ReadPublicKeyByOwner(id string) (pk *activitypub.PublicKey, err error) {
 // the most direct way to read local user's privateKey
 func ReadPrivateKeyByOwner(id string) (pk *rsa.PrivateKey, err error) {
 	lu := &core.LocalUser{
-		ID: id,
+		ActivitypubID: id,
 	}
 	err = Read(lu)
 	if err != nil {
@@ -54,4 +55,53 @@ func ReadPrivateKeyByOwner(id string) (pk *rsa.PrivateKey, err error) {
 		return
 	}
 	return
+}
+
+func UpdateAccountStatusesCount(acct *entities.Account, delta int) error {
+	if err := Read(acct); err != nil {
+		log.Println(err)
+		return err
+	}
+
+	acct.StatusesCount += delta
+	acct.LastStatusAt = utils.ParseStringToPointer(utils.TimestampToRFC3339(utils.Now()), true)
+
+	if err := Update(acct); err != nil {
+		log.Println(err)
+		return err
+	}
+
+	return nil
+}
+
+func UpdateAccountFollowersCount(acct *entities.Account, delta int) error {
+	if err := Read(acct); err != nil {
+		log.Println(err)
+		return err
+	}
+
+	acct.FollowersCount += delta
+
+	if err := Update(acct); err != nil {
+		log.Println(err)
+		return err
+	}
+
+	return nil
+}
+
+func UpdateAccountFollowingCount(acct *entities.Account, delta int) error {
+	if err := Read(acct); err != nil {
+		log.Println(err)
+		return err
+	}
+
+	acct.FollowingCount += delta
+
+	if err := Update(acct); err != nil {
+		log.Println(err)
+		return err
+	}
+
+	return nil
 }

@@ -33,3 +33,16 @@ func ParseBoolToPointer(b bool, emptyIsNil bool) *bool {
 	}
 	return &b
 }
+
+func ParsePointerToBool(pb *bool, def bool) bool {
+	if pb == nil {
+		return def
+	}
+	return *pb
+}
+func ParsePointerToString(ps *string, def string) string {
+	if ps == nil {
+		return def
+	}
+	return *ps
+}
