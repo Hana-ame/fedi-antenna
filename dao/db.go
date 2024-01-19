@@ -1,7 +1,7 @@
 package dao
 
 import (
-	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
+	activitypub "github.com/Hana-ame/fedi-antenna/actions/model"
 	core "github.com/Hana-ame/fedi-antenna/core/model"
 	webfinger "github.com/Hana-ame/fedi-antenna/webfinger/model"
 	"gorm.io/driver/sqlite"

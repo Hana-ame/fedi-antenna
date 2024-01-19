@@ -4,7 +4,7 @@ import (
 	core "github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 
-	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
+	activitypub "github.com/Hana-ame/fedi-antenna/actions/model"
 )
 
 func ToActivityPubNote(o *core.LocalNote) *activitypub.Note {

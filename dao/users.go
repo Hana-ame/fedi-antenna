@@ -4,7 +4,7 @@ import (
 	"crypto/rsa"
 	"log"
 
-	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
+	activitypub "github.com/Hana-ame/fedi-antenna/actions/model"
 	core "github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 	"github.com/Hana-ame/fedi-antenna/mastodon/entities"

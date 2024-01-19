@@ -3,8 +3,8 @@ package core
 import (
 	"log"
 
-	actions "github.com/Hana-ame/fedi-antenna/activitypub/fetch"
-	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
+	actions "github.com/Hana-ame/fedi-antenna/actions/fetch"
+	activitypub "github.com/Hana-ame/fedi-antenna/actions/model"
 	"github.com/Hana-ame/fedi-antenna/core/dao"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 	webfinger "github.com/Hana-ame/fedi-antenna/webfinger/actions"

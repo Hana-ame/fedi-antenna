@@ -3,7 +3,7 @@ package convert
 import (
 	"log"
 
-	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/model"
+	activitypub "github.com/Hana-ame/fedi-antenna/actions/model"
 	"github.com/Hana-ame/fedi-antenna/core/dao"
 	core "github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
