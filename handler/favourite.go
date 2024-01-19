@@ -3,7 +3,7 @@ package handler
 import (
 	"log"
 
-	"github.com/Hana-ame/fedi-antenna/activitypub/actions"
+	"github.com/Hana-ame/fedi-antenna/actions"
 	c "github.com/Hana-ame/fedi-antenna/core"
 	"github.com/Hana-ame/fedi-antenna/core/dao"
 	"github.com/Hana-ame/fedi-antenna/core/utils"

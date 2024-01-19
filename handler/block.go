@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"github.com/Hana-ame/fedi-antenna/activitypub/actions"
+	"github.com/Hana-ame/fedi-antenna/actions"
 	c "github.com/Hana-ame/fedi-antenna/core"
 	"github.com/Hana-ame/fedi-antenna/core/convert"
 	"github.com/Hana-ame/fedi-antenna/core/dao"
