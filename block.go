@@ -77,10 +77,15 @@ func Unblock(id, object, actor string) (*core.LocalRelation, error) {
 		Object: object,
 		Type:   core.RelationTypeBlock,
 	}
-
-	if err := dao.Read(lr); err != nil {
-		log.Printf("%s", err.Error())
-		return lr, err
+	queryString := "Actor = ? AND Object = ? AND Type = ?"
+	queryParams := []any{actor, object, core.RelationTypeBlock}
+	if id != "" {
+		queryString = queryString + " AND ID = ?"
+		queryParams = append(queryParams, id)
+	}
+	if tx := dao.Where(queryString, queryParams...).First(lr); tx.Error != nil {
+		log.Printf("%s", tx.Error.Error())
+		return lr, tx.Error
 	}
 
 	// mastodon
@@ -90,5 +95,5 @@ func Unblock(id, object, actor string) (*core.LocalRelation, error) {
 		return lr, err
 	}
 
-	return lr,nil
+	return lr, nil
 }

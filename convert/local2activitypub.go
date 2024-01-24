@@ -14,15 +14,15 @@ func ToActivityPubUser(activitypubID string) *activitypub.User {
 	lu := &core.LocalUser{
 		ActivitypubID: activitypubID,
 	}
-	if err := dao.Read(lu); err != nil {
-		log.Printf("%s", err.Error())
+	if tx := dao.Where("ActivitypubID = ?", activitypubID).First(lu); tx.Error != nil {
+		log.Printf("%s", tx.Error.Error())
 		return nil
 	}
 	acct := &entities.Account{
 		Uri: activitypubID,
 	}
-	if err := dao.Read(acct); err != nil {
-		log.Printf("%s", err.Error())
+	if tx := dao.Where("Uri = ?", activitypubID).First(acct); tx.Error != nil {
+		log.Printf("%s", tx.Error.Error())
 		return nil
 	}
 

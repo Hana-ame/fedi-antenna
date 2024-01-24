@@ -39,16 +39,18 @@ func Follow(id, object, actor string) error {
 
 func Unfollow(id, object, actor string) error {
 	lr := &core.LocalRelation{
-		// ID:     utils.GenerateObjectID(typ, host),
-		Actor:  actor,
-		Object: object,
-		Type:   core.RelationTypeFollow,
-		// Status: core.RelationStatusPadding,
+		// // ID:     utils.GenerateObjectID(typ, host),
+		// Actor:  actor,
+		// Object: object,
+		// Type:   core.RelationTypeFollow,
+		// // Status: core.RelationStatusPadding,
 	}
-	if err := dao.Read(lr); err != nil {
+	if tx := dao.Where(
+		"Actor = ? AND Object = ? AND Type = ?",
+		actor, object, core.RelationTypeFollow).First(lr); tx.Error != nil {
 		// 不存在的情况
-		log.Printf("%s", err.Error())
-		return err
+		log.Printf("%s", tx.Error.Error())
+		return tx.Error
 	}
 
 	// activitypub
@@ -71,16 +73,18 @@ func Unfollow(id, object, actor string) error {
 
 func Accept(id, object, actor string) error {
 	lr := &core.LocalRelation{
-		// ID:     utils.GenerateObjectID(typ, host),
-		Actor:  object,
-		Object: actor,
-		Type:   core.RelationTypeFollow,
-		Status: core.RelationStatusPadding,
+		// // ID:     utils.GenerateObjectID(typ, host),
+		// Actor:  object,
+		// Object: actor,
+		// Type:   core.RelationTypeFollow,
+		// Status: core.RelationStatusPadding,
 	}
-	if err := dao.Read(lr); err != nil {
+	if tx := dao.Where(
+		"Actor = ? AND Object = ? AND Type = ? AND Status = ?",
+		object, actor, core.RelationTypeFollow, core.RelationStatusPadding).First(lr); tx.Error != nil {
 		// 不存在的情况
-		log.Printf("%s", err.Error())
-		return err
+		log.Printf("%s", tx.Error.Error())
+		return tx.Error
 	}
 
 	// mastodon
@@ -104,16 +108,18 @@ func Accept(id, object, actor string) error {
 
 func Reject(id, object, actor string) error {
 	lr := &core.LocalRelation{
-		// ID:     utils.GenerateObjectID(typ, host),
-		Actor:  object,
-		Object: actor,
-		Type:   core.RelationTypeFollow,
-		Status: core.RelationStatusPadding,
+		// // ID:     utils.GenerateObjectID(typ, host),
+		// Actor:  object,
+		// Object: actor,
+		// Type:   core.RelationTypeFollow,
+		// Status: core.RelationStatusPadding,
 	}
-	if err := dao.Read(lr); err != nil {
+	if tx := dao.Where(
+		"Actor = ? AND Object = ? AND Type = ? AND Status = ?",
+		object, actor, core.RelationTypeFollow, core.RelationStatusPadding).First(lr); tx.Error != nil {
 		// 不存在的情况
-		log.Printf("%s", err.Error())
-		return err
+		log.Printf("%s", tx.Error.Error())
+		return tx.Error
 	}
 
 	// mastodon

@@ -32,13 +32,13 @@ func Reblog(id, object, actor, visibility string) (*entities.Status, error) {
 }
 func Unreblog(object, actor string) error {
 	notify := &core.LocalNotify{
-		Actor:  actor,
-		Object: object,
-		Type:   core.NotifyTypeAnnounce,
+		// Actor:  actor,
+		// Object: object,
+		// Type:   core.NotifyTypeAnnounce,
 	}
-	if err := dao.Read(notify); err != nil {
-		log.Printf("%s", err.Error())
-		return err
+	if tx := dao.Where("Actor = ? AND Object = ? AND Type = ?", actor, object, core.NotifyTypeAnnounce).First(notify); tx.Error != nil {
+		log.Println(tx.Error)
+		return tx.Error
 	}
 	if err := dao.Delete(notify); err != nil {
 		log.Printf("%s", err.Error())

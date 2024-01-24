@@ -7,10 +7,10 @@ import (
 
 func DeletePerson(id string) error {
 	person := &model.User{
-		ID: id,
+		// ID: id,
 	}
-	if err := dao.Read(person); err != nil {
-		return err
+	if tx := dao.Where("ID = ?", id).First(person); tx.Error != nil {
+		return tx.Error
 	}
 	if err := dao.Delete(person); err != nil {
 		return err

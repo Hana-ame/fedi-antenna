@@ -3,19 +3,20 @@ package convert
 import (
 	core "github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
+	"github.com/Hana-ame/fedi-antenna/mastodon/entities"
 
 	activitypub "github.com/Hana-ame/fedi-antenna/actions/model"
 )
 
-func ToActivityPubNote(o *core.LocalNote) *activitypub.Note {
+func ToActivityPubNote(o *entities.Status) *activitypub.Note {
 	note := &activitypub.Note{
-		ID:          o.ID,
-		Summary:     utils.ParseStringToPointer(o.SpoilerText, true),
-		Content:     o.Status,
-		Visibility:  o.Visibility,
-		InReplyTo:   utils.ParseStringToPointer(o.InReplyToID, true),
-		AttributeTo: o.AttributedTo,
-		Published:   utils.TimestampToRFC3339(o.Published),
+		ID:           o.Uri,
+		Summary:      utils.ParseStringToPointer(o.SpoilerText, true),
+		Content:      o.Content,
+		Visibility:   o.Visibility,
+		InReplyTo:    o.InReplyToId,
+		AttributedTo: o.AttributedTo,
+		Published:    o.CreatedAt,
 	}
 	note.Autofill()
 	return note
