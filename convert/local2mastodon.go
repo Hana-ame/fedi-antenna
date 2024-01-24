@@ -116,10 +116,10 @@ func ToMastodonReblog(ln *core.LocalNotify, loadReblog bool) *entities.Status {
 		return nil
 	}
 	acct := &entities.Account{
-		Uri: utils.ParseActivitypubID(name, host),
+		// Uri: utils.ParseActivitypubID(name, host),
 	}
-	if tx := dao.Read(acct); tx.Error != nil {
-		log.Printf("%s", err.Error())
+	if tx := dao.Where("Uri = ?", utils.ParseActivitypubID(name, host)).First(acct); tx.Error != nil {
+		log.Printf("%s", tx.Error.Error())
 		return nil
 	}
 

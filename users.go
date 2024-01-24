@@ -16,7 +16,7 @@ func ReadPublicKeyByOwner(id string) (pk *activitypub.PublicKey, err error) {
 	pk = &activitypub.PublicKey{
 		Owner: id,
 	}
-	err = dao.Read(pk)
+	err = dao.Where(*pk).Find(pk).Error
 	if err == nil {
 		return
 	}

@@ -1,7 +1,6 @@
 package core
 
 import (
-	"fmt"
 	"log"
 
 	"github.com/Hana-ame/fedi-antenna/core/dao"
@@ -19,7 +18,7 @@ func Block(id, object, actor string) error {
 			Type:   core.RelationTypeFollow,
 			// Status: core.RelationStatusPadding,
 		}
-		if err := dao.Read(lr); err == nil {
+		if err := dao.Where(*lr).Find(lr); err == nil {
 			if err := dao.Delete(lr); err != nil {
 				if lr.Status == core.RelationStatusAccepted {
 					dao.UpdateAccountFollowingCount(&entities.Account{Uri: lr.Actor}, -1)
@@ -37,9 +36,9 @@ func Block(id, object, actor string) error {
 			Actor:  object,
 			Object: actor,
 			Type:   core.RelationTypeFollow,
-			// Status: core.RelationStatusPadding,
+			// Status: core.RelationStatusAccepted,
 		}
-		if err := dao.Read(lr); err == nil {
+		if err := dao.Where(*lr).Find(lr); err == nil {
 			if err := dao.Delete(lr); err != nil {
 				if lr.Status == core.RelationStatusAccepted {
 					dao.UpdateAccountFollowingCount(&entities.Account{Uri: lr.Actor}, -1)
@@ -58,9 +57,9 @@ func Block(id, object, actor string) error {
 		Status: core.RelationStatusBlocked,
 	}
 
-	if err := dao.Read(lr); err == nil {
-		return fmt.Errorf("already exists")
-	}
+	// if err := dao.Where("ID = ?", lr.ID).First(lr); err == nil {
+	// 	return fmt.Errorf("already exists")
+	// }
 
 	if err := dao.Create(lr); err != nil {
 		log.Printf("%s", err.Error())

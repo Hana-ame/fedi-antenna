@@ -54,8 +54,8 @@ func ToActivityPubImage(imageURL string) *activitypub.Image {
 		return nil
 	}
 	image := &activitypub.Image{
-		URL: imageURL,
+		// URL: imageURL,
 	}
-	dao.Read(image)
+	dao.Where("URL = ?", imageURL).First(image)
 	return image
 }

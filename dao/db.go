@@ -32,13 +32,14 @@ func Create(o any) error {
 	}
 	return nil
 }
-func Read(o any) error {
-	tx := db.First(o)
-	if tx.Error != nil {
-		return tx.Error
-	}
-	return nil
-}
+
+//	func Read(o any) error {
+//		tx := db.First(o)
+//		if tx.Error != nil {
+//			return tx.Error
+//		}
+//		return nil
+//	}
 func Update(o any) error {
 	tx := db.Save(o)
 	if tx.Error != nil {

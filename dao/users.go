@@ -31,7 +31,7 @@ func ReadPublicKeyByOwner(id string) (pk *activitypub.PublicKey, err error) {
 	pk = &activitypub.PublicKey{
 		Owner: id,
 	}
-	err = Read(pk)
+	err = db.Where("Owner = ?", id).First(pk).Error
 	if err == nil {
 		return
 	}
@@ -44,7 +44,7 @@ func ReadPrivateKeyByOwner(id string) (pk *rsa.PrivateKey, err error) {
 	lu := &core.LocalUser{
 		ActivitypubID: id,
 	}
-	err = Read(lu)
+	err = db.Where("ActivitypubID = ?", id).First(lu).Error
 	if err != nil {
 		log.Println(err)
 		return
@@ -58,9 +58,10 @@ func ReadPrivateKeyByOwner(id string) (pk *rsa.PrivateKey, err error) {
 }
 
 func UpdateAccountStatusesCount(acct *entities.Account, delta int) error {
-	if err := Read(acct); err != nil {
-		log.Println(err)
-		return err
+	other := new(entities.Account)
+	if tx := db.Where("Id = ?", acct.Id).First(other); tx.Error != nil {
+		log.Println(tx.Error)
+		return tx.Error
 	}
 
 	acct.StatusesCount += delta
@@ -75,9 +76,10 @@ func UpdateAccountStatusesCount(acct *entities.Account, delta int) error {
 }
 
 func UpdateAccountFollowersCount(acct *entities.Account, delta int) error {
-	if err := Read(acct); err != nil {
-		log.Println(err)
-		return err
+	other := new(entities.Account)
+	if tx := db.Where("Id = ?", acct.Id).First(other); tx.Error != nil {
+		log.Println(tx.Error)
+		return tx.Error
 	}
 
 	acct.FollowersCount += delta
@@ -91,9 +93,10 @@ func UpdateAccountFollowersCount(acct *entities.Account, delta int) error {
 }
 
 func UpdateAccountFollowingCount(acct *entities.Account, delta int) error {
-	if err := Read(acct); err != nil {
-		log.Println(err)
-		return err
+	other := new(entities.Account)
+	if tx := db.Where("Id = ?", acct.Id).First(other); tx.Error != nil {
+		log.Println(tx.Error)
+		return tx.Error
 	}
 
 	acct.FollowingCount += delta

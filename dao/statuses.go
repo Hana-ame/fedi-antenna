@@ -16,10 +16,6 @@ func ReadMastodonStatuses(status *entities.Status) (err error) {
 }
 
 func DeleteStatus(status *entities.Status) (err error) {
-	if err = Read(status); err != nil {
-		log.Println(err)
-		return
-	}
 	if err = Delete(status); err != nil {
 		log.Println(err)
 		return

@@ -16,7 +16,7 @@ func Follow(id, object, actor string) error {
 		Type:   core.RelationTypeFollow,
 		// Status: core.RelationStatusPadding,
 	}
-	if err := dao.Read(lr); err == nil {
+	if err := dao.Where(*lr).Find(lr).Error; err == nil {
 		if lr.Status == core.RelationStatusPadding {
 			//send again
 		}
