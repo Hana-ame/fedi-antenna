@@ -27,6 +27,7 @@ handler加入入口(等待之后写)
 找不到的话去gist存一份。不然太蛋疼了。
 db也要理。他妈的早知道画图。
 
+**https://gorm.io/docs/transactions.html**
 本地到ap好像没做
 
 好，action有大病。
@@ -37,12 +38,32 @@ db也要理。他妈的早知道画图。
 还有一个Auth。做了能做前端。
 前端似乎可以做了。做吧。
 
+### db
+
+#### core
+localuser
+存一些邮箱或者privatekey之类的
+localrelation
+存一些fub，key是apID
+localnotify
+存一些announce和like
+
+
+#### mastodon
+user
+存一些别的内容
+status
+存note用的
+
+
 ### **cases**
 
 几乎大更了，全要重来。
+~~卧槽我之前全都做通了的啊?~~
 
 #### antenna
-- [ ] 注册 - 查看 localuser 表
+- [x] 注册 - 查看 localuser 表和 mastodonuser 表
+  - [x] 能从activitypub看到
 #### mastodon
 - [ ] 发嘟 - 查看 local notes 表
 - ~~[ ] 发嘟 - fedi (暂时没做)~~

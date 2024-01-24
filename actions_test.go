@@ -30,7 +30,7 @@ func TestUndo(t *testing.T) {
 }
 
 func TestAccept(t *testing.T) {
-	actor := "https://fedi.moonchan.xyz/users/test5"
+	actor := "https://fedi.moonchan.xyz/users/test7"
 	object := "https://me.ns.ci/users/cocoon"
 	fmt.Println(object)
 	lr := &core.LocalRelation{
@@ -44,31 +44,31 @@ func TestReject(t *testing.T) {
 	actor := "https://fedi.moonchan.xyz/users/test5"
 	object := "https://me.ns.ci/users/cocoon"
 	fmt.Println(object)
-	lr := &core.LocalRelation{
-		Actor:  object,
-		Object: actor,
-	}
-	err := actions.Reject(lr, true)
+	// lr := &core.LocalRelation{
+	// 	Actor:  object,
+	// 	Object: actor,
+	// }
+	err := actions.Reject(object, actor)
 	log.Println(err)
 }
 
 func TestNote(t *testing.T) {
-	actor := utils.ParseActivitypubID("test5", "fedi.moonchan.xyz")
+	actor := utils.ParseActivitypubID("test7", "fedi.moonchan.xyz")
 
 	timestamp := utils.Now()
 	published := utils.TimestampToRFC3339(timestamp)
 	name, host := utils.ParseNameAndHost(actor)
 	note := &activitypub.Note{
-		ID:          utils.ParseStatusesUri(name, host, strconv.Itoa(int(timestamp))),
-		Summary:     utils.ParseStringToPointer("", true),
-		Content:     "你们能不能去死啊，吵死了",
-		Visibility:  model.VisiblityPublic,
-		InReplyTo:   utils.ParseStringToPointer("", true),
-		AttributeTo: actor,
-		Published:   published,
+		ID:           utils.ParseStatusesUri(name, host, strconv.Itoa(int(timestamp))),
+		Summary:      utils.ParseStringToPointer("", true),
+		Content:      "要先follow",
+		Visibility:   model.VisiblityPublic,
+		InReplyTo:    utils.ParseStringToPointer("", true),
+		AttributedTo: actor,
+		Published:    published,
 	}
 	note.Autofill()
-	err := actions.CreateNote(note, nil, false)
+	err := actions.CreateNote(note)
 
 	log.Printf("%s", err)
 }
