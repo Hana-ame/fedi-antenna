@@ -143,6 +143,9 @@ git submodule add -b back/antenna -f git@github.com:Hana-ame/fedi-antenna.git an
 git submodule add -b back/mastodon -f git@github.com:Hana-ame/fedi-antenna.git mastodon --depth 1 
 git submodule add -b back/actions -f git@github.com:Hana-ame/fedi-antenna.git actions --depth 1
 
+
+ git submodule init 
+ git submodule update --init --recursive
 ```
 
 ```sh
