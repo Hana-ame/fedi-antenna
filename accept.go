@@ -22,7 +22,7 @@ func Accept(lr *model.LocalRelation, shouldRead bool) error {
 		return fmt.Errorf("nothing passed")
 	}
 	if shouldRead {
-		if err := dao.Read(&lr); err != nil {
+		if err := dao.Read(lr); err != nil {
 			return err
 		}
 	}

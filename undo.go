@@ -14,7 +14,7 @@ func UndoFollow(actor, id string) error {
 	o := &activitypub.Follow{
 		ID: id,
 	}
-	if err := dao.Read(&o); err != nil {
+	if err := dao.Read(o); err != nil {
 		return err
 	}
 	if o.Actor != actor {
@@ -32,7 +32,7 @@ func UndoFollow(actor, id string) error {
 func UndoBlock(actor, id string) error {
 	var o *activitypub.Block
 
-	if err := dao.Read(&o); err != nil {
+	if err := dao.Read(o); err != nil {
 		return err
 	}
 	if o.Actor != actor {
