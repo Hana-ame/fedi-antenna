@@ -15,9 +15,9 @@ func Favourite_a_status(id string, actor string) (*entities.Status, error) {
 	status := &entities.Status{
 		Id: id,
 	}
-	if tx := dao.Where("Id = ?", id).First(status); tx.Error != nil {
-		log.Printf("%s", tx.Error.Error())
-		return nil, tx.Error
+	if err := dao.Read(status); err != nil {
+		log.Printf("%s", err.Error())
+		return nil, err
 	}
 
 	_, host := utils.ParseNameAndHost(actor)
@@ -34,9 +34,9 @@ func Undo_favourite_of_a_status(id string, actor string) (*entities.Status, erro
 	status := &entities.Status{
 		Id: id,
 	}
-	if tx := dao.Where("Id = ?", id).First(status); tx.Error != nil {
-		log.Printf("%s", tx.Error.Error())
-		return nil, tx.Error
+	if err := dao.Read(status); err != nil {
+		log.Printf("%s", err.Error())
+		return nil, err
 	}
 	// mastodon
 	err := c.Unfavourite(status.Uri, actor)

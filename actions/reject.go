@@ -17,10 +17,13 @@ import (
 
 // 'actor' will reject the request from 'object'
 func Reject(object, actor string) error {
-	lr := &model.LocalRelation{}
-	if tx := dao.Where("Actor = ? AND Object = ?", object, actor).First(&lr); tx.Error != nil {
-		log.Println(tx.Error)
-		return tx.Error
+	lr := &model.LocalRelation{
+		Object: actor,
+		Actor:  object,
+	}
+	if err := dao.Read(&lr); err != nil {
+		log.Println(err)
+		return err
 	}
 
 	if lr.Type != activitypub.TypeFollow { // should not.

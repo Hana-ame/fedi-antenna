@@ -25,9 +25,11 @@ func Webfinger(c *gin.Context) {
 	acct := strings.TrimPrefix(resource, "acct:")
 	username, host := utils.ParseUserAndHost(acct)
 	// 判断是否存在 not used
-	user := &core.LocalUser{}
-	if tx := dao.Where("ActivitypubID = ?", utils.ParseActivitypubID(username, host)).First(user); tx.Error != nil {
-		c.JSON(http.StatusNotFound, gin.H{"error": tx.Error.Error()})
+	user := &core.LocalUser{
+		ActivitypubID: utils.ParseActivitypubID(username, host),
+	}
+	if err := dao.Read(user); err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 	} else {
 		_ = user
 

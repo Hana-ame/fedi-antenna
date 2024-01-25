@@ -16,9 +16,9 @@ func Block_account(id, actor string) (*entities.Relationship, error) {
 	acct := &entities.Account{
 		Id: id,
 	}
-	if tx := dao.Where("Id = ?", id).First(acct); tx.Error != nil {
-		log.Println(tx.Error)
-		return convert.ToMastodonRelationship(id, actor), tx.Error
+	if err := dao.Read(acct); err != nil {
+		log.Println(err)
+		return convert.ToMastodonRelationship(id, actor), err
 	}
 
 	_, host := utils.ParseNameAndHost(actor)
@@ -35,9 +35,9 @@ func Unblock_account(id, actor string) (*entities.Relationship, error) {
 	acct := &entities.Account{
 		Id: id,
 	}
-	if tx := dao.Where("Id = ?", id).First(acct); tx.Error != nil {
-		log.Println(tx.Error)
-		return convert.ToMastodonRelationship(id, actor), tx.Error
+	if err := dao.Read(acct); err != nil {
+		log.Println(err)
+		return convert.ToMastodonRelationship(id, actor), err
 	}
 
 	relation, err := c.Unblock("", acct.Uri, actor)

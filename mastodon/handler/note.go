@@ -21,18 +21,20 @@ func Post_a_new_status(actor, IdempotencyKey string, o *mastodon.Post_a_new_stat
 	timestamp := utils.Now()
 	name, host := utils.ParseNameAndHost(actor)
 
-	account := &entities.Account{}
-	if tx := dao.Where("Uri = ?", actor).First(account); tx.Error != nil {
-		log.Println(tx.Error)
-		return nil, tx.Error
+	account := &entities.Account{
+		Uri: actor,
+	}
+	if err := dao.Read(account); err != nil {
+		log.Println(err)
+		return nil, err
 	}
 
 	var inReplyToAccountId *string
 	if o.InReplyToId != nil {
 		replyto := &entities.Status{Id: *o.InReplyToId}
-		if tx := dao.Where("Id = ?", replyto.Id).First(replyto); tx.Error != nil {
-			log.Printf("%s", tx.Error.Error())
-			return nil, tx.Error
+		if err := dao.Read(replyto); err != nil {
+			log.Printf("%s", err.Error())
+			return nil, err
 		}
 		inReplyToAccountId = &replyto.AttributedTo
 	}

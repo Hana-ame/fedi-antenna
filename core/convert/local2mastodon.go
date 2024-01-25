@@ -293,15 +293,15 @@ func ToMastodonRelationship(id, actor string) *entities.Relationship {
 	lu := &core.LocalUser{
 		ActivitypubID: id,
 	}
-	if tx := dao.Where("ActivitypubID = ?", id).First(lu); tx.Error != nil {
-		log.Printf("%s", tx.Error.Error())
+	if err := dao.Read(lu); err != nil {
+		log.Printf("%s", err.Error())
 		return nil
 	}
 	acct := &entities.Account{
 		Uri: id,
 	}
-	if tx := dao.Where("Uri = ?", id).First(acct); tx.Error != nil {
-		log.Printf("%s", tx.Error.Error())
+	if err := dao.Read(acct); err != nil {
+		log.Printf("%s", err.Error())
 		return nil
 	}
 	// actor to object
@@ -309,10 +309,8 @@ func ToMastodonRelationship(id, actor string) *entities.Relationship {
 		Actor:  actor,
 		Object: id,
 	}
-	if tx := dao.Where(
-		"Actor = ? AND Object = ?",
-		id, actor).First(lra2o); tx.Error != nil {
-		log.Printf("%s", tx.Error.Error())
+	if err := dao.Read(lra2o); err != nil {
+		log.Printf("%s", err.Error())
 		return nil
 	}
 	// object to actor
@@ -320,10 +318,8 @@ func ToMastodonRelationship(id, actor string) *entities.Relationship {
 		Actor:  id,
 		Object: actor,
 	}
-	if tx := dao.Where(
-		"Actor = ? AND Object = ?",
-		id, actor).First(lro2a); tx.Error != nil {
-		log.Printf("%s", tx.Error.Error())
+	if err := dao.Read(lro2a); err != nil {
+		log.Printf("%s", err.Error())
 		return nil
 	}
 

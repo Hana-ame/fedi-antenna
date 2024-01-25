@@ -13,11 +13,15 @@ import (
 )
 
 func UndoFollow(object, actor string) error {
-	lr := &model.LocalRelation{}
-	if tx := dao.Where("Object = ? AND Actor = ?", object, actor).First(&lr); tx.Error != nil {
-		log.Println(tx.Error)
-		return tx.Error
+	lr := &model.LocalRelation{
+		Object: object,
+		Actor:  actor,
 	}
+	if err := dao.Read(&lr); err != nil {
+		log.Println(err)
+		return err
+	}
+
 	if lr.Type != model.RelationTypeFollow {
 		return fmt.Errorf("not follow")
 	}
@@ -30,10 +34,6 @@ func UndoFollow(object, actor string) error {
 		Actor:  actor,
 		Object: object,
 	}
-	// if tx := dao.Where("Object = ? AND Actor = ?", object, actor).First(&o); tx.Error != nil {
-	// 	log.Println(tx.Error)
-	// 	return tx.Error
-	// }
 
 	o.Autofill()
 	o.ClearContext()
@@ -47,10 +47,13 @@ func UndoFollow(object, actor string) error {
 }
 
 func UndoBlock(object, actor string) error {
-	lr := &model.LocalRelation{}
-	if tx := dao.Where("Object = ? AND Actor = ?", object, actor).First(&lr); tx.Error != nil {
-		log.Println(tx.Error)
-		return tx.Error
+	lr := &model.LocalRelation{
+		Object: object,
+		Actor:  actor,
+	}
+	if err := dao.Read(&lr); err != nil {
+		log.Println(err)
+		return err
 	}
 
 	o := &activitypub.Block{

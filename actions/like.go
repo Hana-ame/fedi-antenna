@@ -2,6 +2,7 @@ package actions
 
 import (
 	"encoding/json"
+	"log"
 	"net/http"
 
 	"github.com/Hana-ame/fedi-antenna/actions/fetch"
@@ -27,8 +28,9 @@ func Like(actor, object string) error {
 	ln := &model.LocalNote{
 		ID: object,
 	}
-	if tx := dao.Where("ID = ?", object).First(ln); tx.Error != nil {
-		return tx.Error
+	if err := dao.Read(ln); err != nil {
+		log.Println(err)
+		return err
 	}
 	// user := core.ReadActivitypubUserByAccount(ln.AttributedTo)
 	user, err := core.ReadActivitypubUserByID(ln.AttributedTo)
@@ -38,6 +40,7 @@ func Like(actor, object string) error {
 
 	body, err := json.Marshal(o)
 	if err != nil {
+		log.Println(err)
 		return err
 	}
 
@@ -46,6 +49,7 @@ func Like(actor, object string) error {
 		http.MethodPost, user.Inbox, nil, body,
 	)
 	if err != nil {
+		log.Println(err)
 		return err
 	}
 	_ = user

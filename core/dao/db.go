@@ -21,9 +21,9 @@ func init() {
 
 }
 
-func Where(query any, args ...any) (tx *gorm.DB) {
-	return db.Where(query, args...)
-}
+// func Where(query any, args ...any) (tx *gorm.DB) {
+// 	return db.Where(query, args...)
+// }
 
 func Create(o any) error {
 	tx := db.Create(o)
@@ -33,7 +33,7 @@ func Create(o any) error {
 	return nil
 }
 func Read(o any) error {
-	tx := db.First(o)
+	tx := db.Where(o).First(o)
 	if tx.Error != nil {
 		return tx.Error
 	}

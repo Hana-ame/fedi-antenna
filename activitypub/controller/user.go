@@ -25,9 +25,11 @@ func UsersStatuses(c *gin.Context) {
 	// host := c.Request.Host
 	id := c.Param("id")
 
-	status := &entities.Status{}
-	if tx := dao.Where("Id = ?", id).First(status); tx.Error != nil {
-		c.JSON(http.StatusInternalServerError, tx.Error)
+	status := &entities.Status{
+		Id: id,
+	}
+	if err := dao.Read(status); err != nil {
+		c.JSON(http.StatusInternalServerError, err)
 	}
 
 	o := convert.ToActivityPubNote(status)

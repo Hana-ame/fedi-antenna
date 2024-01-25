@@ -30,11 +30,9 @@ func Unfavourite(object, actor string) error {
 		Object: object,
 		Type:   core.NotifyTypeLike,
 	}
-	if tx := dao.Where(
-		"Actor = ? AND Object = ? AND Type = ?",
-		actor, object, core.NotifyTypeLike).First(favourite); tx.Error != nil {
-		log.Printf("%s", tx.Error.Error())
-		return tx.Error
+	if err := dao.Read(favourite); err != nil {
+		log.Printf("%s", err.Error())
+		return err
 	}
 
 	if err := dao.Delete(favourite); err != nil {

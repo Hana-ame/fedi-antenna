@@ -16,11 +16,11 @@ func Follow_account(id, actor string, o *accounts.Follow_account) (*entities.Rel
 	_, host := utils.ParseNameAndHost(actor)
 	objectID := utils.GenerateObjectID(core.RelationTypeFollow, host)
 	acct := &entities.Account{
-		// Id: id,
+		Id: id,
 	}
-	if tx := dao.Where("Id = ?", id).First(acct); tx.Error != nil {
-		log.Println(tx.Error)
-		return convert.ToMastodonRelationship(id, actor), tx.Error
+	if err := dao.Read(acct); err != nil {
+		log.Println(err)
+		return convert.ToMastodonRelationship(id, actor), err
 	}
 
 	err := c.Follow(objectID, acct.Uri, actor)
@@ -36,9 +36,9 @@ func Unfollow_account(id, actor string) (*entities.Relationship, error) {
 	acct := &entities.Account{
 		Id: id,
 	}
-	if tx := dao.Where("Id = ?", id).First(acct); tx.Error != nil {
-		log.Println(tx.Error)
-		return convert.ToMastodonRelationship(id, actor), tx.Error
+	if err := dao.Read(acct); err != nil {
+		log.Println(err)
+		return convert.ToMastodonRelationship(id, actor), err
 	}
 
 	err := c.Unfollow("", acct.Uri, actor)
@@ -72,11 +72,10 @@ func Accept_follow_request(
 	acct := &entities.Account{
 		Id: id,
 	}
-	if tx := dao.Where("Id = ?", id).First(acct); tx.Error != nil {
-		log.Println(tx.Error)
-		return convert.ToMastodonRelationship(id, actor), tx.Error
+	if err := dao.Read(acct); err != nil {
+		log.Println(err)
+		return convert.ToMastodonRelationship(id, actor), err
 	}
-
 	err := c.Accept("", acct.Uri, actor)
 
 	if err == nil {
@@ -92,9 +91,9 @@ func Reject_follow_request(
 	acct := &entities.Account{
 		Id: id,
 	}
-	if tx := dao.Where("Id = ?", id).First(acct); tx.Error != nil {
-		log.Println(tx.Error)
-		return convert.ToMastodonRelationship(id, actor), tx.Error
+	if err := dao.Read(acct); err != nil {
+		log.Println(err)
+		return convert.ToMastodonRelationship(id, actor), err
 	}
 
 	err := c.Reject("", acct.Uri, actor)

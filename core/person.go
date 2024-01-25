@@ -1,18 +1,18 @@
 package core
 
 import (
+	"log"
+
 	"github.com/Hana-ame/fedi-antenna/actions/model"
 	"github.com/Hana-ame/fedi-antenna/core/dao"
 )
 
 func DeletePerson(id string) error {
 	person := &model.User{
-		// ID: id,
-	}
-	if tx := dao.Where("ID = ?", id).First(person); tx.Error != nil {
-		return tx.Error
+		ID: id,
 	}
 	if err := dao.Delete(person); err != nil {
+		log.Println(err)
 		return err
 	}
 	// delete all notify

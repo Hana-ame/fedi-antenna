@@ -12,10 +12,12 @@ import (
 )
 
 func Boost_a_status(id string, actor string, o *model.Boost_a_status) (*entities.Status, error) {
-	status := &entities.Status{}
-	if tx := dao.Where("Id = ?", id).First(status); tx.Error != nil {
-		log.Printf("%s", tx.Error.Error())
-		return nil, tx.Error
+	status := &entities.Status{
+		Id: id,
+	}
+	if err := dao.Read(status); err != nil {
+		log.Printf("%s", err.Error())
+		return nil, err
 	}
 
 	name, host := utils.ParseNameAndHost(actor)
@@ -29,10 +31,12 @@ func Boost_a_status(id string, actor string, o *model.Boost_a_status) (*entities
 }
 
 func Undo_boost_of_a_status(id string, actor string) (*entities.Status, error) {
-	status := &entities.Status{}
-	if tx := dao.Where("Id = ?", id).First(status); tx.Error != nil {
-		log.Printf("%s", tx.Error.Error())
-		return nil, tx.Error
+	status := &entities.Status{
+		Id: id,
+	}
+	if err := dao.Read(status); err != nil {
+		log.Printf("%s", err.Error())
+		return nil, err
 	}
 
 	err := c.Unreblog(status.Uri, actor)

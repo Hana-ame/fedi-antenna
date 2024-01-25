@@ -22,9 +22,9 @@ func Accept(lr *model.LocalRelation, shouldRead bool) error {
 		return fmt.Errorf("nothing passed")
 	}
 	if shouldRead {
-		if tx := dao.Where("Actor = ? AND Object = ?", lr.Actor, lr.Object).First(&lr); tx.Error != nil {
-			log.Println(tx.Error)
-			return tx.Error
+		if err := dao.Read(&lr); err != nil {
+			log.Println(err)
+			return err
 		}
 	}
 
