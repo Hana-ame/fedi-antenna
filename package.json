@@ -1,0 +1,24 @@
+{
+  "name": "react-three",
+  "version": "1.0.0",
+  "description": "心血来潮的能够加入Fediverse的单人实例",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hana-ame/fedi-antenna.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Hana-ame/fedi-antenna/issues"
+  },
+  "homepage": "https://github.com/Hana-ame/fedi-antenna#readme",
+  "dependencies": {
+    "@react-three/fiber": "^8.15.15",
+    "@types/three": "^0.160.0",
+    "three": "^0.160.1"
+  }
+}

@@ -1,28 +1,20 @@
-# fedi-antenna
+# react-three
 
-心血来潮的能够加入Fediverse的单人实例
+npm init
 
-## params
+## create-react-app
 
-|variable||
-|---|---|
-|user| 就是用户名|
-|user.json| activityStream，其他实例会来获取的东西|
-|privateKey| 自己存好|
-|authorization| 大概放在cookie里面校验用|
+```sh
+npx create-react-app .
+```
+https://create-react-app.dev/docs/getting-started/
+that means you have different way to init it.
 
-## interface
-|path||
-|---|---|
-|/users/:user|user.json|
-|/users/:user/inbox|inbox，没啥好讲的|
-|/users/:user/outbox|接受post，校验使用cookie?|
-|/users/:user/followers||
-|/users/:user/following||
-|/users/:user/collection/featured||
-|/inbox|shared inbox|
-|.well-known/webfinger?resource=acct::user@:host|webfinger|
+## three.js
 
-## 访问别人
+```sh
+npm install three @types/three @react-three/fiber
+npm install @types/three
+```
 
-是不是还没写了。
+然后不会了，怎么跑起来啊。
