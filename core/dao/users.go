@@ -8,6 +8,7 @@ import (
 	core "github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 	"github.com/Hana-ame/fedi-antenna/mastodon/entities"
+	"gorm.io/gorm"
 )
 
 // activitypub.User
@@ -28,10 +29,12 @@ func ReadActivitypubUser(id string) (user *activitypub.User, err error) {
 // find in local
 // if not found then fetch from remote
 func ReadPublicKeyByOwner(id string) (pk *activitypub.PublicKey, err error) {
+	tx := db.Begin()
+
 	pk = &activitypub.PublicKey{
 		Owner: id,
 	}
-	err = Read(pk)
+	err = Read(tx, pk)
 	if err == nil {
 		return
 	}
@@ -41,10 +44,12 @@ func ReadPublicKeyByOwner(id string) (pk *activitypub.PublicKey, err error) {
 
 // the most direct way to read local user's privateKey
 func ReadPrivateKeyByOwner(id string) (pk *rsa.PrivateKey, err error) {
+	tx := db.Begin()
+
 	lu := &core.LocalUser{
 		ActivitypubID: id,
 	}
-	err = Read(lu)
+	err = Read(tx, lu)
 	if err != nil {
 		log.Println(err)
 		return
@@ -57,8 +62,10 @@ func ReadPrivateKeyByOwner(id string) (pk *rsa.PrivateKey, err error) {
 	return
 }
 
-func UpdateAccountStatusesCount(acct *entities.Account, delta int) error {
-	if err := Read(acct); err != nil {
+func UpdateAccountStatusesCount(tx *gorm.DB, acct *entities.Account, delta int) error {
+	// tx := db.Begin()
+
+	if err := Read(tx, acct); err != nil {
 		log.Println(err)
 		return err
 	}
@@ -66,40 +73,47 @@ func UpdateAccountStatusesCount(acct *entities.Account, delta int) error {
 	acct.StatusesCount += delta
 	acct.LastStatusAt = utils.ParseStringToPointer(utils.TimestampToRFC3339(utils.Now()), true)
 
-	if err := Update(acct); err != nil {
+	if err := Update(tx, acct); err != nil {
 		log.Println(err)
+		tx.Rollback()
 		return err
 	}
 
 	return nil
 }
 
-func UpdateAccountFollowersCount(acct *entities.Account, delta int) error {
-	if err := Read(acct); err != nil {
+func UpdateAccountFollowersCount(tx *gorm.DB, acct *entities.Account, delta int) error {
+	// tx := db.Begin()
+
+	if err := Read(tx, acct); err != nil {
 		log.Println(err)
 		return err
 	}
 
 	acct.FollowersCount += delta
 
-	if err := Update(acct); err != nil {
+	if err := Update(tx, acct); err != nil {
 		log.Println(err)
+		tx.Rollback()
 		return err
 	}
 
 	return nil
 }
 
-func UpdateAccountFollowingCount(acct *entities.Account, delta int) error {
-	if err := Read(acct); err != nil {
+func UpdateAccountFollowingCount(tx *gorm.DB, acct *entities.Account, delta int) error {
+	// tx := db.Begin()
+
+	if err := Read(tx, acct); err != nil {
 		log.Println(err)
 		return err
 	}
 
 	acct.FollowingCount += delta
 
-	if err := Update(acct); err != nil {
+	if err := Update(tx, acct); err != nil {
 		log.Println(err)
+		tx.Rollback()
 		return err
 	}
 

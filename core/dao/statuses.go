@@ -16,24 +16,32 @@ func ReadMastodonStatuses(status *entities.Status) (err error) {
 }
 
 func DeleteStatus(status *entities.Status) (err error) {
-	if err = Read(status); err != nil {
+	tx := db.Begin()
+
+	if err = Read(tx, status); err != nil {
 		log.Println(err)
+		tx.Rollback()
 		return
 	}
-	if err = Delete(status); err != nil {
+	if err = Delete(tx, status); err != nil {
 		log.Println(err)
+		tx.Rollback()
 		return
 	}
-	UpdateAccountStatusesCount(&entities.Account{Uri: status.AttributedTo}, -1)
+	err = UpdateAccountStatusesCount(tx, &entities.Account{Uri: status.AttributedTo}, -1)
 
 	return
 }
 
 func CreateStatus(status *entities.Status) (err error) {
-	if err = Create(status); err != nil {
+	tx := db.Begin()
+
+	if err = Create(tx, status); err != nil {
 		log.Println(err)
+		tx.Rollback()
 		return
 	}
-	UpdateAccountStatusesCount(&entities.Account{Uri: status.AttributedTo}, 1)
+	err = UpdateAccountStatusesCount(tx, &entities.Account{Uri: status.AttributedTo}, 1)
+
 	return
 }

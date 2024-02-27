@@ -5,6 +5,7 @@ import (
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 )
 
+// 这是啥
 // 不想改表了，很麻烦。
 // not tested.
 func ReadFollowersByLocaluserID(id string) (sharedInboxes []string, err error) {

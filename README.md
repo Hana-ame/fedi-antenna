@@ -1,4 +1,10 @@
-#
+# 24
+
+还是有点不明要干啥。
+先做mastodon兼容api，然后在这之上兼容antenna，再兼容ap。
+mastodon要用的也就只有mastodon几个entities吧。
+那些个写出来就ok了，存储量之类的优化以后搞。
+头好痛头好痛。
 
 ### https://moonchan.xyz/page/
 

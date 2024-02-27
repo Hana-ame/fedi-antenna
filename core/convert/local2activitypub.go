@@ -14,14 +14,14 @@ func ToActivityPubUser(activitypubID string) *activitypub.User {
 	lu := &core.LocalUser{
 		ActivitypubID: activitypubID,
 	}
-	if err := dao.Read(lu); err != nil {
+	if err := dao.Read(dao.DB(), lu); err != nil {
 		log.Printf("%s", err.Error())
 		return nil
 	}
 	acct := &entities.Account{
 		Uri: activitypubID,
 	}
-	if err := dao.Read(acct); err != nil {
+	if err := dao.Read(dao.DB(), acct); err != nil {
 		log.Printf("%s", err.Error())
 		return nil
 	}
@@ -56,6 +56,6 @@ func ToActivityPubImage(imageURL string) *activitypub.Image {
 	image := &activitypub.Image{
 		URL: imageURL,
 	}
-	dao.Read(image)
+	dao.Read(dao.DB(), image)
 	return image
 }

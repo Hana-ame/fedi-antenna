@@ -2,27 +2,3 @@
 	path = Tools
 	url = https://github.com/Hana-ame/Tools.git
 	branch = go
-[submodule "webfinger"]
-	path = webfinger
-	url = git@github.com:Hana-ame/fedi-antenna.git
-	branch = back/webfinger
-[submodule "core"]
-	path = core
-	url = git@github.com:Hana-ame/fedi-antenna.git
-	branch = back/core
-[submodule "activitypub"]
-	path = activitypub
-	url = git@github.com:Hana-ame/fedi-antenna.git
-	branch = back/activitypub
-[submodule "antenna"]
-	path = antenna
-	url = git@github.com:Hana-ame/fedi-antenna.git
-	branch = back/antenna
-[submodule "mastodon"]
-	path = mastodon
-	url = git@github.com:Hana-ame/fedi-antenna.git
-	branch = back/mastodon
-[submodule "actions"]
-	path = actions
-	url = git@github.com:Hana-ame/fedi-antenna.git
-	branch = back/actions

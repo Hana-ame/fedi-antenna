@@ -118,7 +118,7 @@ func ToMastodonReblog(ln *core.LocalNotify, loadReblog bool) *entities.Status {
 	acct := &entities.Account{
 		Uri: utils.ParseActivitypubID(name, host),
 	}
-	if tx := dao.Read(acct); tx.Error != nil {
+	if tx := dao.Read(dao.DB(), acct); tx.Error != nil {
 		log.Printf("%s", err.Error())
 		return nil
 	}
@@ -293,14 +293,14 @@ func ToMastodonRelationship(id, actor string) *entities.Relationship {
 	lu := &core.LocalUser{
 		ActivitypubID: id,
 	}
-	if err := dao.Read(lu); err != nil {
+	if err := dao.Read(dao.DB(), lu); err != nil {
 		log.Printf("%s", err.Error())
 		return nil
 	}
 	acct := &entities.Account{
 		Uri: id,
 	}
-	if err := dao.Read(acct); err != nil {
+	if err := dao.Read(dao.DB(), acct); err != nil {
 		log.Printf("%s", err.Error())
 		return nil
 	}
@@ -309,7 +309,7 @@ func ToMastodonRelationship(id, actor string) *entities.Relationship {
 		Actor:  actor,
 		Object: id,
 	}
-	if err := dao.Read(lra2o); err != nil {
+	if err := dao.Read(dao.DB(), lra2o); err != nil {
 		log.Printf("%s", err.Error())
 		return nil
 	}
@@ -318,7 +318,7 @@ func ToMastodonRelationship(id, actor string) *entities.Relationship {
 		Actor:  id,
 		Object: actor,
 	}
-	if err := dao.Read(lro2a); err != nil {
+	if err := dao.Read(dao.DB(), lro2a); err != nil {
 		log.Printf("%s", err.Error())
 		return nil
 	}

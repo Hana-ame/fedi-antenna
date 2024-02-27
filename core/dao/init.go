@@ -25,29 +25,29 @@ func init() {
 // 	return db.Where(query, args...)
 // }
 
-func Create(o any) error {
-	tx := db.Create(o)
+func Create(tx *gorm.DB, o any) error {
+	tx.Create(o)
 	if tx.Error != nil {
 		return tx.Error
 	}
 	return nil
 }
-func Read(o any) error {
-	tx := db.Where(o).First(o)
+func Read(tx *gorm.DB, o any) error {
+	tx.Where(o).First(o)
 	if tx.Error != nil {
 		return tx.Error
 	}
 	return nil
 }
-func Update(o any) error {
-	tx := db.Save(o)
+func Update(tx *gorm.DB, o any) error {
+	tx.Save(o)
 	if tx.Error != nil {
 		return tx.Error
 	}
 	return nil
 }
-func Delete(o any) error {
-	tx := db.Delete(o)
+func Delete(tx *gorm.DB, o any) error {
+	tx.Delete(o)
 	if tx.Error != nil {
 		return tx.Error
 	}
