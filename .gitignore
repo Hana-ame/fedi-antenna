@@ -6,3 +6,7 @@ log.md
 script
 *.json
 *.sh
+*.db
+
+fedi-antenna
+__debug_bin*

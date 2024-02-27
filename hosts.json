@@ -1,0 +1,7 @@
+{
+  "hosts" : [
+    "fedi.moonchan.xyz"
+  ],
+
+  "localhost:3000" : "fedi.moonchan.xyz"
+}

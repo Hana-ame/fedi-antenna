@@ -1,81 +1,106 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 
-	"github.com/Hana-ame/fedi-antenna/httpsig"
-	"github.com/Hana-ame/fedi-antenna/utils"
+	"github.com/Hana-ame/fedi-antenna/Tools/myfetch"
+	activitypub "github.com/Hana-ame/fedi-antenna/activitypub/controller"
+	antenna "github.com/Hana-ame/fedi-antenna/antenna/controller"
+	_ "github.com/Hana-ame/fedi-antenna/core/dao"
+	"github.com/Hana-ame/fedi-antenna/core/utils"
+	mastodon "github.com/Hana-ame/fedi-antenna/mastodon/controller"
+	webfinger "github.com/Hana-ame/fedi-antenna/webfinger/controller"
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
+	_ "github.com/joho/godotenv/autoload"
 )
 
 func main() {
+	// Init()
+
 	r := gin.Default()
-	// no use
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
-	// webfinger
-	r.GET(".well-known/webfinger", webfinger)
-	// s2s send
-	r.GET("/users/:name", users)
-	r.GET("/users/:name/outbox", usersOutbox)
-	r.GET("/users/:name/followers", usersFollowers)
-	r.GET("/users/:name/following", usersFollowing)
-	r.GET("/users/:name/collections/featured", usersCollectionsFeatured)
-	r.GET("/users/:name/collections/tags", usersCollectionsTags)
-	// https://mstdn.jp/users/meromero/statuses/110734394957749061
-	r.GET("/users/:name/statuses/:id", usersStatuses)
-	// s2s recv
-	r.POST("/users/:name/inbox", usersInbox) // inbox, only on POST?
-	r.POST("/inbox", inbox)                  // inbox
-	// users
-	r.POST("/api/v1/users", apiPostUser)
-	r.GET("/api/v1/users/:name", apiGetUser)
-	r.PUT("/api/v1/users/:name", apiPutUser)
-	r.DELETE("/api/v1/users/:name", apiDeleteUser)
 
-	r.GET("/api/v1/remoteusers", apiQueryRemoteUser)
+	webfinger.RegisterPath(r)
+	activitypub.RegisterPath(r)
+	antenna.RegisterPath(r)
+	mastodon.RegisterPath(r)
 
-	// r.POST("/api/v1/action", apiAction) // nop
-	// mastodon api
-	r.GET("/api/v1/accounts/lookup", apiLookUp)
-	r.GET("/api/v1/accounts/:id", apiAccount)
-	r.POST("/api/v1/accounts/:id/block", apiAccountBlock)
-	r.POST("/api/v1/accounts/:id/unblock", apiAccountUnBlock)
-	r.POST("/api/v1/accounts/:id/follow", apiAccountFollow)
-	r.POST("/api/v1/accounts/:id/unfollow", apiAccountUnFollow)
-	r.POST("/api/v1/accounts/:id/mute", apiAccountMute)
-	r.POST("/api/v1/accounts/:id/unmute", apiAccountUnMute)
+	// r.GET("/users/test7/statuses/1706100851713979", func(c *gin.Context) {
+	// 	log.Println("!!!!!!")
+	// 	var o map[any]any
+	// 	j := `{
+	// 		"@context": [
+	// 				"https://www.w3.org/ns/activitystreams",
+	// 				{
+	// 						"ostatus": "http://ostatus.org#",
+	// 						"atomUri": "ostatus:atomUri",
+	// 						"inReplyToAtomUri": "ostatus:inReplyToAtomUri",
+	// 						"conversation": "ostatus:conversation",
+	// 						"sensitive": "as:sensitive",
+	// 						"toot": "http://joinmastodon.org/ns#",
+	// 						"votersCount": "toot:votersCount"
+	// 				}
+	// 		],
+	// 		"id": "https://fedi.moonchan.xyz/users/test7/statuses/1706100851713979",
+	// 		"type": "Note",
+	// 		"summary": null,
+	// 		"inReplyTo": null,
+	// 		"published": "2024-01-24T12:54:11Z",
+	// 		"url": "https://fedi.moonchan.xyz/@test7/1706100851713979",
+	// 		"attributedTo": "https://fedi.moonchan.xyz/users/test7",
+	// 		"to": [
+	// 				"https://www.w3.org/ns/activitystreams#Public"
+	// 		],
+	// 		"cc": [
+	// 				"https://fedi.moonchan.xyz/users/test7/followers"
+	// 		],
+	// 		"sensitive": false,
+	// 		"atomUri": "https://fedi.moonchan.xyz/users/test7/statuses/1706100851713979",
+	// 		"inReplyToAtomUri": null,
+	// 		"conversation": "tag:fedi.moonchan.xyz,2024-01-24:objectId=1706100851713979:objectType=Conversation",
+	// 		"content": "疯掉123",
+	// 		"contentMap": {
+	// 				"zh": "疯掉123"
+	// 		},
+	// 		"attachment": [],
+	// 		"tag": [],
+	// 		"replies": {
+	// 				"id": "https://fedi.moonchan.xyz/users/test7/statuses/1706100851713979/replies",
+	// 				"type": "Collection",
+	// 				"first": {
+	// 						"type": "CollectionPage",
+	// 						"next": "https://fedi.moonchan.xyz/users/test7/statuses/1706100851713979/replies?only_other_accounts=true&page=true",
+	// 						"partOf": "https://fedi.moonchan.xyz/users/test7/statuses/1706100851713979/replies",
+	// 						"items": []
+	// 				}
+	// 		}
+	// }`
+	// 	json.Unmarshal([]byte(j), &o)
+	// 	c.JSON(http.StatusOK, o)
+	// })
 
-	r.Run("0.0.0.0:3000") // listen and serve on 0.0.0.0:3000
+	r.Run("0.0.0.0:3000")
 }
 
-// utils
-// 这个需要之后再看一下修改一下
-func verify(r *http.Request) (err error) {
-	defer func() {
-		e := recover()
-		if e != nil {
-			err = fmt.Errorf("%s", e)
-		}
-	}()
+// that will work in debug mode.
+func init() {
+	Init()
+}
 
-	algo := utils.RequestToAlgorithm(r)
-	pubKeyId := utils.RequestToPublicKeyId(r)
-	userObj, err := utils.FetchObj("GET", pubKeyId, nil) // this.
-	if err != nil {
-		panic(err)
-	}
-	pubKeyPem := utils.UserObjToPublicKeyPem(userObj)
-	pubKey, err := utils.ParsePublicKey(pubKeyPem)
-	if err != nil {
-		panic(err)
-	}
-	err = httpsig.Verify(r, algo, pubKey)
-	log.Println(err)
-	return err
+func Init() {
+	// set log
+	log.SetFlags(log.LstdFlags | log.Llongfile)
+	log.Println("is that ok?")
+	// set proxy
+	proxyUrl, _ := url.Parse("http://DESKTOP-LLULJ2Q.mshome.net:10809")
+	myClient := &http.Client{Transport: &http.Transport{Proxy: http.ProxyURL(proxyUrl)}}
+	myfetch.SetClients([]*http.Client{myClient})
+
+	godotenv.Load(".env")
+
+	// start up
+	utils.AliasMap["localhost:3000"] = "fedi.moonchan.xyz"
+
 }
