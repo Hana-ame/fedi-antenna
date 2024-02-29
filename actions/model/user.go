@@ -10,7 +10,7 @@ type User struct {
 	// helper.
 	// Account string `json:"-"`
 
-	// fixed "Person"
+	// "Person"
 	Type string `json:"type" gorm:"-"`
 
 	Following    string `json:"following"`

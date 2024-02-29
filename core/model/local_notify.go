@@ -18,7 +18,7 @@ type LocalNotify struct {
 
 	// activitypub ID in url, for the receiver.
 	// the owner of the object
-	// To string // ?
+	Owner string
 
 	// reblog only, public, unlisted, private
 	Visibility string

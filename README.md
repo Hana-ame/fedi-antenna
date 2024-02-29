@@ -6,6 +6,20 @@ mastodon要用的也就只有mastodon几个entities吧。
 那些个写出来就ok了，存储量之类的优化以后搞。
 头好痛头好痛。
 
+- [x] antenna account
+  - 在handler里面create了mastoodn的和local的
+- [ ] mastodon follow unfollow block
+- [ ] mastodon post
+- [ ] mastodon fav reblog
+  
+不对，编译不起来吧。
+只能全部改完再看结果了。
+可能会遇到顺序反了之类的，save和read都做了要test
+
+ap recv 的 model 完全是放在orderedmap里面的啊。
+那么cache的话借用action的model。
+在做完mastodon之后思考。
+
 ### https://moonchan.xyz/page/
 
 mastodon entities流程

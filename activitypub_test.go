@@ -12,6 +12,6 @@ import (
 func TestNewUser(t *testing.T) {
 	user := activitypub.NewUser("test1", "fedi.moonchan.xyz")
 	log.Println(user)
-	err := dao.Create(user)
+	err := dao.Create(dao.DB(), user)
 	log.Println(err)
 }

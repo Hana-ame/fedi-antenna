@@ -10,13 +10,14 @@ import (
 	"github.com/Hana-ame/fedi-antenna/core/dao"
 	core "github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
-	"github.com/Hana-ame/fedi-antenna/mastodon/entities"
+	"github.com/Hana-ame/fedi-antenna/mastodon/handler"
 )
 
 func Register(o *model.Register) error {
 	id := utils.ParseActivitypubID(o.Username, o.Host)
 	pk := utils.GeneratePrivateKey()
 	now := utils.Now()
+
 	user := &core.LocalUser{
 		Email:         o.Email,
 		PasswdHash:    tools.Hash(o.Passwd, os.Getenv("SALT")),
@@ -29,24 +30,31 @@ func Register(o *model.Register) error {
 		// PublicKeyPem:  utils.MarshalPublicKey(&pk.PublicKey),
 	}
 
-	acct := &entities.Account{
-		Id:       user.AccountID,
-		Username: user.Username,
-		Acct:     utils.ParseAcctStr(user.Username, user.Host),
-		Url:      utils.ParseProfileUrl(user.Username, user.Host),
-		Uri:      id,
-	}
-	if err := dao.Create(user); err != nil {
-		log.Println(err)
+	if err := handler.Register(
+		user.AccountID,
+		user.Username,
+		user.Host,
+		id,
+	); err != nil {
 		return err
 	}
-	if err := dao.Create(acct); err != nil {
-		log.Println(err)
-		return err
-	}
+	// acct := &entities.Account{
+	// 	Id:       user.AccountID,
+	// 	Username: user.Username,
+	// 	Acct:     utils.ParseAcctStr(user.Username, user.Host),
+	// 	Url:      utils.ParseProfileUrl(user.Username, user.Host),
+	// 	Uri:      id,
+	// }
 
-	// activitypubUser := convert.ToActivityPubUser(user)
-	// if err := dao.Create(activitypubUser); err != nil {
+	tx := dao.DB().Begin()
+	if err := dao.Create(tx, user); err != nil {
+		log.Println(err)
+		tx.Rollback()
+		return err
+	}
+	// if err := dao.Create(tx, acct); err != nil {
+	// 	log.Println(err)
+	// 	tx.Rollback()
 	// 	return err
 	// }
 
