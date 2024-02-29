@@ -1,5 +1,8 @@
 # back/activitipub
 
+
+when delete person, what should do.
+
 most of functions are here
 
 ## data flow

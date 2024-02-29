@@ -10,7 +10,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/Hana-ame/fedi-antenna/core"
+	"github.com/Hana-ame/fedi-antenna/actions/model"
+	"github.com/Hana-ame/fedi-antenna/core/dao"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 	"github.com/Hana-ame/httpsig"
 	"github.com/gin-gonic/gin"
@@ -78,8 +79,10 @@ func parsePublicKey(signature string) *rsa.PublicKey {
 			keyId = strings.TrimSuffix(keyId, "\"")
 			keyId = strings.TrimSuffix(keyId, "#main-key")
 
-			pk, err := core.ReadPublicKeyByOwner(keyId)
-			if err != nil {
+			pk := &model.PublicKey{
+				Owner: keyId,
+			}
+			if err := dao.Read(dao.DB(), pk); err != nil {
 				log.Println(err)
 				return nil
 			}

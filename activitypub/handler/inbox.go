@@ -13,8 +13,9 @@ import (
 
 // public interface
 // which o is the input object,
-// user, host is the user
-// err is the result of httpsig
+// user is the user that inbox's owner.
+// host is the host that local server on.
+// err is the result of httpsig, <nil> for pass
 func Inbox(o *orderedmap.OrderedMap, user, host string, err error) error {
 
 	v, ok := o.Get("type")

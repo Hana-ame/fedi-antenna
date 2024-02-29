@@ -10,9 +10,9 @@ import (
 	"github.com/Hana-ame/fedi-antenna/core/dao"
 	core "github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
-	"github.com/Hana-ame/fedi-antenna/mastodon/handler"
 )
 
+// just a templet, not used any more.
 func Register(o *model.Register) error {
 	id := utils.NameAndHost2ActivitypubID(o.Username, o.Host)
 	pk := utils.GeneratePrivateKey()
@@ -30,14 +30,14 @@ func Register(o *model.Register) error {
 		// PublicKeyPem:  utils.MarshalPublicKey(&pk.PublicKey),
 	}
 
-	if err := handler.Register(
-		user.AccountID,
-		user.Username,
-		user.Host,
-		id,
-	); err != nil {
-		return err
-	}
+	// if err := handler.Register(
+	// 	user.AccountID,
+	// 	user.Username,
+	// 	user.Host,
+	// 	id,
+	// ); err != nil {
+	// 	return err
+	// }
 	// acct := &entities.Account{
 	// 	Id:       user.AccountID,
 	// 	Username: user.Username,

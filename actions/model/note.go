@@ -88,7 +88,7 @@ func (o *Note) Autofill() {
 	}
 	// for content
 	// o.Content = o.RawContent
-	name, host, timestamp := utils.ParseStatusesUriToNameHostTimestamp(o.ID)
+	name, host, timestamp := utils.ActivitypubID2NameAndHostAndTimestamp(o.ID)
 	if o.AttributedTo == "" {
 		o.AttributedTo = utils.NameAndHost2ActivitypubID(name, host)
 	}
@@ -109,7 +109,7 @@ func (o *Note) Autofill() {
 	default:
 		o.Visibility = utils.ParseVisibility(o.To, o.Cc)
 	}
-	_, _, id := utils.ParseStatusesUriToNameHostTimestamp(o.ID)
+	_, _, id := utils.ActivitypubID2NameAndHostAndTimestamp(o.ID)
 	o.Conversation = "tag:fedi.moonchan.xyz," + o.Published[0:10] + ":objectId=" + id + ":objectType=Conversation"
 	o.ContentMap = map[string]string{
 		"zh": o.Content,

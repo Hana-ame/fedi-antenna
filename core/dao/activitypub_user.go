@@ -2,6 +2,7 @@ package dao
 
 import (
 	activitypub "github.com/Hana-ame/fedi-antenna/actions/model"
+	"github.com/Hana-ame/fedi-antenna/mastodon/entities"
 )
 
 // activitypub.User
@@ -12,19 +13,8 @@ func ReadActivitypubUser(user *activitypub.User) error {
 	return tx.Error
 }
 
-// please do not use it.
-// use read instead.
-
-// what is it???
-// find in local
-// if not found then fetch from remote
-// func ReadPublicKeyByOwner(id string) (pk *activitypub.PublicKey, err error) {
-// 	// tx := db.Begin()
-
-// 	pk = &activitypub.PublicKey{
-// 		Owner: id,
-// 	}
-// 	err = Read(db, pk)
-
-// 	return
-// }
+func DeletePerson(id string) error {
+	Delete(db, &entities.Account{Uri: id})
+	Delete(db, &entities.Status{AttributedTo: id})
+	return nil
+}

@@ -53,11 +53,13 @@ func ParseStatusesUri(name, host, id string) (statusesUri string) {
 }
 
 // "https://" + host + "/users/" + name + "/statuses/" + timestamp (+ "/xxx")
-func ParseStatusesUriToNameHostTimestamp(statusesUri string) (name, host, timestamp string) {
+func ActivitypubID2NameAndHostAndTimestamp(statusesUri string) (name, host, timestamp string) {
 	statusesUri = strings.TrimPrefix(statusesUri, "https://")
 	arr := strings.Split(statusesUri, "/")
-	if len(arr) < 3 {
+	if len(arr) < 1 {
 		return
+	} else if (len(arr)) < 3 {
+		return "", arr[0], ""
 	} else if (len(arr)) < 5 {
 		return arr[2], arr[0], ""
 	}

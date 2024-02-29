@@ -98,7 +98,7 @@ func ToMastodonReblog(ln *core.LocalNotify, reblog *entities.Status) *entities.S
 	if ln.Type != core.NotifyTypeAnnounce {
 		return nil
 	}
-	name, host, timestampString := utils.ParseStatusesUriToNameHostTimestamp(ln.ID)
+	name, host, timestampString := utils.ActivitypubID2NameAndHostAndTimestamp(ln.ID)
 	timestamp, err := strconv.Atoi(timestampString)
 	if err != nil {
 		log.Printf("%s", err.Error())

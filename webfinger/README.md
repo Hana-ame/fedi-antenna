@@ -1,5 +1,9 @@
 # index
 
+note from 24
+
+do not use the methods in actions.
+
 ## NOTE!
 
 for usage:
