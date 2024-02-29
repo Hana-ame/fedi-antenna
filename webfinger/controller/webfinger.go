@@ -26,16 +26,16 @@ func Webfinger(c *gin.Context) {
 	username, host := utils.ParseUserAndHost(acct)
 	// 判断是否存在 not used
 	user := &core.LocalUser{
-		ActivitypubID: utils.NameAndHost2ProfileUrlActivitypubID(username, host),
+		ActivitypubID: utils.NameAndHost2ActivitypubID(username, host),
 	}
-	if err := dao.Read(user); err != nil {
+	if err := dao.Read(dao.DB(), user); err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 	} else {
 		_ = user
 
 		// 形成返回数据
 		// todo: alias.
-		webfingerObj, err := model.CreateWebfingerObj(username, host)
+		webfingerObj, err := model.NewWebfingerObj(username, host)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 			return

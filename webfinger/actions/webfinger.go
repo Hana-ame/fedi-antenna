@@ -17,7 +17,7 @@ func FetchWebfingerByAcct(acct string, skipCache bool) (o *orderedmap.OrderedMap
 	}
 
 	if !skipCache {
-		if err := dao.Read(accountID); err == nil && accountID.WebfingerObject != nil {
+		if err := dao.Read(dao.DB(), accountID); err == nil && accountID.WebfingerObject != nil {
 			return accountID.WebfingerObject, err
 		}
 	}
@@ -32,7 +32,7 @@ func FetchWebfingerByAcct(acct string, skipCache bool) (o *orderedmap.OrderedMap
 
 	if !skipCache {
 		accountID.WebfingerObject = o
-		dao.Update(accountID)
+		dao.Update(dao.DB(), accountID)
 	}
 
 	return

@@ -8,7 +8,7 @@ import (
 )
 
 // "https://" + host + "/users/" + name
-func NameAndHost2ProfileUrlActivitypubID(name, host string) string {
+func NameAndHost2ActivitypubID(name, host string) string {
 	return "https://" + host + "/users/" + name
 }
 

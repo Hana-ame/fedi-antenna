@@ -90,7 +90,7 @@ func (o *Note) Autofill() {
 	// o.Content = o.RawContent
 	name, host, timestamp := utils.ParseStatusesUriToNameHostTimestamp(o.ID)
 	if o.AttributedTo == "" {
-		o.AttributedTo = utils.NameAndHost2ProfileUrlActivitypubID(name, host)
+		o.AttributedTo = utils.NameAndHost2ActivitypubID(name, host)
 	}
 
 	if o.URL == "" {
@@ -146,5 +146,5 @@ func (o *Note) GetActor() string {
 }
 
 func endpointFollower(username, host string) string {
-	return utils.NameAndHost2ProfileUrlActivitypubID(username, host) + "/followers"
+	return utils.NameAndHost2ActivitypubID(username, host) + "/followers"
 }

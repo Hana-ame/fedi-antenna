@@ -63,7 +63,7 @@ func findEndpoints(id string) (endpoints []string, err error) {
 	// local folloers entry point
 	name, host := utils.ActivitypubID2NameAndHost(id)
 
-	endpoints, err = dao.ReadFollowersByLocaluserID(utils.NameAndHost2ProfileUrlActivitypubID(name, host))
+	endpoints, err = dao.ReadFollowersByLocaluserID(utils.NameAndHost2ActivitypubID(name, host))
 
 	return
 }

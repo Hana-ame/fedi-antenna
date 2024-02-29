@@ -93,21 +93,21 @@ var UserContext = []any{
 func NewUser(name, host string) *User {
 	return &User{
 		Context:           UserContext,
-		ID:                utils.NameAndHost2ProfileUrlActivitypubID(name, host),
+		ID:                utils.NameAndHost2ActivitypubID(name, host),
 		Type:              "Person",
-		Following:         utils.NameAndHost2ProfileUrlActivitypubID(name, host) + "/following",
-		Followers:         utils.NameAndHost2ProfileUrlActivitypubID(name, host) + "/followers",
-		Inbox:             utils.NameAndHost2ProfileUrlActivitypubID(name, host) + "/inbox",
-		Outbox:            utils.NameAndHost2ProfileUrlActivitypubID(name, host) + "/outbox",
-		Featured:          utils.NameAndHost2ProfileUrlActivitypubID(name, host) + "/collections/featured",
-		FeaturedTags:      utils.NameAndHost2ProfileUrlActivitypubID(name, host) + "/collections/tags",
+		Following:         utils.NameAndHost2ActivitypubID(name, host) + "/following",
+		Followers:         utils.NameAndHost2ActivitypubID(name, host) + "/followers",
+		Inbox:             utils.NameAndHost2ActivitypubID(name, host) + "/inbox",
+		Outbox:            utils.NameAndHost2ActivitypubID(name, host) + "/outbox",
+		Featured:          utils.NameAndHost2ActivitypubID(name, host) + "/collections/featured",
+		FeaturedTags:      utils.NameAndHost2ActivitypubID(name, host) + "/collections/tags",
 		PreferredUsername: name,
 
 		URL: utils.NameAndHost2ProfileUrl(name, host),
 
 		Published: utils.TimestampToRFC3339(utils.NewTimestamp()),
-		Devices:   utils.NameAndHost2ProfileUrlActivitypubID(name, host) + "/collections/devices",
-		PublicKey: NewPublicKey(utils.NameAndHost2ProfileUrlActivitypubID(name, host)),
+		Devices:   utils.NameAndHost2ActivitypubID(name, host) + "/collections/devices",
+		PublicKey: NewPublicKey(utils.NameAndHost2ActivitypubID(name, host)),
 		Endpoint:  map[string]string{"sharedInbox": "https://" + host + "/inbox"},
 
 		Icon: &Image{

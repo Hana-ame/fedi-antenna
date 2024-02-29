@@ -105,7 +105,7 @@ func ToMastodonReblog(ln *core.LocalNotify, reblog *entities.Status) *entities.S
 		return nil
 	}
 	acct := &entities.Account{
-		Uri: utils.NameAndHost2ProfileUrlActivitypubID(name, host),
+		Uri: utils.NameAndHost2ActivitypubID(name, host),
 	}
 	if err := dao.Read(dao.DB(), acct); err != nil {
 		log.Printf("%s", err.Error())
@@ -116,7 +116,7 @@ func ToMastodonReblog(ln *core.LocalNotify, reblog *entities.Status) *entities.S
 		Id:                 timestampString,
 		Uri:                ln.ID,
 		CreatedAt:          utils.TimestampToRFC3339(int64(timestamp)),
-		AttributedTo:       utils.NameAndHost2ProfileUrlActivitypubID(name, host),
+		AttributedTo:       utils.NameAndHost2ActivitypubID(name, host),
 		Account:            acct,
 		Content:            "",
 		Visibility:         ln.Visibility,

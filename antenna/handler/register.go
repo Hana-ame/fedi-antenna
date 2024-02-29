@@ -14,7 +14,7 @@ import (
 )
 
 func Register(o *model.Register) error {
-	id := utils.NameAndHost2ProfileUrlActivitypubID(o.Username, o.Host)
+	id := utils.NameAndHost2ActivitypubID(o.Username, o.Host)
 	pk := utils.GeneratePrivateKey()
 	now := utils.NewTimestamp()
 
