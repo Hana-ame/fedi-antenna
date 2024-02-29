@@ -15,8 +15,8 @@ import (
 
 // 未完成
 func Like(actor, object string) error {
-	_, host := utils.ParseNameAndHost(actor)
-	id := utils.GenerateObjectID("like", host)
+	_, host := utils.ActivitypubID2NameAndHost(actor)
+	id := utils.NewObjectID("like", host)
 
 	o := &activitypub.Like{
 		ID:     id,

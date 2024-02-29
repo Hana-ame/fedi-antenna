@@ -26,7 +26,7 @@ func Webfinger(c *gin.Context) {
 	username, host := utils.ParseUserAndHost(acct)
 	// 判断是否存在 not used
 	user := &core.LocalUser{
-		ActivitypubID: utils.ParseActivitypubID(username, host),
+		ActivitypubID: utils.NameAndHost2ProfileUrlActivitypubID(username, host),
 	}
 	if err := dao.Read(user); err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})

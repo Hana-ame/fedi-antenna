@@ -4,9 +4,6 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/Hana-ame/fedi-antenna/actions"
-	c "github.com/Hana-ame/fedi-antenna/core"
-	"github.com/Hana-ame/fedi-antenna/core/convert"
 	"github.com/Hana-ame/fedi-antenna/core/dao"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 	mastodon "github.com/Hana-ame/fedi-antenna/mastodon/controller/statuses/model"
@@ -16,27 +13,27 @@ import (
 // todo: poll
 // todo: image list
 func Post_a_new_status(actor, IdempotencyKey string, o *mastodon.Post_a_new_status) (*entities.Status, error) {
-	// actor string,
+	tx := dao.Begin()
 
-	timestamp := utils.Now()
-	name, host := utils.ParseNameAndHost(actor)
+	timestamp := utils.NewTimestamp()
+	name, host := utils.ActivitypubID2NameAndHost(actor)
 
 	account := &entities.Account{
 		Uri: actor,
 	}
-	if err := dao.Read(account); err != nil {
+	if err := dao.Read(tx, account); err != nil {
 		log.Println(err)
 		return nil, err
 	}
 
-	var inReplyToAccountId *string
+	inReplyToAccountId := new(string)
 	if o.InReplyToId != nil {
 		replyto := &entities.Status{Id: *o.InReplyToId}
-		if err := dao.Read(replyto); err != nil {
+		if err := dao.ReadMastodonStatuses(replyto); err != nil {
 			log.Printf("%s", err.Error())
 			return nil, err
 		}
-		inReplyToAccountId = &replyto.AttributedTo
+		inReplyToAccountId = &replyto.Account.Id
 	}
 
 	status := &entities.Status{
@@ -97,13 +94,14 @@ func Post_a_new_status(actor, IdempotencyKey string, o *mastodon.Post_a_new_stat
 		// EditedAt *string `json:"edited_at"`
 	}
 
-	err := c.CreateStatus(status)
-
-	if err == nil {
-		actions.CreateNote(convert.ToActivityPubNote(status))
+	if err := dao.CreateStatus(status); err != nil {
+		return status, err
 	}
 
-	return status, err
+	//TODO
+	// board cast
+
+	return status, nil
 }
 
 func Delete_a_status(id string, actor string) (*entities.Status, error) {
@@ -113,11 +111,9 @@ func Delete_a_status(id string, actor string) (*entities.Status, error) {
 		AttributedTo: actor,
 	}
 
-	err := c.DeleteStatus(status)
-
-	if err == nil {
-
+	if err := dao.DeleteStatus(status); err != nil {
+		return status, err
 	}
 
-	return status, err
+	return status, nil
 }

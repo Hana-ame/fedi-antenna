@@ -53,7 +53,7 @@ func Favourite(id, object, actor string) error {
 	return tx.Error
 }
 
-func Unfavourite(id, object, actor string) error {
+func Unfavourite(object, actor string) error {
 	tx := db.Begin()
 
 	liked, err := Liked(object, actor)

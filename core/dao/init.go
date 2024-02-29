@@ -1,6 +1,9 @@
 package dao
 
 import (
+	"fmt"
+	"time"
+
 	activitypub "github.com/Hana-ame/fedi-antenna/actions/model"
 	core "github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/mastodon/entities"
@@ -54,6 +57,22 @@ func Delete(tx *gorm.DB, o any) error {
 	return nil
 }
 
+func MustDelete(o any) {
+	tx := db.Begin()
+	for i := 0; i < 10; i++ {
+		tx.Delete(o)
+		time.Sleep(time.Second * time.Duration(i))
+		if tx.Error == nil {
+			return
+		}
+	}
+	fmt.Println("not deleted. %s"  , o)
+}
+
 func DB() *gorm.DB {
 	return db
+}
+
+func Begin() *gorm.DB {
+	return db.Begin()
 }

@@ -15,7 +15,7 @@ func Users(c *gin.Context) {
 	name := c.Param("name")
 	host := c.Request.Host
 
-	o := convert.ToActivityPubUser(utils.ParseActivitypubID(name, host))
+	o := convert.ToActivityPubUser(utils.NameAndHost2ProfileUrlActivitypubID(name, host))
 
 	c.JSON(http.StatusOK, o)
 }

@@ -31,8 +31,8 @@ func Accept(lr *model.LocalRelation, shouldRead bool) error {
 	if lr.Type != activitypub.TypeFollow { // should not.
 		return fmt.Errorf("lr.Type != Follow")
 	}
-	_, host := utils.ParseNameAndHost(lr.Object)
-	id := utils.GenerateObjectID("accept", host)
+	_, host := utils.ActivitypubID2NameAndHost(lr.Object)
+	id := utils.NewObjectID("accept", host)
 
 	follow := convert.ToActivityPubFollow(lr)
 	follow.Autofill()

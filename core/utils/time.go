@@ -15,12 +15,12 @@ func TimestampToRFC3339(ms int64) string {
 var timestamp atomic.Int64
 
 // second * 1e6
-func Now() (ms int64) {
-	ms = time.Now().UnixNano() / 1e3
-	if timestamp.Load() == ms {
+func NewTimestamp() (now int64) {
+	now = time.Now().UnixNano() / 1e3
+	if timestamp.Load() == now {
 		// time.Sleep(time.Microsecond)
-		ms++
+		now++
 	}
-	timestamp.Store(ms)
-	return ms
+	timestamp.Store(now)
+	return now
 }

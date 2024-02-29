@@ -26,8 +26,9 @@ const (
 	RelationStatusAccepted = "accepted"
 	RelationStatusRejected = "rejected"
 
-	RelationStatusBlocked  = "blocked"
-	RelationStatusBlocking = "blocking"
+	RelationStatusUnblocked = "unblocked"
+	RelationStatusBlocked   = "blocked"
+	RelationStatusBlocking  = "blocking"
 
 	RelationStatusUndo = "undo"
 )

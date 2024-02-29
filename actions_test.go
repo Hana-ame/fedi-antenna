@@ -53,11 +53,11 @@ func TestReject(t *testing.T) {
 }
 
 func TestNote(t *testing.T) {
-	actor := utils.ParseActivitypubID("test7", "fedi.moonchan.xyz")
+	actor := utils.NameAndHost2ProfileUrlActivitypubID("test7", "fedi.moonchan.xyz")
 
-	timestamp := utils.Now()
+	timestamp := utils.NewTimestamp()
 	published := utils.TimestampToRFC3339(timestamp)
-	name, host := utils.ParseNameAndHost(actor)
+	name, host := utils.ActivitypubID2NameAndHost(actor)
 	note := &activitypub.Note{
 		ID:           utils.ParseStatusesUri(name, host, strconv.Itoa(int(timestamp))),
 		Summary:      utils.ParseStringToPointer("", true),

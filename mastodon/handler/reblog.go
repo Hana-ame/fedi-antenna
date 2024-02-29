@@ -4,45 +4,68 @@ import (
 	"log"
 	"strconv"
 
-	c "github.com/Hana-ame/fedi-antenna/core"
+	"github.com/Hana-ame/fedi-antenna/core"
+	"github.com/Hana-ame/fedi-antenna/core/convert"
 	"github.com/Hana-ame/fedi-antenna/core/dao"
+	"github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
-	"github.com/Hana-ame/fedi-antenna/mastodon/controller/statuses/model"
+	mastodon "github.com/Hana-ame/fedi-antenna/mastodon/controller/statuses/model"
 	"github.com/Hana-ame/fedi-antenna/mastodon/entities"
 )
 
-func Boost_a_status(id string, actor string, o *model.Boost_a_status) (*entities.Status, error) {
+func Boost_a_status(id string, actor string, o *mastodon.Boost_a_status) (*entities.Status, error) {
+	tx := dao.DB()
+
 	status := &entities.Status{
 		Id: id,
 	}
-	if err := dao.Read(status); err != nil {
+	if err := dao.Read(tx, status); err != nil {
 		log.Printf("%s", err.Error())
 		return nil, err
 	}
 
-	name, host := utils.ParseNameAndHost(actor)
-	announceID := utils.ParseStatusesUri(name, host, strconv.Itoa(int(utils.Now()))) + "/activity"
-
-	reblog, err := c.Reblog(announceID, status.Uri, actor, o.Visibility)
-	if reblog != nil {
-		reblog.Reblog = status
+	name, host := utils.ActivitypubID2NameAndHost(actor)
+	announceID := utils.ParseStatusesUri(name, host, strconv.Itoa(int(utils.NewTimestamp()))) + "/activity"
+	if err := dao.Reblog(announceID, status.Uri, actor, o.Visibility); err != nil {
+		log.Println(err)
+		return nil, err
 	}
-	return reblog, err
+
+	_, host = utils.ActivitypubID2NameAndHost(status.Uri)
+	core.IsLocal(host)
+	// if host not at local
+	// then post to remote. TODO
+
+	localNotify := &model.LocalNotify{
+		ID: announceID,
+	}
+	if err := dao.Read(tx, localNotify); err != nil {
+		return nil, err
+	}
+
+	return convert.ToMastodonReblog(localNotify, status), nil
 }
 
 func Undo_boost_of_a_status(id string, actor string) (*entities.Status, error) {
+	tx := dao.DB()
+
 	status := &entities.Status{
 		Id: id,
 	}
-	if err := dao.Read(status); err != nil {
+	if err := dao.Read(tx, status); err != nil {
 		log.Printf("%s", err.Error())
 		return nil, err
 	}
 
-	err := c.Unreblog(status.Uri, actor)
+	if err := dao.Unreblog(status.Uri, actor); err != nil {
+		log.Println(err)
+		return status, err
+	}
 
-	// activitypub
-	// todo
+	_, host := utils.ActivitypubID2NameAndHost(status.Uri)
+	core.IsLocal(host)
+	// if host not at local
+	// then post to remote. TODO
 
-	return status, err
+	return status, nil
 }

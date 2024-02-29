@@ -93,21 +93,21 @@ var UserContext = []any{
 func NewUser(name, host string) *User {
 	return &User{
 		Context:           UserContext,
-		ID:                utils.ParseActivitypubID(name, host),
+		ID:                utils.NameAndHost2ProfileUrlActivitypubID(name, host),
 		Type:              "Person",
-		Following:         utils.ParseActivitypubID(name, host) + "/following",
-		Followers:         utils.ParseActivitypubID(name, host) + "/followers",
-		Inbox:             utils.ParseActivitypubID(name, host) + "/inbox",
-		Outbox:            utils.ParseActivitypubID(name, host) + "/outbox",
-		Featured:          utils.ParseActivitypubID(name, host) + "/collections/featured",
-		FeaturedTags:      utils.ParseActivitypubID(name, host) + "/collections/tags",
+		Following:         utils.NameAndHost2ProfileUrlActivitypubID(name, host) + "/following",
+		Followers:         utils.NameAndHost2ProfileUrlActivitypubID(name, host) + "/followers",
+		Inbox:             utils.NameAndHost2ProfileUrlActivitypubID(name, host) + "/inbox",
+		Outbox:            utils.NameAndHost2ProfileUrlActivitypubID(name, host) + "/outbox",
+		Featured:          utils.NameAndHost2ProfileUrlActivitypubID(name, host) + "/collections/featured",
+		FeaturedTags:      utils.NameAndHost2ProfileUrlActivitypubID(name, host) + "/collections/tags",
 		PreferredUsername: name,
 
-		URL: utils.ParseProfileUrl(name, host),
+		URL: utils.NameAndHost2ProfileUrl(name, host),
 
-		Published: utils.TimestampToRFC3339(utils.Now()),
-		Devices:   utils.ParseActivitypubID(name, host) + "/collections/devices",
-		PublicKey: NewPublicKey(utils.ParseActivitypubID(name, host)),
+		Published: utils.TimestampToRFC3339(utils.NewTimestamp()),
+		Devices:   utils.NameAndHost2ProfileUrlActivitypubID(name, host) + "/collections/devices",
+		PublicKey: NewPublicKey(utils.NameAndHost2ProfileUrlActivitypubID(name, host)),
 		Endpoint:  map[string]string{"sharedInbox": "https://" + host + "/inbox"},
 
 		Icon: &Image{
@@ -120,7 +120,7 @@ func NewUser(name, host string) *User {
 
 func (o *User) Autofill() {
 	// get name and host
-	name, host := utils.ParseNameAndHost(o.ID)
+	name, host := utils.ActivitypubID2NameAndHost(o.ID)
 
 	o.Context = UserContext
 	if o.Type == "" {
@@ -148,7 +148,7 @@ func (o *User) Autofill() {
 		o.PreferredUsername = name
 	}
 	if o.URL == "" {
-		o.URL = utils.ParseProfileUrl(name, host)
+		o.URL = utils.NameAndHost2ProfileUrl(name, host)
 	}
 	if o.Devices == "" {
 		o.Devices = o.ID + "/collections/devices"

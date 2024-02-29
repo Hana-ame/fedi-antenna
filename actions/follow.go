@@ -16,8 +16,8 @@ import (
 // object is the activityID of object.
 // all activitypub id url strings
 func Follow(actor, object string) error {
-	_, host := utils.ParseNameAndHost(actor)
-	id := utils.GenerateObjectID("follow", host)
+	_, host := utils.ActivitypubID2NameAndHost(actor)
+	id := utils.NewObjectID("follow", host)
 	o := &model.Follow{
 		ID:     id,
 		Actor:  actor,

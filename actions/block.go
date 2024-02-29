@@ -13,8 +13,8 @@ import (
 
 // all activitypub id url strings
 func Block(actor, object string) error {
-	_, host := utils.ParseNameAndHost(actor)
-	id := utils.GenerateObjectID("block", host)
+	_, host := utils.ActivitypubID2NameAndHost(actor)
+	id := utils.NewObjectID("block", host)
 	o := &model.Block{
 		ID:     id,
 		Actor:  actor,

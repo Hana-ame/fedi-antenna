@@ -7,6 +7,7 @@ import (
 	"github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 	"github.com/Hana-ame/fedi-antenna/mastodon/entities"
+	"gorm.io/gorm"
 )
 
 // 这是啥
@@ -26,7 +27,7 @@ func ReadFollowersByLocaluserID(id string) (sharedInboxes []string, err error) {
 	// 2.1. remove more than once
 	var m map[string]any = make(map[string]any)
 	for _, r := range relations {
-		_, host := utils.ParseNameAndHost(r.Actor)
+		_, host := utils.ActivitypubID2NameAndHost(r.Actor)
 		m[host] = true
 	}
 	// 2.2. host to shared inbox
@@ -47,35 +48,21 @@ func ReadFollowersByLocaluserID(id string) (sharedInboxes []string, err error) {
 	return
 }
 
-func Relationship(object, actor string) (relationship *entities.Relationship, err error) {
-
-	o2a := &model.LocalRelation{
-		Actor:  actor,
-		Object: object,
+// actor's following, object's follower
+func UpdateAccountFollowerFollowingCount(tx *gorm.DB, object, actor string, delta int) (err error) {
+	err = UpdateAccountFollowingCount(tx, &entities.Account{Uri: actor}, delta)
+	if err != nil {
+		log.Printf("%s", err.Error())
+		tx.Rollback()
+		return err
 	}
-	a2o := &model.LocalRelation{
-		Actor:  object,
-		Object: actor,
+	err = UpdateAccountFollowersCount(tx, &entities.Account{Uri: object}, delta)
+	if err != nil {
+		log.Printf("%s", err.Error())
+		tx.Rollback()
+		return err
 	}
-	if err = Read(db, o2a); err != nil {
-		return
-	}
-	if err = Read(db, a2o); err != nil {
-		return
-	}
-
-	relationship = &entities.Relationship{
-		Following:  a2o.Status == model.RelationStatusAccepted,
-		FollowedBy: o2a.Status == model.RelationStatusAccepted,
-
-		Requested:   a2o.Status == model.RelationStatusPadding,
-		RequestedBy: o2a.Status == model.RelationStatusPadding,
-
-		Blocking:  a2o.Status == model.RelationStatusBlocking,
-		BlockedBy: o2a.Status == model.RelationStatusBlocking,
-	}
-
-	return
+	return nil
 }
 
 // set to padding
@@ -120,31 +107,27 @@ func Unfollow(id, object, actor string) error {
 	if err != nil {
 		return err
 	}
-	if !relationship.Following && !relationship.Requested {
+	if !(relationship.Following || relationship.Requested) {
 		return fmt.Errorf("done")
 	} else if relationship.BlockedBy || relationship.Blocking {
 		return fmt.Errorf("forbidden")
 	}
 
 	lr := &model.LocalRelation{
+		ID:     id,
 		Actor:  actor,
 		Object: object,
 		Type:   model.RelationTypeFollow,
+		Status: model.RelationStatusRejected,
 	}
-	if err := Delete(tx, lr); err != nil {
+	if err := Update(tx, lr); err != nil {
 		// should not
 		log.Printf("%s", err.Error())
 		tx.Rollback()
 		return err
 	}
 	if relationship.Following {
-		err = UpdateAccountFollowingCount(tx, &entities.Account{Uri: actor}, -1)
-		if err != nil {
-			log.Printf("%s", err.Error())
-			tx.Rollback()
-			return err
-		}
-		err = UpdateAccountFollowersCount(tx, &entities.Account{Uri: object}, -1)
+		err = UpdateAccountFollowerFollowingCount(tx, actor, object, -1)
 		if err != nil {
 			log.Printf("%s", err.Error())
 			tx.Rollback()
@@ -183,13 +166,7 @@ func Accept(id, object, actor string) error {
 		return err
 	}
 	if relationship.RequestedBy {
-		err = UpdateAccountFollowingCount(tx, &entities.Account{Uri: lr.Actor}, 1)
-		if err != nil {
-			log.Printf("%s", err.Error())
-			tx.Rollback()
-			return err
-		}
-		err = UpdateAccountFollowersCount(tx, &entities.Account{Uri: lr.Object}, 1)
+		err = UpdateAccountFollowerFollowingCount(tx, actor, object, 1)
 		if err != nil {
 			log.Printf("%s", err.Error())
 			tx.Rollback()
@@ -210,7 +187,7 @@ func Reject(id, object, actor string) error {
 	if err != nil {
 		return err
 	}
-	if !relationship.RequestedBy && !relationship.FollowedBy {
+	if !(relationship.RequestedBy || relationship.FollowedBy) {
 		return fmt.Errorf("forbidden")
 	}
 
@@ -219,12 +196,22 @@ func Reject(id, object, actor string) error {
 		Actor:  object,
 		Object: actor,
 		Type:   model.RelationTypeFollow,
+		Status: model.RelationStatusRejected,
 	}
-	if err := Delete(tx, lr); err != nil {
+	if err := Update(tx, lr); err != nil {
 		// should not
 		log.Printf("%s", err.Error())
 		tx.Rollback()
 		return err
+	}
+
+	if relationship.FollowedBy {
+		err = UpdateAccountFollowerFollowingCount(tx, actor, object, -1)
+		if err != nil {
+			log.Printf("%s", err.Error())
+			tx.Rollback()
+			return err
+		}
 	}
 
 	tx.Commit()
@@ -244,15 +231,17 @@ func Block(id, object, actor string) error {
 	}
 
 	if relationship.FollowedBy {
-		err = Reject("", object, actor)
+		err = UpdateAccountFollowerFollowingCount(tx, actor, object, -1)
 		if err != nil {
+			log.Printf("%s", err.Error())
 			tx.Rollback()
 			return err
 		}
 	}
 	if relationship.Following {
-		err = Unfollow("", object, actor)
+		err = UpdateAccountFollowerFollowingCount(tx, object, actor, -1)
 		if err != nil {
+			log.Printf("%s", err.Error())
 			tx.Rollback()
 			return err
 		}
@@ -266,7 +255,7 @@ func Block(id, object, actor string) error {
 		Status: model.RelationStatusBlocking,
 	}
 
-	if err := Create(tx, lr); err != nil {
+	if err := Update(tx, lr); err != nil {
 		log.Printf("%s", err.Error())
 		tx.Rollback()
 		return err
@@ -292,9 +281,10 @@ func Unblock(id, object, actor string) error {
 		Actor:  actor,
 		Object: object,
 		Type:   model.RelationTypeBlock,
+		Status: model.RelationStatusUnblocked,
 	}
 
-	if err := Delete(tx, lr); err != nil {
+	if err := Update(tx, lr); err != nil {
 		log.Printf("%s", err.Error())
 		tx.Rollback()
 		return err

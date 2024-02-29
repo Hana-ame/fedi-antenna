@@ -29,8 +29,8 @@ func Reject(object, actor string) error {
 	if lr.Type != activitypub.TypeFollow { // should not.
 		return fmt.Errorf("lr.Type != Follow")
 	}
-	_, host := utils.ParseNameAndHost(lr.Object)
-	id := utils.GenerateObjectID("reject", host)
+	_, host := utils.ActivitypubID2NameAndHost(lr.Object)
+	id := utils.NewObjectID("reject", host)
 
 	follow := convert.ToActivityPubFollow(lr)
 	follow.Autofill()
