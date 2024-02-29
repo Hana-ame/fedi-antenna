@@ -33,7 +33,7 @@ func ParseUserAndHost(acct string) (user, host string) {
 // }
 
 // just add @ between [user] and [host]
-func ParseAcctStr(user, host string) (acct string) {
+func UsernameAndHost2Account(user, host string) (acct string) {
 	return user + "@" + host
 }
 

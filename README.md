@@ -8,13 +8,15 @@ mastodon要用的也就只有mastodon几个entities吧。
 
 - [x] antenna account
   - 在handler里面create了mastoodn的和local的
-- [ ] mastodon follow unfollow block
-- [ ] mastodon post
-- [ ] mastodon fav reblog
+- [x] mastodon follow unfollow block
+- [x] mastodon post
+- [x] mastodon fav reblog
   
 不对，编译不起来吧。
 只能全部改完再看结果了。
 可能会遇到顺序反了之类的，save和read都做了要test
+
+code in webfinger is in bad quality, do not use it.
 
 ap recv 的 model 完全是放在orderedmap里面的啊。
 那么cache的话借用action的model。
