@@ -17,6 +17,8 @@ func Host2PublicInbox(host string) (inbox string) {
 	return "https://" + host + "/inbox"
 }
 
+// todo
+// return known servers
 func knownServers() map[string]struct{} {
 	return map[string]struct{}{
 		"o3o.ca":    struct{}{},
@@ -24,19 +26,37 @@ func knownServers() map[string]struct{} {
 	}
 }
 
-func actorsServers(actor string) map[string]struct{} {
+// todo
+// return the followers
+func followersServers(actor string) map[string]struct{} {
 	dao.ReadFollowersByLocaluserID(actor)
+	return map[string]struct{}{}
+}
+
+// todo
+// return the inboxes should send
+func inboxes(actionType, dataType, primarykey, inbox, actor string) (map[string]struct{}, error) {
+	if actionType == model.TypeCreate && dataType == model.TypeNote {
+		// query the visibility
+
+	} else if actionType == model.TypeAnnounce {
+		// query the visibility
+	}
+	return knownServers(), nil
 }
 
 func DoTask(actionType, dataType, primarykey, inbox, actor string) error {
+	// when not specified inbox,
 	if inbox == "" {
-		if actionType == model.TypeCreate && dataType == model.TypeNote {
-			// query the visibility
-
-		} else if actionType == model.TypeAnnounce {
-			// query the visibility
+		inboxSet, err := inboxes(actionType, dataType, primarykey, inbox, actor)
+		if err != nil {
+			return err
+		}
+		for i := range inboxSet {
+			DoTask(actionType, dataType, primarykey, i, actor)
 		}
 	}
+
 	u, err := url.Parse(inbox)
 	if err != nil {
 		return err
@@ -57,28 +77,13 @@ func DoTask(actionType, dataType, primarykey, inbox, actor string) error {
 		return err
 	}
 
-	return nil
-}
-func AddTask(typ, primarykey, inbox, actor string) error {
-	u, err := url.Parse(inbox)
-	if err != nil {
-		return err
-	}
-	task := &model.Task{
-		AddedAt:    utils.NewTimestamp(false),
-		Host:       u.Host,
-		Inbox:      inbox,
-		Type:       typ,
-		ForeignKey: primarykey,
-
-		Status: model.TaskPadding,
-	}
-
-	return nil
+	return exec(task)
 }
 
+// todo
+// should do the tasks here,
 func exec(task *model.Task) error {
-
+	return nil
 }
 
 type Agent struct {
