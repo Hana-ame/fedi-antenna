@@ -90,7 +90,8 @@ var UserContext = []any{
 	}),
 }
 
-func NewUser(name, host string) *User {
+// only for local user to activity pub
+func NewUser(name, host string, timestamp int64, publicKey *PublicKey, icon *Image) *User {
 	return &User{
 		Context:           UserContext,
 		ID:                utils.NameAndHost2ActivitypubID(name, host),
@@ -105,16 +106,19 @@ func NewUser(name, host string) *User {
 
 		URL: utils.NameAndHost2ProfileUrl(name, host),
 
-		Published: utils.TimestampToRFC3339(utils.NewTimestamp(false)),
+		Published: utils.TimestampToRFC3339(timestamp),
 		Devices:   utils.NameAndHost2ActivitypubID(name, host) + "/collections/devices",
-		PublicKey: NewPublicKey(utils.NameAndHost2ActivitypubID(name, host)),
-		Endpoint:  map[string]string{"sharedInbox": "https://" + host + "/inbox"},
+		PublicKey: publicKey,
 
-		Icon: &Image{
-			"Image",
-			"image/png",
-			"https://twimg.moonchan.xyz/media/GB8hT5vacAAK6wa?format=png&name=medium",
-		},
+		SharedInbox: "https://" + host + "/inbox",
+		Endpoint:    map[string]string{"sharedInbox": "https://" + host + "/inbox"},
+
+		Icon: icon,
+		// Icon: &Image{
+		// 	"Image",
+		// 	"image/png",
+		// 	"https://twimg.moonchan.xyz/media/GB8hT5vacAAK6wa?format=png&name=medium",
+		// },
 	}
 }
 

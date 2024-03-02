@@ -22,7 +22,7 @@ func UsersStatus(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, err)
 	}
 
-	o := convert.ToActivityPubNote(status)
+	o := convert.StatusToNote(status)
 	c.Writer.Header().Set("Content-Type", "application/activity+json; charset=utf-8")
 	c.JSON(http.StatusOK, o)
 }

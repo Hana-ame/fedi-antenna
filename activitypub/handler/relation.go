@@ -9,6 +9,7 @@ import (
 	"github.com/Hana-ame/fedi-antenna/core/model"
 )
 
+// should check local mastodon user is exist.
 func Follow(o *orderedmap.OrderedMap) error {
 	err := dao.Follow(
 		o.GetOrDefault("id", "").(string),

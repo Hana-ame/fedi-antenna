@@ -1,7 +1,5 @@
 package model
 
-import "github.com/Hana-ame/fedi-antenna/core/utils"
-
 type PublicKey struct {
 	ID string `json:"id"`
 
@@ -13,10 +11,10 @@ type PublicKey struct {
 }
 
 // should never be used?
-func NewPublicKey(id string) *PublicKey {
-	pk := utils.GeneratePrivateKey()
+func NewPublicKey(id, publicKeyPem string) *PublicKey {
+	// pk := utils.GeneratePrivateKey()
 	// privateKeyPem := utils.MarshalPrivateKey(pk)
-	publicKeyPem := utils.MarshalPublicKey(&pk.PublicKey)
+	// publicKeyPem := utils.MarshalPublicKey(&pk.PublicKey)
 	return &PublicKey{
 		ID:           id + "#main-key",
 		Owner:        id,
