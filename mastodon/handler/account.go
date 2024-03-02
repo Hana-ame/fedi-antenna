@@ -22,7 +22,7 @@ func Register_an_account(
 
 	activitypubID := utils.NameAndHost2ActivitypubID(o.Username, host)
 	pk := utils.GeneratePrivateKey()
-	now := utils.NewTimestamp()
+	now := utils.NewTimestamp(false)
 
 	user := &model.LocalUser{
 		Email:         o.Email,

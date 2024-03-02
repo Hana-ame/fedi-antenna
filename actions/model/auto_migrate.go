@@ -14,4 +14,6 @@ func AutoMigrate(db *gorm.DB) {
 	db.AutoMigrate(&Accept{})
 	db.AutoMigrate(&Reject{})
 	db.AutoMigrate(&Note{})
+
+	db.AutoMigrate(new(Task))
 }

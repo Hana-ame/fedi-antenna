@@ -13,7 +13,7 @@ import (
 
 // type: note
 func CreateNote(o *orderedmap.OrderedMap) error {
-	timestamp := utils.NewTimestamp()
+	timestamp := utils.NewTimestamp(false)
 	oapplication, ok := o.GetOrDefault("application", orderedmap.New()).(*orderedmap.OrderedMap)
 	var application *status.Application
 	if ok && oapplication != nil {

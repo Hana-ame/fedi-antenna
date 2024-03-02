@@ -105,7 +105,7 @@ func NewUser(name, host string) *User {
 
 		URL: utils.NameAndHost2ProfileUrl(name, host),
 
-		Published: utils.TimestampToRFC3339(utils.NewTimestamp()),
+		Published: utils.TimestampToRFC3339(utils.NewTimestamp(false)),
 		Devices:   utils.NameAndHost2ActivitypubID(name, host) + "/collections/devices",
 		PublicKey: NewPublicKey(utils.NameAndHost2ActivitypubID(name, host)),
 		Endpoint:  map[string]string{"sharedInbox": "https://" + host + "/inbox"},

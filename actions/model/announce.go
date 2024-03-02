@@ -19,6 +19,17 @@ type Announce struct {
 	Object string `json:"object"`
 }
 
+func NewAnnounce(id, actor, published, visibility string) *Announce {
+	o := &Announce{
+		ID:         id,
+		Actor:      actor,
+		Published:  published,
+		Visibility: visibility,
+	}
+	o.Autofill()
+	return o
+}
+
 var AnnounceContext = "https://www.w3.org/ns/activitystreams"
 
 func (o *Announce) Autofill() {

@@ -55,7 +55,7 @@ func TestReject(t *testing.T) {
 func TestNote(t *testing.T) {
 	actor := utils.NameAndHost2ActivitypubID("test7", "fedi.moonchan.xyz")
 
-	timestamp := utils.NewTimestamp()
+	timestamp := utils.NewTimestamp(false)
 	published := utils.TimestampToRFC3339(timestamp)
 	name, host := utils.ActivitypubID2NameAndHost(actor)
 	note := &activitypub.Note{

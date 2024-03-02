@@ -25,7 +25,7 @@ func Boost_a_status(id string, actor string, o *mastodon.Boost_a_status) (*entit
 	}
 
 	name, host := utils.ActivitypubID2NameAndHost(actor)
-	announceID := utils.ParseStatusesUri(name, host, strconv.Itoa(int(utils.NewTimestamp()))) + "/activity"
+	announceID := utils.ParseStatusesUri(name, host, strconv.Itoa(int(utils.NewTimestamp(false)))) + "/activity"
 	if err := dao.Reblog(announceID, status.Uri, actor, o.Visibility); err != nil {
 		log.Println(err)
 		return nil, err

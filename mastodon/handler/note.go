@@ -15,7 +15,7 @@ import (
 func Post_a_new_status(actor, IdempotencyKey string, o *mastodon.Post_a_new_status) (*entities.Status, error) {
 	tx := dao.Begin()
 
-	timestamp := utils.NewTimestamp()
+	timestamp := utils.NewTimestamp(false)
 	name, host := utils.ActivitypubID2NameAndHost(actor)
 
 	account := &entities.Account{
