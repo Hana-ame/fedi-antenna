@@ -6,22 +6,23 @@ import (
 
 	"github.com/Hana-ame/fedi-antenna/core/dao"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
-	mastodon "github.com/Hana-ame/fedi-antenna/mastodon/controller/statuses/model"
+	controller "github.com/Hana-ame/fedi-antenna/mastodon/controller/statuses/model"
+	mastodon "github.com/Hana-ame/fedi-antenna/mastodon/dao"
 	"github.com/Hana-ame/fedi-antenna/mastodon/entities"
 )
 
 // todo: poll
 // todo: image list
-func Post_a_new_status(actor, IdempotencyKey string, o *mastodon.Post_a_new_status) (*entities.Status, error) {
-	tx := dao.Begin()
+func Post_a_new_status(actor, IdempotencyKey string, o *controller.Post_a_new_status) (*entities.Status, error) {
+	tx := mastodon.DB.Begin()
 
 	timestamp := utils.NewTimestamp(false)
 	name, host := utils.ActivitypubID2NameAndHost(actor)
 
-	account := &entities.Account{
+	acct := &entities.Account{
 		Uri: actor,
 	}
-	if err := dao.Read(tx, account); err != nil {
+	if err := dao.Read(tx, acct); err != nil {
 		log.Println(err)
 		return nil, err
 	}
@@ -29,11 +30,18 @@ func Post_a_new_status(actor, IdempotencyKey string, o *mastodon.Post_a_new_stat
 	inReplyToAccountId := new(string)
 	if o.InReplyToId != nil {
 		replyto := &entities.Status{Id: *o.InReplyToId}
-		if err := dao.ReadMastodonStatuses(replyto); err != nil {
+		if err := mastodon.ReadStatuses(tx, replyto); err != nil {
 			log.Printf("%s", err.Error())
 			return nil, err
 		}
 		inReplyToAccountId = &replyto.Account.Id
+	}
+
+	mediaAttachments := make([]*entities.MediaAttachment, len(o.MediaIds))
+	for i := range o.MediaIds {
+		mediaAttachment := &entities.MediaAttachment{PreviewUrl: o.MediaIds[i]}
+		mastodon.DB.Read(tx, mediaAttachment)
+		mediaAttachments[i] = mediaAttachment
 	}
 
 	status := &entities.Status{
@@ -42,14 +50,14 @@ func Post_a_new_status(actor, IdempotencyKey string, o *mastodon.Post_a_new_stat
 		Id: strconv.Itoa(int(timestamp)),
 		// Type: String
 		// Description: URI of the status used for federation.
-		Uri: utils.ParseStatusesUri(name, host, strconv.Itoa(int(timestamp))),
+		Uri: utils.NameHostTimestampToStatusesUri(name, host, strconv.Itoa(int(timestamp))),
 		// Type: String (ISO 8601 Datetime)
 		// Description: The date when this status was created.
 		CreatedAt: utils.TimestampToRFC3339(timestamp),
 		// Type: Account
 		// Description: The account that authored this status.
 		AttributedTo: actor,
-		Account:      account,
+		Account:      acct,
 		// Type: String (HTML)
 		// Description: HTML-encoded status content.
 		Content: o.Status,
@@ -64,7 +72,7 @@ func Post_a_new_status(actor, IdempotencyKey string, o *mastodon.Post_a_new_stat
 		SpoilerText: o.SpoilerText,
 		// Type: Array of MediaAttachment
 		// Description: Media that is attached to this status.
-		// MediaAttachments []*MediaAttachment `json:"media_attachments" gorm:"many2many:status_mediaattachments;"`
+		MediaAttachments: mediaAttachments,
 		// Type: Hash
 		// Description: The application used to post this status.
 		// Application *status.Application `json:"application,omitempty" gorm:"serializer:json"`
@@ -94,25 +102,29 @@ func Post_a_new_status(actor, IdempotencyKey string, o *mastodon.Post_a_new_stat
 		// EditedAt *string `json:"edited_at"`
 	}
 
-	if err := dao.CreateStatus(status); err != nil {
+	if err := mastodon.CreateStatus(tx, status); err != nil {
+		log.Println(err)
+		tx.Rollback()
 		return status, err
 	}
-
-	//TODO
-	// board cast
 
 	return status, nil
 }
 
 func Delete_a_status(id string, actor string) (*entities.Status, error) {
+	tx := mastodon.DB.Begin()
 
 	status := &entities.Status{
-		Id:           id,
-		AttributedTo: actor,
+		Id: id,
+	}
+	if err := mastodon.ReadStatuses(tx, status); err != nil {
+		log.Println(err)
+		return nil, err
 	}
 
-	if err := dao.DeleteStatus(status); err != nil {
-		return status, err
+	if err := mastodon.DeleteStatus(tx, id); err != nil {
+		log.Println(err)
+		return nil, err
 	}
 
 	return status, nil

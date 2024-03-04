@@ -24,7 +24,7 @@ type LocalNotify struct {
 	Visibility string
 
 	// todo
-	// DeleteAt int64
+	DeleteAt int64
 }
 
 const (

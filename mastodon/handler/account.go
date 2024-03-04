@@ -9,16 +9,16 @@ import (
 	"github.com/Hana-ame/fedi-antenna/core/dao"
 	"github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
-	mastodon "github.com/Hana-ame/fedi-antenna/mastodon/controller/accounts/model"
+	controller "github.com/Hana-ame/fedi-antenna/mastodon/controller/accounts/model"
+	mastodon "github.com/Hana-ame/fedi-antenna/mastodon/dao"
 	"github.com/Hana-ame/fedi-antenna/mastodon/entities"
 )
 
 func Register_an_account(
 	id string,
 	host string,
-	o *mastodon.Register_an_account,
+	o *controller.Register_an_account,
 ) error {
-	tx := dao.DB().Begin()
 
 	activitypubID := utils.NameAndHost2ActivitypubID(o.Username, host)
 	pk := utils.GeneratePrivateKey()
@@ -44,29 +44,32 @@ func Register_an_account(
 		Uri:      activitypubID,
 	}
 
-	if err := dao.Create(tx, user); err != nil {
+	ctx := dao.Begin()
+	if err := dao.Create(ctx, user); err != nil {
 		log.Println(err)
-		tx.Rollback()
-		return err
-	}
-	if err := dao.Create(tx, acct); err != nil {
-		log.Println(err)
-		tx.Rollback()
+		ctx.Rollback()
 		return err
 	}
 
-	tx.Commit()
+	mtx := mastodon.DB.Begin()
+	if err := mastodon.DB.Create(mtx, acct); err != nil {
+		log.Println(err)
+		mtx.Rollback()
+		ctx.Rollback()
+		return err
+	}
 
-	return tx.Error
+	mtx.Commit()
+	ctx.Commit()
+
+	return nil
 }
 
 func Get_account(id, actor string) (*entities.Account, error) {
-	tx := dao.Begin()
+	tx := mastodon.DB.Begin()
 
-	acct := &entities.Account{
-		Id: id,
-	}
-	if err := dao.Read(tx, acct); err != nil {
+	acct, err := mastodon.ReadAccount(tx, id)
+	if err != nil {
 		log.Println(err)
 		tx.Rollback()
 		return acct, err

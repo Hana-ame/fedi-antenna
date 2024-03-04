@@ -6,10 +6,10 @@ package model
 
 type LocalRelation struct {
 	// object ID in url
-	ID string `gorm:"primarykey"`
+	ID string
 	// activitypub ID in url
-	Actor  string
-	Object string
+	Actor  string `gorm:"primarykey"`
+	Object string `gorm:"primarykey"`
 	// Follow or Block
 	Type string
 	// padding or acccpted
@@ -19,6 +19,7 @@ type LocalRelation struct {
 const (
 	RelationTypeFollow = "Follow"
 	RelationTypeBlock  = "Block"
+	RelationTypeNone   = ""
 )
 
 const (

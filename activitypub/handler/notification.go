@@ -34,14 +34,26 @@ func Announce(o *orderedmap.OrderedMap) error {
 func UndoNotify(o *orderedmap.OrderedMap) error {
 	switch o.GetOrDefault("type", "").(string) {
 	case model.NotifyTypeLike:
-		err := dao.Unfavourite(
-			o.GetOrDefault("object", "").(string),
-			o.GetOrDefault("actor", "").(string))
+		notify := &model.LocalNotify{
+			Actor:  o.GetOrDefault("actor", "").(string),
+			Object: o.GetOrDefault("object", "").(string),
+			Type:   model.NotifyTypeLike,
+		}
+		if err := dao.Read(dao.DB(), notify); err != nil {
+			return err
+		}
+		err := dao.Unreblog(notify)
 		return err
 	case model.NotifyTypeAnnounce:
-		err := dao.Unreblog(
-			o.GetOrDefault("object", "").(string),
-			o.GetOrDefault("actor", "").(string))
+		notify := &model.LocalNotify{
+			Actor:  o.GetOrDefault("actor", "").(string),
+			Object: o.GetOrDefault("object", "").(string),
+			Type:   model.NotifyTypeAnnounce,
+		}
+		if err := dao.Read(dao.DB(), notify); err != nil {
+			return err
+		}
+		err := dao.Unreblog(notify)
 		return err
 	default:
 		log.Println("not support")

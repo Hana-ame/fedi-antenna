@@ -15,7 +15,7 @@ func StatusToNote(o *entities.Status) *activitypub.Note {
 		Visibility:   o.Visibility,
 		InReplyTo:    o.InReplyToId,
 		AttributedTo: o.AttributedTo,
-		Published:    o.CreatedAt,
+		Published:    o.CreatedAt, // TODO
 	}
 	note.Autofill()
 	return note

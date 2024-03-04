@@ -1,13 +1,11 @@
 package dao
 
 import (
+	"errors"
 	"fmt"
 	"time"
 
-	activitypub "github.com/Hana-ame/fedi-antenna/actions/model"
 	core "github.com/Hana-ame/fedi-antenna/core/model"
-	"github.com/Hana-ame/fedi-antenna/mastodon/entities"
-	webfinger "github.com/Hana-ame/fedi-antenna/webfinger/model"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -17,11 +15,7 @@ var db *gorm.DB
 func init() {
 	db, _ = gorm.Open(sqlite.Open("gorm.db"), &gorm.Config{})
 
-	activitypub.AutoMigrate(db)
 	core.AutoMigrate(db)
-	webfinger.AutoMigrate(db)
-	entities.AutoMigrate(db)
-
 }
 
 // func Where(query any, args ...any) (tx *gorm.DB) {
@@ -66,7 +60,7 @@ func MustDelete(o any) {
 			return
 		}
 	}
-	fmt.Println("not deleted. %s"  , o)
+	fmt.Printf("not deleted. %s\n", o)
 }
 
 func DB() *gorm.DB {
@@ -75,4 +69,8 @@ func DB() *gorm.DB {
 
 func Begin() *gorm.DB {
 	return db.Begin()
+}
+
+func ErrRecordNotFound(err error) bool {
+	return errors.Is(err, gorm.ErrRecordNotFound)
 }

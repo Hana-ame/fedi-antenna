@@ -3,63 +3,71 @@ package handler
 import (
 	"log"
 
-	"github.com/Hana-ame/fedi-antenna/core"
 	"github.com/Hana-ame/fedi-antenna/core/dao"
-	"github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 	accounts "github.com/Hana-ame/fedi-antenna/mastodon/controller/accounts/model"
+	mastodon "github.com/Hana-ame/fedi-antenna/mastodon/dao"
 	"github.com/Hana-ame/fedi-antenna/mastodon/entities"
 )
 
 func Follow_account(id, actor string, o *accounts.Follow_account) (*entities.Relationship, error) {
-	acct := &entities.Account{
-		Id: id,
-	}
-	if err := dao.Read(dao.DB(), acct); err != nil {
+	tx := mastodon.DB.Begin()
+
+	acct, err := mastodon.ReadAccount(tx, id)
+	if err != nil {
 		log.Println(err)
-		relationship, _ := dao.Relationship(acct.Uri, actor)
+		tx.Rollback()
+		relationship, _ := mastodon.ReadRelationship(tx, acct.Uri, actor)
 		return relationship, err
 	}
 
-	_, host := utils.ActivitypubID2NameAndHost(actor)
-	objectID := utils.NewObjectID(model.RelationTypeFollow, host)
-	if err := dao.Follow(objectID, acct.Uri, actor); err != nil {
+	if err := mastodon.Follow(tx, acct.Uri, actor); err != nil {
 		log.Println(err)
-		relationship, _ := dao.Relationship(acct.Uri, actor)
+		tx.Rollback()
+		relationship, _ := mastodon.ReadRelationship(tx, acct.Uri, actor)
 		return relationship, err
 	}
 
-	_, host = utils.ActivitypubID2NameAndHost(acct.Uri)
-	core.IsLocal(host)
-	// if host not at local
-	// then post to remote. TODO
+	relationship, err := mastodon.ReadRelationship(tx, acct.Uri, actor)
+	if err != nil {
+		log.Println(err)
+		tx.Rollback()
+		return relationship, err
+	}
 
-	return dao.Relationship(acct.Uri, actor)
+	tx.Commit()
+
+	return relationship, tx.Error
 }
 
 func Unfollow_account(id, actor string) (*entities.Relationship, error) {
-	acct := &entities.Account{
-		Id: id,
-	}
-	if err := dao.Read(dao.DB(), acct); err != nil {
+	tx := mastodon.DB.Begin()
+
+	acct, err := mastodon.ReadAccount(tx, id)
+	if err != nil {
 		log.Println(err)
-		relationship, _ := dao.Relationship(acct.Uri, actor)
+		tx.Rollback()
+		relationship, _ := mastodon.ReadRelationship(tx, acct.Uri, actor)
 		return relationship, err
 	}
 
-	_, host := utils.ActivitypubID2NameAndHost(actor)
-	if err := dao.Unfollow("", acct.Uri, actor); err != nil {
+	if err := mastodon.Unfollow(tx, acct.Uri, actor); err != nil {
 		log.Println(err)
-		relationship, _ := dao.Relationship(acct.Uri, actor)
+		tx.Rollback()
+		relationship, _ := mastodon.ReadRelationship(tx, acct.Uri, actor)
 		return relationship, err
 	}
 
-	_, host = utils.ActivitypubID2NameAndHost(acct.Uri)
-	core.IsLocal(host)
-	// if host not at local
-	// then post to remote. TODO
+	relationship, err := mastodon.ReadRelationship(tx, acct.Uri, actor)
+	if err != nil {
+		log.Println(err)
+		tx.Rollback()
+		return relationship, err
+	}
 
-	return dao.Relationship(acct.Uri, actor)
+	tx.Commit()
+
+	return relationship, tx.Error
 }
 
 // TODO
@@ -79,50 +87,61 @@ func View_pending_follow_requests(
 }
 
 func Accept_follow_request(id, actor string) (*entities.Relationship, error) {
-	acct := &entities.Account{
-		Id: id,
-	}
-	if err := dao.Read(dao.DB(), acct); err != nil {
+	tx := mastodon.DB.Begin()
+
+	acct, err := mastodon.ReadAccount(tx, id)
+	if err != nil {
 		log.Println(err)
-		relationship, _ := dao.Relationship(acct.Uri, actor)
+		tx.Rollback()
+		relationship, _ := mastodon.ReadRelationship(tx, acct.Uri, actor)
 		return relationship, err
 	}
 
-	if err := dao.Accept("", acct.Uri, actor); err != nil {
+	if err := mastodon.Accept(tx, acct.Uri, actor); err != nil {
 		log.Println(err)
-		relationship, _ := dao.Relationship(acct.Uri, actor)
+		tx.Rollback()
+		relationship, _ := mastodon.ReadRelationship(tx, acct.Uri, actor)
 		return relationship, err
 	}
 
-	_, host := utils.ActivitypubID2NameAndHost(acct.Uri)
-	core.IsLocal(host)
-	// if host not at local
-	// then post to remote. TODO
+	relationship, err := mastodon.ReadRelationship(tx, acct.Uri, actor)
+	if err != nil {
+		log.Println(err)
+		tx.Rollback()
+		return relationship, err
+	}
 
-	return dao.Relationship(acct.Uri, actor)
+	tx.Commit()
+
+	return relationship, tx.Error
 }
 
 func Reject_follow_request(id, actor string) (*entities.Relationship, error) {
-	acct := &entities.Account{
-		Id: id,
-	}
-	if err := dao.Read(dao.DB(), acct); err != nil {
+	tx := mastodon.DB.Begin()
+
+	acct, err := mastodon.ReadAccount(tx, id)
+	if err != nil {
 		log.Println(err)
-		relationship, _ := dao.Relationship(acct.Uri, actor)
+		tx.Rollback()
+		relationship, _ := mastodon.ReadRelationship(tx, acct.Uri, actor)
 		return relationship, err
 	}
 
-	if err := dao.Reject("", acct.Uri, actor); err != nil {
+	if err := mastodon.Reject(tx, acct.Uri, actor); err != nil {
 		log.Println(err)
-		relationship, _ := dao.Relationship(acct.Uri, actor)
+		tx.Rollback()
+		relationship, _ := mastodon.ReadRelationship(tx, acct.Uri, actor)
 		return relationship, err
 	}
 
-	_, host := utils.ActivitypubID2NameAndHost(acct.Uri)
-	if core.IsLocal(host) {
-		// if host not at local
-		// then post to remote. TODO
+	relationship, err := mastodon.ReadRelationship(tx, acct.Uri, actor)
+	if err != nil {
+		log.Println(err)
+		tx.Rollback()
+		return relationship, err
 	}
 
-	return dao.Relationship(acct.Uri, actor)
+	tx.Commit()
+
+	return relationship, tx.Error
 }

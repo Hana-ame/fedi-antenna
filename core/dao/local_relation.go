@@ -69,7 +69,7 @@ func UpdateAccountFollowerFollowingCount(tx *gorm.DB, object, actor string, delt
 func Follow(id, object, actor string) error {
 	tx := db.Begin()
 
-	relationship, err := Relationship(object, actor)
+	relationship, err := ReadRelationship(object, actor)
 	if err != nil {
 		return err
 	}
@@ -103,7 +103,7 @@ func Follow(id, object, actor string) error {
 func Unfollow(id, object, actor string) error {
 	tx := db.Begin()
 
-	relationship, err := Relationship(object, actor)
+	relationship, err := ReadRelationship(object, actor)
 	if err != nil {
 		return err
 	}
@@ -117,8 +117,8 @@ func Unfollow(id, object, actor string) error {
 		ID:     id,
 		Actor:  actor,
 		Object: object,
-		Type:   model.RelationTypeFollow,
-		Status: model.RelationStatusRejected,
+		Type:   model.RelationTypeNone,
+		Status: model.RelationStatusUndo,
 	}
 	if err := Update(tx, lr); err != nil {
 		// should not
@@ -144,7 +144,7 @@ func Unfollow(id, object, actor string) error {
 func Accept(id, object, actor string) error {
 	tx := db.Begin()
 
-	relationship, err := Relationship(object, actor)
+	relationship, err := ReadRelationship(object, actor)
 	if err != nil {
 		return err
 	}
@@ -183,7 +183,7 @@ func Accept(id, object, actor string) error {
 func Reject(id, object, actor string) error {
 	tx := db.Begin()
 
-	relationship, err := Relationship(object, actor)
+	relationship, err := ReadRelationship(object, actor)
 	if err != nil {
 		return err
 	}
@@ -195,7 +195,7 @@ func Reject(id, object, actor string) error {
 		ID:     id,
 		Actor:  object,
 		Object: actor,
-		Type:   model.RelationTypeFollow,
+		Type:   model.RelationTypeNone,
 		Status: model.RelationStatusRejected,
 	}
 	if err := Update(tx, lr); err != nil {
@@ -222,7 +222,7 @@ func Reject(id, object, actor string) error {
 func Block(id, object, actor string) error {
 	tx := db.Begin()
 
-	relationship, err := Relationship(object, actor)
+	relationship, err := ReadRelationship(object, actor)
 	if err != nil {
 		return err
 	}
@@ -246,7 +246,7 @@ func Block(id, object, actor string) error {
 			return err
 		}
 	}
-
+	// err := Delete(tx, &model)
 	lr := &model.LocalRelation{
 		ID:     id,
 		Actor:  actor,
@@ -269,7 +269,7 @@ func Block(id, object, actor string) error {
 func Unblock(id, object, actor string) error {
 	tx := db.Begin()
 
-	relationship, err := Relationship(object, actor)
+	relationship, err := ReadRelationship(object, actor)
 	if err != nil {
 		return err
 	}

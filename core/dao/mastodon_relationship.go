@@ -8,7 +8,7 @@ import (
 )
 
 // activitypubID.
-func Relationship(object, actor string) (*entities.Relationship, error) {
+func ReadRelationship(object, actor string) (*entities.Relationship, error) {
 
 	account := &entities.Account{Uri: object}
 	if err := Read(db, account); err != nil {

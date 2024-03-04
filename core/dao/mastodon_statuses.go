@@ -3,6 +3,7 @@ package dao
 import (
 	"log"
 
+	"github.com/Hana-ame/fedi-antenna/core/utils"
 	"github.com/Hana-ame/fedi-antenna/mastodon/entities"
 )
 
@@ -18,12 +19,13 @@ func ReadMastodonStatuses(status *entities.Status) (err error) {
 func DeleteStatus(status *entities.Status) error {
 	tx := db.Begin()
 
-	if err := Read(tx, status); err != nil {
-		log.Println(err)
-		tx.Rollback()
-		return err
-	}
-	if err := Delete(tx, status); err != nil {
+	// if err := Read(tx, status); err != nil {
+	// 	log.Println(err)
+	// 	tx.Rollback()
+	// 	return err
+	// }
+	status.DeletedAt = utils.NewTimestamp(true)
+	if err := Update(tx, status); err != nil {
 		log.Println(err)
 		tx.Rollback()
 		return err

@@ -3,57 +3,53 @@ package handler
 import (
 	"log"
 
-	"github.com/Hana-ame/fedi-antenna/core"
-	"github.com/Hana-ame/fedi-antenna/core/dao"
-	"github.com/Hana-ame/fedi-antenna/core/utils"
+	mastodon "github.com/Hana-ame/fedi-antenna/mastodon/dao"
 	"github.com/Hana-ame/fedi-antenna/mastodon/entities"
 )
 
 // id is the mastodon published which is timestamp in us
 func Favourite_a_status(id string, actor string) (*entities.Status, error) {
-	tx := dao.Begin()
+	tx := mastodon.DB.Begin()
 
 	status := &entities.Status{
 		Id: id,
 	}
-	if err := dao.Read(tx, status); err != nil {
+	if err := mastodon.DB.Read(tx, status); err != nil {
 		log.Printf("%s", err.Error())
+		tx.Rollback()
 		return nil, err
 	}
 
-	_, host := utils.ActivitypubID2NameAndHost(actor)
-	if err := dao.Favourite(utils.NewObjectID("favourite", host), status.Uri, actor); err != nil {
+	if err := mastodon.CreateFavourite(tx, status.Uri, actor); err != nil {
 		log.Println(err)
+		tx.Rollback()
 		return status, err
 	}
 
-	core.IsLocal(host)
-	// if host not at local
-	// then post to remote. TODO
+	tx.Commit()
 
-	return status, nil
+	return status, tx.Error
 }
 
 func Undo_favourite_of_a_status(id string, actor string) (*entities.Status, error) {
-	tx := dao.Begin()
+	tx := mastodon.DB.Begin()
 
 	status := &entities.Status{
 		Id: id,
 	}
-	if err := dao.Read(tx, status); err != nil {
+	if err := mastodon.DB.Read(tx, status); err != nil {
 		log.Printf("%s", err.Error())
+		tx.Rollback()
 		return nil, err
 	}
 
-	_, host := utils.ActivitypubID2NameAndHost(actor)
-	if err := dao.Unfavourite(status.Uri, actor); err != nil {
+	if err := mastodon.DeleteFavourite(tx, status.Uri, actor); err != nil {
 		log.Println(err)
+		tx.Rollback()
 		return status, err
 	}
 
-	core.IsLocal(host)
-	// if host not at local
-	// then post to remote. TODO
+	tx.Commit()
 
-	return status, nil
+	return status, tx.Error
 }

@@ -48,7 +48,7 @@ func ParseTypeFromObjectID(id string) (typ, host string) {
 }
 
 // "https://" + host + "/users/" + name + "/statuses/" + id
-func ParseStatusesUri(name, host, id string) (statusesUri string) {
+func NameHostTimestampToStatusesUri(name, host, id string) (statusesUri string) {
 	return "https://" + host + "/users/" + name + "/statuses/" + id
 }
 

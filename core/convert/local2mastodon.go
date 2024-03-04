@@ -94,20 +94,13 @@ import (
 // 	return account
 // }
 
-func ToMastodonReblog(ln *core.LocalNotify, reblog *entities.Status) *entities.Status {
+func ToMastodonReblog(ln *core.LocalNotify, acct *entities.Account, reblog *entities.Status) *entities.Status {
 	if ln.Type != core.NotifyTypeAnnounce {
 		return nil
 	}
 	name, host, timestampString := utils.ActivitypubID2NameAndHostAndTimestamp(ln.ID)
 	timestamp, err := strconv.Atoi(timestampString)
 	if err != nil {
-		log.Printf("%s", err.Error())
-		return nil
-	}
-	acct := &entities.Account{
-		Uri: utils.NameAndHost2ActivitypubID(name, host),
-	}
-	if err := dao.Read(dao.DB(), acct); err != nil {
 		log.Printf("%s", err.Error())
 		return nil
 	}
@@ -148,6 +141,7 @@ func ToMastodonReblog(ln *core.LocalNotify, reblog *entities.Status) *entities.S
 	}
 
 	if reblog == nil {
+		log.Printf("reblog is nil, %s", ln.ID)
 		reblog = &entities.Status{
 			Uri: ln.Object,
 		}
