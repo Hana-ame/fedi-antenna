@@ -1,5 +1,9 @@
 # 24
 
+不知道脑子抽了什么疯反正mastodon改到单独的db里面了，有前端就可以上测试了。  
+ap的部分接受和发送还能分开做，先做接收然后再做发送再补接收。服了。
+
+
 还是有点不明要干啥。
 先做mastodon兼容api，然后在这之上兼容antenna，再兼容ap。
 mastodon要用的也就只有mastodon几个entities吧。
