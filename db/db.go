@@ -1,6 +1,8 @@
 package db
 
 import (
+	"database/sql"
+
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 )
@@ -18,14 +20,41 @@ func initDB() *gorm.DB {
 	return db
 }
 
-func init() {
-	Init()
+func DB() *gorm.DB {
+	return db
+}
+func Begin(opts ...*sql.TxOptions) *gorm.DB {
+	return db.Begin(opts...)
+}
+func AutoMigrate(dst ...any) error {
+	return db.AutoMigrate(dst...)
 }
 
-func Init() {
-	// Migrate the schema
-	db.AutoMigrate(&Log{})
-	db.AutoMigrate(&Object{})
-	db.AutoMigrate(&User{})
-	db.AutoMigrate(&RemoteUser{})
+func Create(tx *gorm.DB, o any) error {
+	tx.Create(o)
+	if tx.Error != nil {
+		return tx.Error
+	}
+	return nil
+}
+func Read(tx *gorm.DB, o any) error {
+	tx.Where(o).First(o)
+	if tx.Error != nil {
+		return tx.Error
+	}
+	return nil
+}
+func Update(tx *gorm.DB, o any) error {
+	tx.Save(o)
+	if tx.Error != nil {
+		return tx.Error
+	}
+	return nil
+}
+func Delete(tx *gorm.DB, o any) error {
+	tx.Delete(o)
+	if tx.Error != nil {
+		return tx.Error
+	}
+	return nil
 }

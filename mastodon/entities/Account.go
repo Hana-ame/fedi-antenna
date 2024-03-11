@@ -17,7 +17,7 @@ type Account struct {
 	Url string `json:"url"`
 	// Type: String
 	// Description: URI of the status used for federation.
-	Uri string `json:"uri" gorm:"index:,unique"` // activitypubID
+	Uri string `json:"uri" gorm:"index:activitypub_id,unique"` // activitypubID
 	// Type: String
 	// Description: The profile’s display name.
 	DisplayName string `json:"display_name"`

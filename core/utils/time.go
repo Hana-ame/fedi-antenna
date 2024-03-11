@@ -16,7 +16,7 @@ var mutex sync.Mutex
 var timestamp int64
 
 // second * 1e6
-func NewTimestamp(fast bool) (now int64) {
+func Timestamp(fast bool) (now int64) {
 	now = time.Now().UnixNano() / 1e3
 	if fast {
 		return now

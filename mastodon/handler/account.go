@@ -1,30 +1,28 @@
 package handler
 
 import (
-	"log"
 	"os"
 	"strconv"
 
 	tools "github.com/Hana-ame/fedi-antenna/Tools"
-	"github.com/Hana-ame/fedi-antenna/core/dao"
-	"github.com/Hana-ame/fedi-antenna/core/model"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
-	controller "github.com/Hana-ame/fedi-antenna/mastodon/controller/accounts/model"
-	mastodon "github.com/Hana-ame/fedi-antenna/mastodon/dao"
+	"github.com/Hana-ame/fedi-antenna/db"
+	"github.com/Hana-ame/fedi-antenna/mastodon/controller/accounts/model"
+	"github.com/Hana-ame/fedi-antenna/mastodon/dao"
 	"github.com/Hana-ame/fedi-antenna/mastodon/entities"
 )
 
 func Register_an_account(
 	id string,
 	host string,
-	o *controller.Register_an_account,
+	o *model.Register_an_account,
 ) error {
 
 	activitypubID := utils.NameAndHost2ActivitypubID(o.Username, host)
 	pk := utils.GeneratePrivateKey()
-	now := utils.NewTimestamp(false)
+	now := utils.Timestamp(false)
 
-	user := &model.LocalUser{
+	user := &dao.MyAccount{
 		Email:         o.Email,
 		PasswdHash:    tools.Hash(o.Password, os.Getenv("SALT")),
 		ActivitypubID: activitypubID,
@@ -33,7 +31,6 @@ func Register_an_account(
 		Host:          host,
 		CreatedAt:     now,
 		PrivateKeyPem: utils.MarshalPrivateKey(pk),
-		// PublicKeyPem:  utils.MarshalPublicKey(&pk.PublicKey),
 	}
 
 	acct := &entities.Account{
@@ -44,33 +41,33 @@ func Register_an_account(
 		Uri:      activitypubID,
 	}
 
-	ctx := dao.Begin()
-	if err := dao.Create(ctx, user); err != nil {
-		log.Println(err)
-		ctx.Rollback()
+	tx := db.Begin()
+
+	if err := dao.Create(tx, acct); err != nil {
+		logE(err)
+		tx.Rollback()
 		return err
 	}
 
-	mtx := mastodon.DB.Begin()
-	if err := mastodon.DB.Create(mtx, acct); err != nil {
-		log.Println(err)
-		mtx.Rollback()
-		ctx.Rollback()
+	if err := dao.Create(tx, user); err != nil {
+		logE(err)
+		tx.Rollback()
 		return err
 	}
 
-	mtx.Commit()
-	ctx.Commit()
+	tx.Commit()
 
-	return nil
+	return tx.Error
 }
 
 func Get_account(id, actor string) (*entities.Account, error) {
-	tx := mastodon.DB.Begin()
 
-	acct, err := mastodon.ReadAccount(tx, id)
+	tx := db.Begin()
+
+	acct := &entities.Account{Id: id}
+	_, err := dao.ReadAccount(tx, acct)
 	if err != nil {
-		log.Println(err)
+		logE(err)
 		tx.Rollback()
 		return acct, err
 	}

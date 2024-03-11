@@ -1,37 +1,40 @@
 package handler
 
 import (
-	"log"
 	"strconv"
 
-	"github.com/Hana-ame/fedi-antenna/core/dao"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
-	controller "github.com/Hana-ame/fedi-antenna/mastodon/controller/statuses/model"
-	mastodon "github.com/Hana-ame/fedi-antenna/mastodon/dao"
+	"github.com/Hana-ame/fedi-antenna/db"
+	"github.com/Hana-ame/fedi-antenna/mastodon/controller/statuses/model"
+	"github.com/Hana-ame/fedi-antenna/mastodon/dao"
 	"github.com/Hana-ame/fedi-antenna/mastodon/entities"
 )
 
 // todo: poll
 // todo: image list
-func Post_a_new_status(actor, IdempotencyKey string, o *controller.Post_a_new_status) (*entities.Status, error) {
-	tx := mastodon.DB.Begin()
+func Post_a_new_status(
+	actor, IdempotencyKey string, o *model.Post_a_new_status,
+) (*entities.Status, error) {
 
-	timestamp := utils.NewTimestamp(false)
+	timestamp := utils.Timestamp(false)
 	name, host := utils.ActivitypubID2NameAndHost(actor)
 
 	acct := &entities.Account{
 		Uri: actor,
 	}
+
+	tx := db.Begin()
+
 	if err := dao.Read(tx, acct); err != nil {
-		log.Println(err)
+		logE(err)
 		return nil, err
 	}
 
 	inReplyToAccountId := new(string)
 	if o.InReplyToId != nil {
 		replyto := &entities.Status{Id: *o.InReplyToId}
-		if err := mastodon.ReadStatuses(tx, replyto); err != nil {
-			log.Printf("%s", err.Error())
+		if err := dao.ReadStatuses(tx, replyto); err != nil {
+			logE(err)
 			return nil, err
 		}
 		inReplyToAccountId = &replyto.Account.Id
@@ -40,7 +43,7 @@ func Post_a_new_status(actor, IdempotencyKey string, o *controller.Post_a_new_st
 	mediaAttachments := make([]*entities.MediaAttachment, len(o.MediaIds))
 	for i := range o.MediaIds {
 		mediaAttachment := &entities.MediaAttachment{PreviewUrl: o.MediaIds[i]}
-		mastodon.DB.Read(tx, mediaAttachment)
+		db.Read(tx, mediaAttachment) // do not process error
 		mediaAttachments[i] = mediaAttachment
 	}
 
@@ -102,30 +105,36 @@ func Post_a_new_status(actor, IdempotencyKey string, o *controller.Post_a_new_st
 		// EditedAt *string `json:"edited_at"`
 	}
 
-	if err := mastodon.CreateStatus(tx, status); err != nil {
-		log.Println(err)
+	if err := dao.CreateStatus(tx, status); err != nil {
+		logE(err)
 		tx.Rollback()
 		return status, err
 	}
 
-	return status, nil
+	tx.Commit()
+
+	return status, tx.Error
 }
 
 func Delete_a_status(id string, actor string) (*entities.Status, error) {
-	tx := mastodon.DB.Begin()
 
 	status := &entities.Status{
 		Id: id,
 	}
-	if err := mastodon.ReadStatuses(tx, status); err != nil {
-		log.Println(err)
+
+	tx := db.Begin()
+
+	if err := dao.ReadStatuses(tx, status); err != nil {
+		logE(err)
 		return nil, err
 	}
 
-	if err := mastodon.DeleteStatus(tx, id); err != nil {
-		log.Println(err)
+	if err := dao.DeleteStatus(tx, status); err != nil {
+		logE(err)
 		return nil, err
 	}
 
-	return status, nil
+	tx.Commit()
+
+	return status, tx.Error
 }

@@ -2,51 +2,50 @@ package dao
 
 import (
 	"fmt"
-	"log"
 
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 	"github.com/Hana-ame/fedi-antenna/mastodon/entities"
 	"gorm.io/gorm"
 )
 
-func ReadAccount(tx *gorm.DB, id string) (*entities.Account, error) {
-	account := &entities.Account{
-		Id: id,
+func ReadAccount(tx *gorm.DB, acct *entities.Account) (*entities.Account, error) {
+
+	if err := Read(tx, acct); err != nil {
+		return acct, err
 	}
-	if err := DB.Read(tx, account); err != nil {
-		return account, err
+
+	if acct.DeletedAt != 0 {
+		return acct, fmt.Errorf("Tombstone")
 	}
-	if account.DeletedAt != 0 {
-		return account, fmt.Errorf("Tombstone")
-	}
-	return account, nil
+
+	return acct, nil
 }
 
-func DeleteAccount(tx *gorm.DB, id string) (*entities.Account, error) {
-	account := &entities.Account{
-		Id: id,
+func DeleteAccount(tx *gorm.DB, acct *entities.Account) (*entities.Account, error) {
+
+	acct.DeletedAt = utils.Timestamp(true)
+
+	if err := Update(tx, acct); err != nil {
+		return acct, err
 	}
-	if err := DB.Read(tx, account); err != nil {
-		return account, err
-	}
-	account.DeletedAt = utils.NewTimestamp(true)
-	if err := DB.Update(tx, account); err != nil {
-		return account, err
-	}
-	return account, nil
+
+	return acct, nil
 }
 
 func UpdateAccountStatusesCount(tx *gorm.DB, acct *entities.Account, delta int) error {
-	if err := DB.Read(tx, acct); err != nil {
-		log.Println(err)
+
+	if err := Read(tx, acct); err != nil {
+		logE(err)
 		return err
 	}
 
 	acct.StatusesCount += delta
-	acct.LastStatusAt = utils.ParseStringToPointer(utils.TimestampToRFC3339(utils.NewTimestamp(false)), true)
+	if delta > 0 {
+		acct.LastStatusAt = utils.ParseStringToPointer(utils.TimestampToRFC3339(utils.Timestamp(false)), true)
+	}
 
-	if err := DB.Update(tx, acct); err != nil {
-		log.Println(err)
+	if err := Update(tx, acct); err != nil {
+		logE(err)
 		return err
 	}
 
@@ -54,15 +53,16 @@ func UpdateAccountStatusesCount(tx *gorm.DB, acct *entities.Account, delta int) 
 }
 
 func UpdateAccountFollowersCount(tx *gorm.DB, acct *entities.Account, delta int) error {
-	if err := DB.Read(tx, acct); err != nil {
-		log.Println(err)
+
+	if err := Read(tx, acct); err != nil {
+		logE(err)
 		return err
 	}
 
 	acct.FollowersCount += delta
 
-	if err := DB.Update(tx, acct); err != nil {
-		log.Println(err)
+	if err := Update(tx, acct); err != nil {
+		logE(err)
 		return err
 	}
 
@@ -70,15 +70,16 @@ func UpdateAccountFollowersCount(tx *gorm.DB, acct *entities.Account, delta int)
 }
 
 func UpdateAccountFollowingCount(tx *gorm.DB, acct *entities.Account, delta int) error {
-	if err := DB.Read(tx, acct); err != nil {
-		log.Println(err)
+
+	if err := Read(tx, acct); err != nil {
+		logE(err)
 		return err
 	}
 
 	acct.FollowingCount += delta
 
-	if err := DB.Update(tx, acct); err != nil {
-		log.Println(err)
+	if err := Update(tx, acct); err != nil {
+		logE(err)
 		return err
 	}
 
