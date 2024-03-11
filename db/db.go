@@ -29,6 +29,9 @@ func Begin(opts ...*sql.TxOptions) *gorm.DB {
 func AutoMigrate(dst ...any) error {
 	return db.AutoMigrate(dst...)
 }
+func Raw(sql string, values ...any) *gorm.DB {
+	return db.Raw(sql, values...)
+}
 
 func Create(tx *gorm.DB, o any) error {
 	tx.Create(o)

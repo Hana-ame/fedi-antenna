@@ -65,7 +65,7 @@ func Get_account(id, actor string) (*entities.Account, error) {
 	tx := db.Begin()
 
 	acct := &entities.Account{Id: id}
-	_, err := dao.ReadAccount(tx, acct)
+	err := dao.ReadAccount(tx, acct)
 	if err != nil {
 		logE(err)
 		tx.Rollback()

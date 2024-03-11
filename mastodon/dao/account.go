@@ -8,17 +8,17 @@ import (
 	"gorm.io/gorm"
 )
 
-func ReadAccount(tx *gorm.DB, acct *entities.Account) (*entities.Account, error) {
+func ReadAccount(tx *gorm.DB, acct *entities.Account) error {
 
 	if err := Read(tx, acct); err != nil {
-		return acct, err
+		return err
 	}
 
 	if acct.DeletedAt != 0 {
-		return acct, fmt.Errorf("Tombstone")
+		return fmt.Errorf("Tombstone")
 	}
 
-	return acct, nil
+	return nil
 }
 
 func DeleteAccount(tx *gorm.DB, acct *entities.Account) (*entities.Account, error) {

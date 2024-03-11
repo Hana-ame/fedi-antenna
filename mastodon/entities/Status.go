@@ -63,7 +63,7 @@ type Status struct {
 	InReplyToAccountId *string `json:"in_reply_to_account_id"`
 	// Type: NULLABLE Status or null
 	// Description: The status being reblogged.
-	ReblogUri string  `json:"-"`
+	ReblogUri *string `json:"-"`
 	Reblog    *Status `json:"reblog" gorm:"foreignKey:ReblogUri;references:Uri"`
 	// Type: NULLABLE Poll or null
 	// Description: The poll attached to the status.

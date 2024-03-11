@@ -25,7 +25,7 @@ func Post_a_new_status(
 
 	tx := db.Begin()
 
-	if err := dao.Read(tx, acct); err != nil {
+	if err := dao.ReadAccount(tx, acct); err != nil {
 		logE(err)
 		return nil, err
 	}
@@ -116,7 +116,28 @@ func Post_a_new_status(
 	return status, tx.Error
 }
 
-func Delete_a_status(id string, actor string) (*entities.Status, error) {
+func View_a_single_status(
+	id, actor string,
+) (*entities.Status, error) {
+
+	status := &entities.Status{Id: id}
+
+	tx := db.Begin()
+
+	if err := dao.ReadStatuses(tx, status); err != nil {
+		logE(err)
+		tx.Rollback()
+		return status, err
+	}
+
+	tx.Commit()
+
+	return status, tx.Error
+}
+
+func Delete_a_status(
+	id string, actor string,
+) (*entities.Status, error) {
 
 	status := &entities.Status{
 		Id: id,
@@ -126,11 +147,13 @@ func Delete_a_status(id string, actor string) (*entities.Status, error) {
 
 	if err := dao.ReadStatuses(tx, status); err != nil {
 		logE(err)
+		tx.Rollback()
 		return nil, err
 	}
 
 	if err := dao.DeleteStatus(tx, status); err != nil {
 		logE(err)
+		tx.Rollback()
 		return nil, err
 	}
 

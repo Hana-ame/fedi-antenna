@@ -1,4 +1,4 @@
-package statuses
+package controller
 
 import (
 	"net/http"

@@ -44,3 +44,18 @@ func DeleteStatus(tx *gorm.DB, status *entities.Status) error {
 
 	return tx.Error
 }
+
+func ReadPublicStatus(tx *gorm.DB, limit int) (statuses []*entities.Status, err error) {
+
+	if limit > 40 {
+		limit = 40
+	} else if limit <= 0 {
+		limit = 20
+	}
+
+	// not tested
+	tx.Raw("SELECT * FROM statuses WHERE visibility = 'public' AND reblog_uri IS NULL ORDER BY create_at DESC LIMIT ?", limit).Scan(&statuses)
+	err = tx.Error
+
+	return
+}
