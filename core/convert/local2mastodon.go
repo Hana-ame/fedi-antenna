@@ -94,31 +94,13 @@ import (
 // 	return account
 // }
 
-func ToMastodonStatus_Deprecated(note *core.LocalNote, notify *core.LocalNotify) *entities.Status {
-	if note != nil {
-		// return ToMastodonStatus(note)
-	} else if notify != nil {
-		return ToMastodonReblog(notify, false)
-	} else {
-		return nil
-	}
-	return nil
-}
-
-func ToMastodonReblog(ln *core.LocalNotify, loadReblog bool) *entities.Status {
+func ToMastodonReblog(ln *core.LocalNotify, acct *entities.Account, reblog *entities.Status) *entities.Status {
 	if ln.Type != core.NotifyTypeAnnounce {
 		return nil
 	}
-	name, host, timestampString := utils.ParseStatusesUriToNameHostTimestamp(ln.ID)
+	name, host, timestampString := utils.ActivitypubID2NameAndHostAndTimestamp(ln.ID)
 	timestamp, err := strconv.Atoi(timestampString)
 	if err != nil {
-		log.Printf("%s", err.Error())
-		return nil
-	}
-	acct := &entities.Account{
-		Uri: utils.ParseActivitypubID(name, host),
-	}
-	if tx := dao.Read(acct); tx.Error != nil {
 		log.Printf("%s", err.Error())
 		return nil
 	}
@@ -127,7 +109,7 @@ func ToMastodonReblog(ln *core.LocalNotify, loadReblog bool) *entities.Status {
 		Id:                 timestampString,
 		Uri:                ln.ID,
 		CreatedAt:          utils.TimestampToRFC3339(int64(timestamp)),
-		AttributedTo:       utils.ParseActivitypubID(name, host),
+		AttributedTo:       utils.NameAndHost2ActivitypubID(name, host),
 		Account:            acct,
 		Content:            "",
 		Visibility:         ln.Visibility,
@@ -158,16 +140,17 @@ func ToMastodonReblog(ln *core.LocalNotify, loadReblog bool) *entities.Status {
 		Filtered:           nil,
 	}
 
-	if loadReblog {
-		reblog := &entities.Status{
+	if reblog == nil {
+		log.Printf("reblog is nil, %s", ln.ID)
+		reblog = &entities.Status{
 			Uri: ln.Object,
 		}
 		if err := dao.ReadMastodonStatuses(reblog); err != nil {
 			log.Printf("%s", err.Error())
 			return nil
 		}
-		status.Reblog = reblog
 	}
+	status.Reblog = reblog
 
 	return status
 }
@@ -287,88 +270,3 @@ func ToMastodonReblog(ln *core.LocalNotify, loadReblog bool) *entities.Status {
 // 	}
 // 	return status
 // }
-
-// 好像不该在这里。
-func ToMastodonRelationship(id, actor string) *entities.Relationship {
-	lu := &core.LocalUser{
-		ActivitypubID: id,
-	}
-	if err := dao.Read(lu); err != nil {
-		log.Printf("%s", err.Error())
-		return nil
-	}
-	acct := &entities.Account{
-		Uri: id,
-	}
-	if err := dao.Read(acct); err != nil {
-		log.Printf("%s", err.Error())
-		return nil
-	}
-	// actor to object
-	lra2o := &core.LocalRelation{
-		Actor:  actor,
-		Object: id,
-	}
-	if err := dao.Read(lra2o); err != nil {
-		log.Printf("%s", err.Error())
-		return nil
-	}
-	// object to actor
-	lro2a := &core.LocalRelation{
-		Actor:  id,
-		Object: actor,
-	}
-	if err := dao.Read(lro2a); err != nil {
-		log.Printf("%s", err.Error())
-		return nil
-	}
-
-	relationship := &entities.Relationship{
-		// Type: String (cast from an integer, but not guaranteed to be a number)
-		// Description: The account ID.
-		Attributes: utils.TimestampToRFC3339(lu.CreatedAt),
-		// Type: Boolean
-		// Description: Are you following this user?
-		Following: lra2o.Type == core.RelationTypeFollow && lra2o.Status == core.RelationStatusAccepted,
-		// Type: Boolean
-		// Description: Are you receiving this user’s boosts in your home timeline?
-		ShowingReblogs: true,
-		// Type: Boolean
-		// Description: Have you enabled notifications for this user?
-		Notifying: false,
-		// Type: Array of String (ISO 639-1 language two-letter code)
-		// Description: Which languages are you following from this user?
-		Languages: []string{},
-		// Type: Boolean
-		// Description: Are you followed by this user?
-		FollowedBy: lro2a.Type == core.RelationTypeFollow && lro2a.Status == core.RelationStatusAccepted,
-		// Type: Boolean
-		// Description: Are you blocking this user?
-		Blocking: lra2o.Type == core.RelationTypeBlock,
-		// Type: Boolean
-		// Description: Is this user blocking you?
-		BlockedBy: lro2a.Type == core.RelationTypeBlock,
-		// Type: Boolean
-		// Description: Are you muting this user?
-		Muting: false,
-		// Type: Boolean
-		// Description: Are you muting notifications from this user?
-		MutingNotifications: false,
-		// Type: Boolean
-		// Description: Do you have a pending follow request for this user?
-		Requested: lra2o.Type == core.RelationTypeFollow && lra2o.Status == core.RelationStatusPadding,
-		// Type: Boolean
-		// Description: Has this user requested to follow you?
-		RequestedBy: lro2a.Type == core.RelationTypeFollow && lro2a.Status == core.RelationStatusPadding,
-		// Type: Boolean
-		// Description: Are you blocking this user’s domain?
-		DomainBlocking: false,
-		// Type: Boolean
-		// Description: Are you featuring this user on your profile?
-		Endorsed: false,
-		// Type: String
-		// Description: This user’s profile bio
-		Note: acct.Note,
-	}
-	return relationship
-}

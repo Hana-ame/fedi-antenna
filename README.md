@@ -1,4 +1,30 @@
-#
+# 24
+
+不知道脑子抽了什么疯反正mastodon改到单独的db里面了，有前端就可以上测试了。  
+ap的部分接受和发送还能分开做，先做接收然后再做发送再补接收。服了。
+
+
+还是有点不明要干啥。
+先做mastodon兼容api，然后在这之上兼容antenna，再兼容ap。
+mastodon要用的也就只有mastodon几个entities吧。
+那些个写出来就ok了，存储量之类的优化以后搞。
+头好痛头好痛。
+
+- [x] antenna account
+  - 在handler里面create了mastoodn的和local的
+- [x] mastodon follow unfollow block
+- [x] mastodon post
+- [x] mastodon fav reblog
+  
+不对，编译不起来吧。
+只能全部改完再看结果了。
+可能会遇到顺序反了之类的，save和read都做了要test
+
+code in webfinger is in bad quality, do not use it.
+
+ap recv 的 model 完全是放在orderedmap里面的啊。
+那么cache的话借用action的model。
+在做完mastodon之后思考。
 
 
 ## modules

@@ -10,7 +10,7 @@ type User struct {
 	// helper.
 	// Account string `json:"-"`
 
-	// fixed "Person"
+	// "Person"
 	Type string `json:"type" gorm:"-"`
 
 	Following    string `json:"following"`
@@ -90,37 +90,41 @@ var UserContext = []any{
 	}),
 }
 
-func NewUser(name, host string) *User {
+// only for local user to activity pub
+func NewUser(name, host string, timestamp int64, publicKey *PublicKey, icon *Image) *User {
 	return &User{
 		Context:           UserContext,
-		ID:                utils.ParseActivitypubID(name, host),
+		ID:                utils.NameAndHost2ActivitypubID(name, host),
 		Type:              "Person",
-		Following:         utils.ParseActivitypubID(name, host) + "/following",
-		Followers:         utils.ParseActivitypubID(name, host) + "/followers",
-		Inbox:             utils.ParseActivitypubID(name, host) + "/inbox",
-		Outbox:            utils.ParseActivitypubID(name, host) + "/outbox",
-		Featured:          utils.ParseActivitypubID(name, host) + "/collections/featured",
-		FeaturedTags:      utils.ParseActivitypubID(name, host) + "/collections/tags",
+		Following:         utils.NameAndHost2ActivitypubID(name, host) + "/following",
+		Followers:         utils.NameAndHost2ActivitypubID(name, host) + "/followers",
+		Inbox:             utils.NameAndHost2ActivitypubID(name, host) + "/inbox",
+		Outbox:            utils.NameAndHost2ActivitypubID(name, host) + "/outbox",
+		Featured:          utils.NameAndHost2ActivitypubID(name, host) + "/collections/featured",
+		FeaturedTags:      utils.NameAndHost2ActivitypubID(name, host) + "/collections/tags",
 		PreferredUsername: name,
 
-		URL: utils.ParseProfileUrl(name, host),
+		URL: utils.NameAndHost2ProfileUrl(name, host),
 
-		Published: utils.TimestampToRFC3339(utils.Now()),
-		Devices:   utils.ParseActivitypubID(name, host) + "/collections/devices",
-		PublicKey: NewPublicKey(utils.ParseActivitypubID(name, host)),
-		Endpoint:  map[string]string{"sharedInbox": "https://" + host + "/inbox"},
+		Published: utils.TimestampToRFC3339(timestamp),
+		Devices:   utils.NameAndHost2ActivitypubID(name, host) + "/collections/devices",
+		PublicKey: publicKey,
 
-		Icon: &Image{
-			"Image",
-			"image/png",
-			"https://twimg.moonchan.xyz/media/GB8hT5vacAAK6wa?format=png&name=medium",
-		},
+		SharedInbox: "https://" + host + "/inbox",
+		Endpoint:    map[string]string{"sharedInbox": "https://" + host + "/inbox"},
+
+		Icon: icon,
+		// Icon: &Image{
+		// 	"Image",
+		// 	"image/png",
+		// 	"https://twimg.moonchan.xyz/media/GB8hT5vacAAK6wa?format=png&name=medium",
+		// },
 	}
 }
 
 func (o *User) Autofill() {
 	// get name and host
-	name, host := utils.ParseNameAndHost(o.ID)
+	name, host := utils.ActivitypubID2NameAndHost(o.ID)
 
 	o.Context = UserContext
 	if o.Type == "" {
@@ -148,7 +152,7 @@ func (o *User) Autofill() {
 		o.PreferredUsername = name
 	}
 	if o.URL == "" {
-		o.URL = utils.ParseProfileUrl(name, host)
+		o.URL = utils.NameAndHost2ProfileUrl(name, host)
 	}
 	if o.Devices == "" {
 		o.Devices = o.ID + "/collections/devices"

@@ -9,6 +9,8 @@ import (
 
 func RegisterPath(r *gin.Engine) {
 	// account
+	r.POST("/api/v1/accounts", accounts.Register_an_account)
+	r.GET("/api/v1/accounts/:id", accounts.Get_account)
 	// block
 	r.POST("/api/v1/accounts/:id/unblock", accounts.Unblock_account)
 	r.POST("/api/v1/accounts/:id/block", accounts.Block_account)

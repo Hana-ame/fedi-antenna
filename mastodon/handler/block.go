@@ -3,48 +3,67 @@ package handler
 import (
 	"log"
 
-	"github.com/Hana-ame/fedi-antenna/actions"
-	c "github.com/Hana-ame/fedi-antenna/core"
-	"github.com/Hana-ame/fedi-antenna/core/convert"
-	"github.com/Hana-ame/fedi-antenna/core/dao"
-	"github.com/Hana-ame/fedi-antenna/core/model"
-	"github.com/Hana-ame/fedi-antenna/core/utils"
+	mastodon "github.com/Hana-ame/fedi-antenna/mastodon/dao"
 	"github.com/Hana-ame/fedi-antenna/mastodon/entities"
 )
 
+// id is a number in string
 func Block_account(id, actor string) (*entities.Relationship, error) {
-	acct := &entities.Account{
-		Id: id,
-	}
-	if err := dao.Read(acct); err != nil {
+	tx := mastodon.DB.Begin()
+
+	acct, err := mastodon.ReadAccount(tx, id)
+	if err != nil {
 		log.Println(err)
-		return convert.ToMastodonRelationship(id, actor), err
+		tx.Rollback()
+		relationship, _ := mastodon.ReadRelationship(tx, acct.Uri, actor)
+		return relationship, err
 	}
 
-	_, host := utils.ParseNameAndHost(actor)
-	err := c.Block(utils.GenerateObjectID(model.RelationTypeBlock, host), acct.Uri, actor)
-
-	if err == nil {
-		go actions.Block(actor, acct.Uri)
+	if err := mastodon.Block(tx, acct.Uri, actor); err != nil {
+		log.Println(err)
+		tx.Rollback()
+		relationship, _ := mastodon.ReadRelationship(tx, acct.Uri, actor)
+		return relationship, err
 	}
 
-	return convert.ToMastodonRelationship(acct.Uri, actor), err
+	relationship, err := mastodon.ReadRelationship(tx, acct.Uri, actor)
+	if err != nil {
+		log.Println(err)
+		tx.Rollback()
+		return relationship, err
+	}
+
+	tx.Commit()
+
+	return relationship, tx.Error
 }
 
 func Unblock_account(id, actor string) (*entities.Relationship, error) {
-	acct := &entities.Account{
-		Id: id,
-	}
-	if err := dao.Read(acct); err != nil {
+	tx := mastodon.DB.Begin()
+
+	acct, err := mastodon.ReadAccount(tx, id)
+	if err != nil {
 		log.Println(err)
-		return convert.ToMastodonRelationship(id, actor), err
+		tx.Rollback()
+		relationship, _ := mastodon.ReadRelationship(tx, acct.Uri, actor)
+		return relationship, err
 	}
 
-	relation, err := c.Unblock("", acct.Uri, actor)
-
-	if err == nil {
-		go actions.UndoBlock(actor, relation.ID)
+	if err := mastodon.Unblock(tx, acct.Uri, actor); err != nil {
+		log.Println(err)
+		tx.Rollback()
+		relationship, _ := mastodon.ReadRelationship(tx, acct.Uri, actor)
+		return relationship, err
 	}
 
-	return convert.ToMastodonRelationship(acct.Uri, actor), err
+	relationship, err := mastodon.ReadRelationship(tx, acct.Uri, actor)
+	if err != nil {
+		log.Println(err)
+		tx.Rollback()
+		return relationship, err
+	}
+
+	tx.Commit()
+
+	return relationship, tx.Error
 }

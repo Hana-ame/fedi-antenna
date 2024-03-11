@@ -5,12 +5,13 @@ import (
 	"log"
 
 	"github.com/Hana-ame/fedi-antenna/Tools/orderedmap"
-	"github.com/Hana-ame/fedi-antenna/core"
+	"github.com/Hana-ame/fedi-antenna/core/dao"
 	"github.com/Hana-ame/fedi-antenna/core/model"
 )
 
+// should check local mastodon user is exist.
 func Follow(o *orderedmap.OrderedMap) error {
-	err := core.Follow(
+	err := dao.Follow(
 		o.GetOrDefault("id", "").(string),
 		o.GetOrDefault("object", "").(string),
 		o.GetOrDefault("actor", "").(string),
@@ -29,7 +30,7 @@ func Accept(o *orderedmap.OrderedMap) error {
 		log.Printf("accept object do not have type : %+v\n", o)
 		return fmt.Errorf("accept object do not have type : %+v", o)
 	}
-	err := core.Accept(
+	err := dao.Accept(
 		oo.GetOrDefault("id", "").(string),
 		o.GetOrDefault("object", "").(string),
 		o.GetOrDefault("actor", "").(string),
@@ -48,7 +49,7 @@ func Reject(o *orderedmap.OrderedMap) error {
 		log.Printf("accept object do not have type : %+v\n", o)
 		return fmt.Errorf("accept object do not have type : %+v", o)
 	}
-	err := core.Reject(
+	err := dao.Reject(
 		oo.GetOrDefault("id", "").(string),
 		o.GetOrDefault("object", "").(string),
 		o.GetOrDefault("actor", "").(string),
@@ -57,17 +58,26 @@ func Reject(o *orderedmap.OrderedMap) error {
 }
 
 func Block(o *orderedmap.OrderedMap) error {
-	err := core.Block(o.GetOrDefault("id", "").(string), o.GetOrDefault("object", "").(string), o.GetOrDefault("actor", "").(string))
+	err := dao.Block(
+		o.GetOrDefault("id", "").(string),
+		o.GetOrDefault("object", "").(string),
+		o.GetOrDefault("actor", "").(string))
 	return err
 }
 
 func UndoRelation(o *orderedmap.OrderedMap) error {
 	switch o.GetOrDefault("type", "").(string) {
 	case model.RelationTypeBlock:
-		_, err := core.Unblock(o.GetOrDefault("id", "").(string), o.GetOrDefault("object", "").(string), o.GetOrDefault("actor", "").(string))
+		err := dao.Unblock(
+			o.GetOrDefault("id", "").(string),
+			o.GetOrDefault("object", "").(string),
+			o.GetOrDefault("actor", "").(string))
 		return err
 	case model.RelationTypeFollow:
-		err := core.Unfollow(o.GetOrDefault("id", "").(string), o.GetOrDefault("object", "").(string), o.GetOrDefault("actor", "").(string))
+		err := dao.Unfollow(
+			o.GetOrDefault("id", "").(string),
+			o.GetOrDefault("object", "").(string),
+			o.GetOrDefault("actor", "").(string))
 		return err
 	default:
 		return nil

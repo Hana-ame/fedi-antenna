@@ -23,7 +23,8 @@ func UsersInbox(c *gin.Context) {
 	}
 
 	o := orderedmap.New()
-	if err := json.Unmarshal(b, &o); err != nil {
+	err = json.Unmarshal(b, &o)
+	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusBadRequest, err)
 		return
@@ -36,18 +37,21 @@ func UsersInbox(c *gin.Context) {
 	j, _ := json.Marshal(o)
 	log.Println(string(j))
 
-	if err := verify(c, b); err != nil {
-		log.Println(err)
-		c.JSON(http.StatusUnauthorized, err.Error())
-		return
-	}
-	if err := handler.Inbox(o, name, host, err); err != nil {
+	err = verify(c, b)
+	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusUnauthorized, err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, "")
+	err = handler.Inbox(o, name, host, err)
+	if err != nil {
+		log.Println(err)
+		c.JSON(http.StatusUnauthorized, err.Error())
+		return
+	}
+
+	c.String(http.StatusOK, "")
 }
 
 func Inbox(c *gin.Context) {
@@ -87,5 +91,5 @@ func Inbox(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, "")
+	c.String(http.StatusOK, "")
 }

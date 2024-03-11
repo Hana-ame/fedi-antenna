@@ -97,4 +97,6 @@ type Status struct {
 	// Type: Array of FilterResult
 	// Description: If the current token has an authorized user: The filter and keywords that matched this status.
 	Filtered []FilterResult `json:"filtered,omitempty" gorm:"-"`
+
+	DeletedAt int64 `json:"-"`
 }

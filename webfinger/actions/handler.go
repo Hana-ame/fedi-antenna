@@ -14,7 +14,7 @@ func GetUserIdFromAcct(acct string, skipCache bool) (userId string, err error) {
 		}
 	}()
 
-	o, err := FetchWebfingerByAcct(acct,skipCache)
+	o, err := FetchWebfingerByAcct(acct, skipCache)
 	userId = utils.ParseUserId(o)
 
 	return

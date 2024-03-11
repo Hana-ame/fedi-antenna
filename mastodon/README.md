@@ -1,24 +1,6 @@
 # back/mastodon
 
-## entities
+please see `method-script.js` and `entities-script.js` at `/`
 
-entities from mastodon.
-
-examples in gist
-
-## 应当建立如此一张表
-
-actions
-
-id type endpoint status
-
-| ID | object's ID |
-| Type | which table should it query |
-| endpoint | endpointurl |
-
-if faild
-
-peer info
-
-last faild 
-last seen.
+deal with the actions later.  
+(if the destnations are remote, run another function to work with that.)

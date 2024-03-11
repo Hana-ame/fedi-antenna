@@ -81,4 +81,6 @@ type Account struct {
 	// Type: Integer
 	// Description: The reported follows of this profile.
 	FollowingCount int `json:"following_count"`
+
+	DeletedAt int64 `json:"-"`
 }

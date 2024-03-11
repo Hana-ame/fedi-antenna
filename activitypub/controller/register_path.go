@@ -11,7 +11,7 @@ func RegisterPath(r *gin.Engine) {
 	// r.GET("/users/:name/following", UsersFollowing)
 	// r.GET("/users/:name/collections/featured", UsersCollectionsFeatured)
 	// r.GET("/users/:name/collections/tags", UsersCollectionsTags)
-	r.GET("/users/:name/statuses/:id", UsersStatuses)
+	r.GET("/users/:name/statuses/:id", UsersStatus)
 
 	r.POST("/users/:name/inbox", UsersInbox) // inbox, only on POST?
 	r.POST("/inbox", Inbox)                  // inbox

@@ -8,18 +8,18 @@ import (
 )
 
 // "https://" + host + "/users/" + name
-func ParseActivitypubID(name, host string) string {
+func NameAndHost2ActivitypubID(name, host string) string {
 	return "https://" + host + "/users/" + name
 }
 
 // "https://" + host + "/@" + name
-func ParseProfileUrl(name, host string) string {
+func NameAndHost2ProfileUrl(name, host string) string {
 	return "https://" + host + "/@" + name
 }
 
 // [host, name] found from activitypubID
 // "https://" + host + "/users/" + name + "/xxx"
-func ParseNameAndHost(activitypubID string) (name, host string) {
+func ActivitypubID2NameAndHost(activitypubID string) (name, host string) {
 	activitypubID = strings.TrimPrefix(activitypubID, "https://")
 	strSlince := strings.Split(activitypubID, "/")
 	if len(strSlince) < 1 {
@@ -32,7 +32,7 @@ func ParseNameAndHost(activitypubID string) (name, host string) {
 }
 
 // "https://" + host + "/objects/" + typ + "/" + uuid.New().String()
-func GenerateObjectID(typ, host string) string {
+func NewObjectID(typ, host string) string {
 	return "https://" + host + "/objects/" + typ + "/" + uuid.New().String()
 }
 
@@ -48,16 +48,18 @@ func ParseTypeFromObjectID(id string) (typ, host string) {
 }
 
 // "https://" + host + "/users/" + name + "/statuses/" + id
-func ParseStatusesUri(name, host, id string) (statusesUri string) {
+func NameHostTimestampToStatusesUri(name, host, id string) (statusesUri string) {
 	return "https://" + host + "/users/" + name + "/statuses/" + id
 }
 
 // "https://" + host + "/users/" + name + "/statuses/" + timestamp (+ "/xxx")
-func ParseStatusesUriToNameHostTimestamp(statusesUri string) (name, host, timestamp string) {
+func ActivitypubID2NameAndHostAndTimestamp(statusesUri string) (name, host, timestamp string) {
 	statusesUri = strings.TrimPrefix(statusesUri, "https://")
 	arr := strings.Split(statusesUri, "/")
-	if len(arr) < 3 {
+	if len(arr) < 1 {
 		return
+	} else if (len(arr)) < 3 {
+		return "", arr[0], ""
 	} else if (len(arr)) < 5 {
 		return arr[2], arr[0], ""
 	}

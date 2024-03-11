@@ -1,7 +1,7 @@
 package handler
 
-import "github.com/Hana-ame/fedi-antenna/core"
-
 func DeletePerson(id string) error {
-	return core.DeletePerson(id)
+	// return dao.DeletePerson(id)
+	// should use mastodon's delete
+	return nil
 }

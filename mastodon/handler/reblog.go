@@ -2,47 +2,54 @@ package handler
 
 import (
 	"log"
-	"strconv"
 
-	c "github.com/Hana-ame/fedi-antenna/core"
-	"github.com/Hana-ame/fedi-antenna/core/dao"
-	"github.com/Hana-ame/fedi-antenna/core/utils"
-	"github.com/Hana-ame/fedi-antenna/mastodon/controller/statuses/model"
+	controller "github.com/Hana-ame/fedi-antenna/mastodon/controller/statuses/model"
+	mastodon "github.com/Hana-ame/fedi-antenna/mastodon/dao"
 	"github.com/Hana-ame/fedi-antenna/mastodon/entities"
 )
 
-func Boost_a_status(id string, actor string, o *model.Boost_a_status) (*entities.Status, error) {
+func Boost_a_status(id string, actor string, o *controller.Boost_a_status) (*entities.Status, error) {
+	tx := mastodon.DB.Begin()
+
 	status := &entities.Status{
 		Id: id,
 	}
-	if err := dao.Read(status); err != nil {
+	if err := mastodon.DB.Read(tx, status); err != nil {
 		log.Printf("%s", err.Error())
+		tx.Rollback()
 		return nil, err
 	}
 
-	name, host := utils.ParseNameAndHost(actor)
-	announceID := utils.ParseStatusesUri(name, host, strconv.Itoa(int(utils.Now()))) + "/activity"
-
-	reblog, err := c.Reblog(announceID, status.Uri, actor, o.Visibility)
-	if reblog != nil {
-		reblog.Reblog = status
+	if err := mastodon.CreateReblog(tx, status.Uri, actor, o.Visibility); err != nil {
+		log.Println(err)
+		tx.Rollback()
+		return status, err
 	}
-	return reblog, err
+
+	tx.Commit()
+
+	return status, tx.Error
 }
 
 func Undo_boost_of_a_status(id string, actor string) (*entities.Status, error) {
+	tx := mastodon.DB.Begin()
+
 	status := &entities.Status{
 		Id: id,
 	}
-	if err := dao.Read(status); err != nil {
+	if err := mastodon.DB.Read(tx, status); err != nil {
 		log.Printf("%s", err.Error())
+		tx.Rollback()
 		return nil, err
 	}
 
-	err := c.Unreblog(status.Uri, actor)
+	if err := mastodon.DeleteReblog(tx, status.Uri, actor); err != nil {
+		log.Println(err)
+		tx.Rollback()
+		return status, err
+	}
 
-	// activitypub
-	// todo
+	tx.Commit()
 
-	return status, err
+	return status, tx.Error
 }

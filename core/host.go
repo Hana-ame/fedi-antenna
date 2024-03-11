@@ -10,3 +10,8 @@ func Host(alias string) string {
 	}
 	return alias
 }
+
+// TODO
+func IsLocal(host string) bool {
+	return true
+}

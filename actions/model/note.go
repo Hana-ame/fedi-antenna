@@ -63,6 +63,32 @@ type Note struct {
 	// Replies *Collection `json:"replies" gorm:"foreignKey:ID;references:NoteID"`
 }
 
+func NewNote(
+	id string,
+	summary *string,
+	inReplyTo *string,
+	published string,
+	visibility string,
+	content string,
+	attachment []any,
+	tag []*Mention,
+	replies *Collection,
+) *Note {
+	o := &Note{
+		ID:         id,
+		Summary:    summary,
+		InReplyTo:  inReplyTo,
+		Published:  published,
+		Visibility: visibility,
+		Content:    content,
+		Attachment: attachment,
+		Tag:        tag,
+		Replies:    replies,
+	}
+	o.Autofill()
+	return o
+}
+
 var NoteContext = []any{
 	"https://www.w3.org/ns/activitystreams",
 	utils.NewMapFromKV([]*utils.KV{
@@ -88,9 +114,9 @@ func (o *Note) Autofill() {
 	}
 	// for content
 	// o.Content = o.RawContent
-	name, host, timestamp := utils.ParseStatusesUriToNameHostTimestamp(o.ID)
+	name, host, timestamp := utils.ActivitypubID2NameAndHostAndTimestamp(o.ID)
 	if o.AttributedTo == "" {
-		o.AttributedTo = utils.ParseActivitypubID(name, host)
+		o.AttributedTo = utils.NameAndHost2ActivitypubID(name, host)
 	}
 
 	if o.URL == "" {
@@ -109,13 +135,17 @@ func (o *Note) Autofill() {
 	default:
 		o.Visibility = utils.ParseVisibility(o.To, o.Cc)
 	}
-	_, _, id := utils.ParseStatusesUriToNameHostTimestamp(o.ID)
-	o.Conversation = "tag:fedi.moonchan.xyz," + o.Published[0:10] + ":objectId=" + id + ":objectType=Conversation"
+	_, _, id := utils.ActivitypubID2NameAndHostAndTimestamp(o.ID)
+	o.Conversation = "tag:" + host + "," + o.Published[0:10] + ":objectId=" + id + ":objectType=Conversation"
 	o.ContentMap = map[string]string{
 		"zh": o.Content,
 	}
-	o.Attachment = []any{}
-	o.Tag = []*Mention{}
+	if o.Attachment == nil {
+		o.Attachment = []any{}
+	}
+	if o.Tag == nil {
+		o.Tag = []*Mention{}
+	}
 	o.Replies = &Collection{
 		ID:   o.ID + "/replies",
 		Type: "Collection",
@@ -146,5 +176,5 @@ func (o *Note) GetActor() string {
 }
 
 func endpointFollower(username, host string) string {
-	return utils.ParseActivitypubID(username, host) + "/followers"
+	return utils.NameAndHost2ActivitypubID(username, host) + "/followers"
 }

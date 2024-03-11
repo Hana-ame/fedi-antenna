@@ -8,5 +8,6 @@ script
 *.sh
 *.db
 
+*.exe
 fedi-antenna
 __debug_bin*

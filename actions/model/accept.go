@@ -1,5 +1,7 @@
 package model
 
+import "encoding/json"
+
 type Accept struct {
 	Context any    `json:"@context,omitempty" gorm:"-"`
 	Type    string `json:"type" gorm:"-"`
@@ -24,4 +26,13 @@ func (o *Accept) Autofill() {
 		o.ObjectID = o.Object.GetID()
 	}
 	o.Object.ClearContext()
+}
+
+func (o *Accept) ClearContext() {
+	o.Context = nil
+}
+
+func (o *Accept) String() (string, error) {
+	body, err := json.Marshal(o)
+	return string(body), err
 }

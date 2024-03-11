@@ -38,5 +38,5 @@ func AutoMigrate(db *gorm.DB) (err error) {
 	if err != nil {
 		log.Println(err)
 	}
-	return nil
+	return
 }

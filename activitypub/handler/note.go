@@ -5,7 +5,7 @@ import (
 
 	tools "github.com/Hana-ame/fedi-antenna/Tools"
 	"github.com/Hana-ame/fedi-antenna/Tools/orderedmap"
-	"github.com/Hana-ame/fedi-antenna/core"
+	"github.com/Hana-ame/fedi-antenna/core/dao"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
 	"github.com/Hana-ame/fedi-antenna/mastodon/entities"
 	"github.com/Hana-ame/fedi-antenna/mastodon/entities/status"
@@ -13,7 +13,7 @@ import (
 
 // type: note
 func CreateNote(o *orderedmap.OrderedMap) error {
-	timestamp := utils.Now()
+	timestamp := utils.NewTimestamp(false)
 	oapplication, ok := o.GetOrDefault("application", orderedmap.New()).(*orderedmap.OrderedMap)
 	var application *status.Application
 	if ok && oapplication != nil {
@@ -95,7 +95,7 @@ func CreateNote(o *orderedmap.OrderedMap) error {
 		// Pinned bool `json:"pinned,omitempty" gorm:"-"`
 		// Filtered []FilterResult `json:"filtered,omitempty" gorm:"-"`
 	}
-	err := core.CreateStatus(n)
+	err := dao.CreateStatus(n)
 	return err
 }
 
@@ -103,6 +103,6 @@ func DeleteNote(id string) error {
 	status := &entities.Status{
 		Uri: id,
 	}
-	err := core.DeleteStatus(status)
+	err := dao.DeleteStatus(status)
 	return err
 }
