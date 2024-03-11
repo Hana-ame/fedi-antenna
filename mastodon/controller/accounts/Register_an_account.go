@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/Hana-ame/fedi-antenna/mastodon/controller/accounts/model"
 	"github.com/Hana-ame/fedi-antenna/mastodon/handler"
@@ -12,12 +13,12 @@ import (
 func Register_an_account(c *gin.Context) {
 	// REQUIRED Provide this header with Bearer <app token> to gain authorized access to this API method.
 	Authorization := c.GetHeader("Authorization")
-	host := c.GetHeader("Host")
+	// host := c.GetHeader("Host")
 	var data *model.Register_an_account
 	c.Bind(&data)
 	err := handler.Register_an_account(
 		Authorization,
-		host,
+		os.Getenv("HOST"),
 		data,
 	)
 	if err != nil {

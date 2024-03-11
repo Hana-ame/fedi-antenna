@@ -36,7 +36,7 @@ func Register_an_account(
 	acct := &entities.Account{
 		Id:       strconv.Itoa(int(now)),
 		Username: o.Username,
-		Acct:     utils.UsernameAndHost2Account(o.Username, host),
+		Acct:     o.Username,
 		Url:      utils.NameAndHost2ProfileUrl(o.Username, host),
 		Uri:      activitypubID,
 	}
