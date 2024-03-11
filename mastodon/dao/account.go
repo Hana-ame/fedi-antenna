@@ -41,7 +41,7 @@ func UpdateAccountStatusesCount(tx *gorm.DB, acct *entities.Account, delta int) 
 
 	acct.StatusesCount += delta
 	if delta > 0 {
-		acct.LastStatusAt = utils.ParseStringToPointer(utils.TimestampToRFC3339(utils.Timestamp(false)), true)
+		acct.LastStatusAt = utils.StringToPointer(utils.TimestampToRFC3339(utils.Timestamp(false)), true)
 	}
 
 	if err := Update(tx, acct); err != nil {

@@ -7,10 +7,9 @@ import (
 	"encoding/pem"
 	"log"
 	"os"
-	"strconv"
 )
 
-var RSABits, _ = strconv.Atoi(os.Getenv("RSA_BITS"))
+var RSABits = Atoi(os.Getenv("RSA_BITS"), 4096)
 
 // create a new private key
 func GeneratePrivateKey() *rsa.PrivateKey {

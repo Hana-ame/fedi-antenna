@@ -23,15 +23,6 @@ func ParseUserAndHost(acct string) (user, host string) {
 	return
 }
 
-// func ParseObjValueToString(o *orderedmap.OrderedMap, key string) (string, bool) {
-// 	if v, ok := o.Get(key); !ok {
-// 		return "not found", false
-// 	} else {
-// 		s, ok := v.(string)
-// 		return s, ok
-// 	}
-// }
-
 // just add @ between [user] and [host]
 func UsernameAndHost2Account(user, host string) (acct string) {
 	return user + "@" + host

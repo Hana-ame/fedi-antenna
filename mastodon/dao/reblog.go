@@ -5,4 +5,6 @@ import (
 	"gorm.io/gorm"
 )
 
-func DeleteReblog(tx *gorm.DB, status *entities.Status) error
+func DeleteReblog(tx *gorm.DB, status *entities.Status) error {
+	return nil
+}

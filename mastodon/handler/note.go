@@ -89,7 +89,7 @@ func Post_a_new_status(
 
 		// Type: NULLABLE String (URL) or null
 		// Description: A link to the status’s HTML representation.
-		Url: utils.ParseStringToPointer(utils.ParseStatusesURL(name, host, strconv.Itoa(int(timestamp))), true),
+		Url: utils.StringToPointer(utils.ParseStatusesURL(name, host, strconv.Itoa(int(timestamp))), true),
 		// Type: NULLABLE String (cast from an integer but not guaranteed to be a number) or null
 		// Description: ID of the status being replied to.
 		InReplyToId: o.InReplyToId,
