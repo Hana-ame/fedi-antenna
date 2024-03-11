@@ -14,9 +14,9 @@
 
 似乎除了user其他ap都不需要保存的样子。
 
-传到台式机的wsl里面
-跑go和nextjs
-记更新一下，go版本不对。
-然后在台式机wsl里面打开debug进行调试。
-如果要和nextjs一起的话
-记得装一下nginx
+传到台式机的wsl里面  
+跑go和nextjs  
+记更新一下，go版本不对。  
+然后在台式机wsl里面打开debug进行调试。  
+如果要和nextjs一起的话  
+记得装一下nginx  
