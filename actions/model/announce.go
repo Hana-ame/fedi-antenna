@@ -1,6 +1,10 @@
 package model
 
-import "github.com/Hana-ame/fedi-antenna/core/utils"
+import (
+	"encoding/json"
+
+	"github.com/Hana-ame/fedi-antenna/core/utils"
+)
 
 type Announce struct {
 	Context any    `json:"@context,omitempty" gorm:"-"`
@@ -55,12 +59,8 @@ func (o *Announce) Autofill() {
 func (o *Announce) ClearContext() {
 	o.Context = nil
 }
-func (o *Announce) GetID() string {
-	return o.ID
-}
-func (o *Announce) GetActor() string {
-	return o.Actor
-}
-func (o *Announce) GetEndpoint() string {
-	return "https://www.w3.org/ns/activitystreams#Public"
+
+func (o *Announce) String() (string, error) {
+	body, err := json.Marshal(o)
+	return string(body), err
 }
