@@ -77,3 +77,9 @@ if loading, use another style.
 
 ## https://reactrouter.com/en/main/start/tutorial#deleting-records
 enter the path by f5 doesn't delete the record.
+
+## https://reactrouter.com/en/main/start/tutorial#index-routes
+> Note the `{ index:true }` instead of `{ path: "" }`. That tells the router to match and render this route when the user is at the parent route's exact path, so there are no other child routes to render in the `<Outlet>`.
+
+`{ path: "" }` is also ok though.
+
