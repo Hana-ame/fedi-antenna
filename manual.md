@@ -74,3 +74,6 @@ high light while activing.
 
 ## https://reactrouter.com/en/main/start/tutorial#global-pending-ui
 if loading, use another style.
+
+## https://reactrouter.com/en/main/start/tutorial#deleting-records
+enter the path by f5 doesn't delete the record.
