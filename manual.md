@@ -20,6 +20,9 @@ install in vscode
 https://stackoverflow.com/questions/70597844/unknown-at-rule-tailwind-css-in-reactjs  
 https://marketplace.visualstudio.com/items?itemName=csstools.postcss  
 
+# vite
+https://vitejs.dev/config/server-options  
+
 # router
 https://reactrouter.com/en/main/start/tutorial#setup
 
@@ -27,3 +30,4 @@ https://reactrouter.com/en/main/start/tutorial#setup
 in this step, it makes `/` can be accessed and return soemthing.  
 an undefined rotuer returns error.
 
+## https://reactrouter.com/en/main/start/tutorial#the-root-route
