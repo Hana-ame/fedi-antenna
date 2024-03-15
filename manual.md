@@ -86,3 +86,7 @@ enter the path by f5 doesn't delete the record.
 ## https://reactrouter.com/en/main/start/tutorial#cancel-button
 though add the cancel function but it don't delete the record.
 
+## https://reactrouter.com/en/main/start/tutorial#url-search-params-and-get-submissions
+if path is in some record, the q will also add to the url with recordID directly.
+
+
