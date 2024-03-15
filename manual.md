@@ -99,3 +99,5 @@ now the query textarea has default value which is same as search param q
 ## https://reactrouter.com/en/main/start/tutorial#submitting-forms-onchange
 edit on change.
 
+## https://reactrouter.com/en/main/start/tutorial#adding-search-spinner
+add icon instruct searching
