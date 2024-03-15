@@ -64,4 +64,6 @@ hook is located in `contact.jsx`, registed in `main.tsx`
 hot fix made a error. 
 
 ## https://reactrouter.com/en/main/start/tutorial#updating-contacts-with-formdata
+> 😑 It worked, but I have no idea what is going on here...
 
+## https://reactrouter.com/en/main/start/tutorial#mutation-discussion
