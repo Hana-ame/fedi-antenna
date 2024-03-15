@@ -50,3 +50,7 @@ use `<Link to={'/path/to/file'}></Link>` instad `<a href="/path/to/file"></a>`
 
 ## https://reactrouter.com/en/main/start/tutorial#loading-data
 datas are stored at localstorage.
+
+## https://reactrouter.com/en/main/start/tutorial#data-writes--html-forms
+is that saying POST is not avaliable?
+
