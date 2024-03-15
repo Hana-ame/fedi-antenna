@@ -84,6 +84,10 @@ function Favorite({ contact }) {
   // yes, this is a `let` for later
   // eslint-disable-next-line react/prop-types
   let favorite = contact.favorite;
+  if (fetcher.formData) {
+    favorite = fetcher.formData.get("favorite") === "true";
+  }
+
   return (
     <fetcher.Form method="post">
       <button

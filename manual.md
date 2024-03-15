@@ -107,3 +107,10 @@ why the title not changed.
 
 ## https://reactrouter.com/en/main/start/tutorial#mutations-without-navigation
 what is formdata?
+
+## https://reactrouter.com/en/main/start/tutorial#optimistic-ui
+useFetcher
+
+## https://reactrouter.com/en/main/start/tutorial#not-found-data
+## https://reactrouter.com/en/main/start/tutorial#pathless-routes
+## https://reactrouter.com/en/main/start/tutorial#jsx-routes
