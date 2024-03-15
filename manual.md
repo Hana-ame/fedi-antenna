@@ -31,3 +31,7 @@ in this step, it makes `/` can be accessed and return soemthing.
 an undefined rotuer returns error.
 
 ## https://reactrouter.com/en/main/start/tutorial#the-root-route
+page added in router list, prop = element.
+
+## https://reactrouter.com/en/main/start/tutorial#handling-not-found-errors
+error page added in router list, prop = errorElement.
