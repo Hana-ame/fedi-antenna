@@ -54,3 +54,7 @@ datas are stored at localstorage.
 ## https://reactrouter.com/en/main/start/tutorial#data-writes--html-forms
 is that saying POST is not avaliable?
 
+## https://reactrouter.com/en/main/start/tutorial#creating-contacts
+how to refresh the side bar.
+
+
