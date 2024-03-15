@@ -89,4 +89,7 @@ though add the cancel function but it don't delete the record.
 ## https://reactrouter.com/en/main/start/tutorial#url-search-params-and-get-submissions
 if path is in some record, the q will also add to the url with recordID directly.
 
+## https://reactrouter.com/en/main/start/tutorial#get-submissions-with-client-side-routing
+what is the difference of `<Form>` and `<form>`.  
+a GET, which is same as clicking a link.
 
