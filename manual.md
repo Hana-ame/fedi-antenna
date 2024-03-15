@@ -44,3 +44,6 @@ ps: cat icon is unavaliable.
 
 ## https://reactrouter.com/en/main/start/tutorial#nested-routes
 oops, it means that the side bar is not appeared.  
+
+## https://reactrouter.com/en/main/start/tutorial#client-side-routing
+use `<Link to={'/path/to/file'}></Link>` instad `<a href="/path/to/file"></a>`
