@@ -100,4 +100,9 @@ now the query textarea has default value which is same as search param q
 edit on change.
 
 ## https://reactrouter.com/en/main/start/tutorial#adding-search-spinner
-add icon instruct searching
+add icon instruct searching.
+
+## https://reactrouter.com/en/main/start/tutorial#managing-the-history-stack
+why the title not changed.
+
+
