@@ -95,3 +95,7 @@ a GET, which is same as clicking a link.
 
 ## https://reactrouter.com/en/main/start/tutorial#synchronizing-urls-to-form-state
 now the query textarea has default value which is same as search param q
+
+## https://reactrouter.com/en/main/start/tutorial#submitting-forms-onchange
+edit on change.
+
