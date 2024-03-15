@@ -67,3 +67,7 @@ hot fix made a error.
 > 😑 It worked, but I have no idea what is going on here...
 
 ## https://reactrouter.com/en/main/start/tutorial#mutation-discussion
+redirect to edit after new.
+
+## https://reactrouter.com/en/main/start/tutorial#active-link-styling
+high light while activing.
