@@ -71,3 +71,6 @@ redirect to edit after new.
 
 ## https://reactrouter.com/en/main/start/tutorial#active-link-styling
 high light while activing.
+
+## https://reactrouter.com/en/main/start/tutorial#global-pending-ui
+if loading, use another style.
