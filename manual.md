@@ -93,3 +93,5 @@ if path is in some record, the q will also add to the url with recordID directly
 what is the difference of `<Form>` and `<form>`.  
 a GET, which is same as clicking a link.
 
+## https://reactrouter.com/en/main/start/tutorial#synchronizing-urls-to-form-state
+now the query textarea has default value which is same as search param q
