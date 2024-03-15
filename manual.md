@@ -35,3 +35,9 @@ page added in router list, prop = element.
 
 ## https://reactrouter.com/en/main/start/tutorial#handling-not-found-errors
 error page added in router list, prop = errorElement.
+
+## https://reactrouter.com/en/main/start/tutorial#the-contact-route-ui
+> However, it's not inside of our root layout 😠
+
+this means that it was hooked directly on the app root not under the `<App />` component  
+ps: cat icon is unavaliable.
