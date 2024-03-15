@@ -83,3 +83,6 @@ enter the path by f5 doesn't delete the record.
 
 `{ path: "" }` is also ok though.
 
+## https://reactrouter.com/en/main/start/tutorial#cancel-button
+though add the cancel function but it don't delete the record.
+
