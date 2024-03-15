@@ -12,6 +12,8 @@ import ErrorPage from "./error-page";
 import Contact, {
   loader as contactLoader,
 } from "./routes/contact";
+import EditContact from "./routes/edit";
+
 
 
 import './main.css'
@@ -27,6 +29,11 @@ const router = createBrowserRouter([
       {
         path: "contacts/:contactId",
         element: <Contact />,
+        loader: contactLoader,
+      },
+      {
+        path: "contacts/:contactId/edit",
+        element: <EditContact />,
         loader: contactLoader,
       },
     ],
