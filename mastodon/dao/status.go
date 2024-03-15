@@ -54,7 +54,7 @@ func ReadPublicStatus(tx *gorm.DB, limit int) (statuses []*entities.Status, err 
 	}
 
 	// not tested
-	tx.Raw("SELECT * FROM statuses WHERE visibility = 'public' AND reblog_uri IS NULL ORDER BY create_at DESC LIMIT ?", limit).Scan(&statuses)
+	tx.Raw("SELECT * FROM statuses WHERE visibility = 'public' AND reblog_uri IS NULL ORDER BY created_at DESC LIMIT ?", limit).Scan(&statuses)
 	err = tx.Error
 
 	return
