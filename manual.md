@@ -20,6 +20,10 @@ install in vscode
 https://stackoverflow.com/questions/70597844/unknown-at-rule-tailwind-css-in-reactjs  
 https://marketplace.visualstudio.com/items?itemName=csstools.postcss  
 
+# 
+
+去看一眼教程就都晓得了。
+
 # vite
 https://vitejs.dev/config/server-options  
 

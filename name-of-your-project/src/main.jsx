@@ -19,12 +19,17 @@ import EditContact, {
 } from "./routes/edit";
 import { action as destroyAction } from "./routes/destroy";
 import Index from "./routes/index";
-
+import { Timeline } from './timeline/timeline';
 
 
 import './main.css'
 
 const router = createBrowserRouter([
+  {
+    path: "/timeline",
+    element: <Timeline />,
+    
+  },
   {
     path: "/",
     element: <Root></Root>,

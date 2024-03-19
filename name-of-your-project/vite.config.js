@@ -6,5 +6,13 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000,
+    proxy: {
+      "/assets": {
+        target: "http://localhost:5500",
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^/, "/name-of-your-project/src"),
+      },
+    },
+
   }
 })
