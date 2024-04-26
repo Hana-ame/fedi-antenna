@@ -20,15 +20,19 @@ import EditContact, {
 import { action as destroyAction } from "./routes/destroy";
 import Index from "./routes/index";
 import { Timeline } from './timeline/timeline';
+import { Edit } from './edit/edit';
 
 
 import './main.css'
 
 const router = createBrowserRouter([
   {
+    path: "/edit",
+    element: <Edit />,
+  },
+  {
     path: "/timeline",
     element: <Timeline />,
-    
   },
   {
     path: "/",
@@ -57,10 +61,6 @@ const router = createBrowserRouter([
       },
     ],
   },
-  // {
-  //   path: "contacts/:contactId",
-  //   element: <Contact />,
-  // },
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(

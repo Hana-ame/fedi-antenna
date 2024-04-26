@@ -24,6 +24,17 @@ https://marketplace.visualstudio.com/items?itemName=csstools.postcss
 
 去看一眼教程就都晓得了。
 
+# 如何得到api
+
+先用正常的api，做一个纯前端
+
+# 如何渲染正文
+
+因为是html格式，所以
+- parse with paser and generate dom tree
+- create react virtual doms
+- return
+
 # vite
 https://vitejs.dev/config/server-options  
 
