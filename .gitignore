@@ -3,3 +3,5 @@
 *.exe
 fedi-antenna
 __debug_bin*
+
+*.zip

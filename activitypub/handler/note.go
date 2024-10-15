@@ -3,7 +3,6 @@ package handler
 import (
 	"strconv"
 
-	tools "github.com/Hana-ame/fedi-antenna/Tools"
 	"github.com/Hana-ame/fedi-antenna/Tools/orderedmap"
 	"github.com/Hana-ame/fedi-antenna/core/dao"
 	"github.com/Hana-ame/fedi-antenna/core/utils"
@@ -42,8 +41,8 @@ func CreateNote(o *orderedmap.OrderedMap) error {
 		// Type: String (Enumerable oneOf)
 		// Description: Visibility of this status.
 		Visibility: utils.ParseVisibility(
-			tools.ParseSliceToStringSlice(o.Get("to")),
-			tools.ParseSliceToStringSlice(o.Get("cc")),
+			o.GetOrDefault("to", []string{}).([]string),
+			o.GetOrDefault("cc", []string{}).([]string),
 		),
 		// Type: Boolean
 		// Description: Is this status marked as sensitive content?
