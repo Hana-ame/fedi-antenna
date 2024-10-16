@@ -1,0 +1,47 @@
+{
+  "@context": [
+    "https://www.w3.org/ns/activitystreams",
+    {
+      "ostatus": "http://ostatus.org#",
+      "atomUri": "ostatus:atomUri",
+      "inReplyToAtomUri": "ostatus:inReplyToAtomUri",
+      "conversation": "ostatus:conversation",
+      "sensitive": "as:sensitive",
+      "toot": "http://joinmastodon.org/ns#",
+      "votersCount": "toot:votersCount"
+    }
+  ],
+  "id": "https://me.ns.ci/users/cocoon/statuses/111264673643919103",
+  "type": "Note",
+  "summary": null,
+  "inReplyTo": null,
+  "published": "2023-10-20T01:09:45Z",
+  "url": "https://me.ns.ci/@cocoon/111264673643919103",
+  "attributedTo": "https://me.ns.ci/users/cocoon",
+  "to": [
+    "https://www.w3.org/ns/activitystreams#Public"
+  ],
+  "cc": [
+    "https://me.ns.ci/users/cocoon/followers"
+  ],
+  "sensitive": false,
+  "atomUri": "https://me.ns.ci/users/cocoon/statuses/111264673643919103",
+  "inReplyToAtomUri": null,
+  "conversation": "tag:me.ns.ci,2023-10-20:objectId=36654304:objectType=Conversation",
+  "content": "<p>如果花了时间但是得不到和时间相应的报酬，会亏(废话)</p>",
+  "contentMap": {
+    "zh": "<p>如果花了时间但是得不到和时间相应的报酬，会亏(废话)</p>"
+  },
+  "attachment": [],
+  "tag": [],
+  "replies": {
+    "id": "https://me.ns.ci/users/cocoon/statuses/111264673643919103/replies",
+    "type": "Collection",
+    "first": {
+      "type": "CollectionPage",
+      "next": "https://me.ns.ci/users/cocoon/statuses/111264673643919103/replies?only_other_accounts=true&page=true",
+      "partOf": "https://me.ns.ci/users/cocoon/statuses/111264673643919103/replies",
+      "items": []
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "@context": "https://www.w3.org/ns/activitystreams",
+  "id": "https://me.ns.ci/users/cocoon#likes/1644103",
+  "type": "Like",
+  "actor": "https://me.ns.ci/users/cocoon",
+  "object": "https://fedi.moonchan.xyz/users/test5/statuses/1704542848319306"
+}

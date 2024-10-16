@@ -1,0 +1,15 @@
+{
+  "@context": "https://www.w3.org/ns/activitystreams",
+  "id": "https://me.ns.ci/users/cocoon/statuses/111708981622317577/activity",
+  "type": "Announce",
+  "actor": "https://me.ns.ci/users/cocoon",
+  "published": "2024-01-06T12:23:06Z",
+  "to": [
+    "https://www.w3.org/ns/activitystreams#Public"
+  ],
+  "cc": [
+    "https://fedi.moonchan.xyz/users/test5",
+    "https://me.ns.ci/users/cocoon/followers"
+  ],
+  "object": "https://fedi.moonchan.xyz/users/test5/statuses/1704542848319306"
+}

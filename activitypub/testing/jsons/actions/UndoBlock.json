@@ -1,0 +1,12 @@
+{
+  "@context": "https://www.w3.org/ns/activitystreams",
+  "id": "https://me.ns.ci/users/cocoon#blocks/68851/undo",
+  "type": "Undo",
+  "actor": "https://me.ns.ci/users/cocoon",
+  "object": {
+    "id": "https://me.ns.ci/e1a6ab49-f724-4917-aca1-869c05cb764e",
+    "type": "Block",
+    "actor": "https://me.ns.ci/users/cocoon",
+    "object": "https://fedi.moonchan.xyz/users/test5"
+  }
+}

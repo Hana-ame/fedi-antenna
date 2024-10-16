@@ -1,0 +1,29 @@
+{
+  "@context": "https://www.w3.org/ns/activitystreams",
+  "id": "https://me.ns.ci/users/cocoon#announces/111708981622317577/undo",
+  "type": "Undo",
+  "actor": "https://me.ns.ci/users/cocoon",
+  "to": [
+    "https://www.w3.org/ns/activitystreams#Public"
+  ],
+  "object": {
+    "id": "https://me.ns.ci/users/cocoon/statuses/111708981622317577/activity",
+    "type": "Announce",
+    "actor": "https://me.ns.ci/users/cocoon",
+    "published": "2024-01-06T12:23:06Z",
+    "to": [
+      "https://www.w3.org/ns/activitystreams#Public"
+    ],
+    "cc": [
+      "https://fedi.moonchan.xyz/users/test5",
+      "https://me.ns.ci/users/cocoon/followers"
+    ],
+    "object": "https://fedi.moonchan.xyz/users/test5/statuses/1704542848319306"
+  },
+  "signature": {
+    "type": "RsaSignature2017",
+    "creator": "https://me.ns.ci/users/cocoon#main-key",
+    "created": "2024-01-06T12:23:16Z",
+    "signatureValue": "MKX4Xs0hMvr4/se5oAKDYyTG37n4ox48O9P9w3m0y2321gsYv3dPmMnglbAl/fCoijFkSmlk8siwtl1djcfY+0GO8NdruguVNj+bjIMS+dzZWmx2+Yiz4+/DWWSQYxca3emr/lKxY8PiREkg7oxd89XqP7ZbWGhoQ2kAM9Xwi3QJyEUnqx37AFflvMKoEp8NVYTXIEgENWoK6+qkXtvm2M8tWRteZPb24RlsfwDMfq0f7w97CIa+fE40U6hHSZRh2UxCot3Zid5FVpCPFEb1d23H6deJJz/RQusofJiORxfWN9+kpM38h2idRoewgWqtZvxMo8ccFoP/Gv+i2zdKUQ=="
+  }
+}

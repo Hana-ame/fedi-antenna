@@ -1,0 +1,12 @@
+{
+  "@context": "https://www.w3.org/ns/activitystreams",
+  "id": "https://me.ns.ci/users/cocoon#rejects/follows/135282",
+  "type": "Reject",
+  "actor": "https://me.ns.ci/users/cocoon",
+  "object": {
+    "id": "https://fedi.moonchan.xyz/objects/follow/61ec2a3d-bd27-42b5-b007-06822b9c45bf",
+    "type": "Follow",
+    "actor": "https://fedi.moonchan.xyz/users/test3",
+    "object": "https://me.ns.ci/users/cocoon"
+  }
+}
