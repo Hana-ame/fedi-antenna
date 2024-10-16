@@ -7,13 +7,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/Hana-ame/fedi-antenna/testpkg"
 	"github.com/go-fed/httpsig"
 )
-
-func SomeFun() {
-	log.Println(testpkg.Test)
-}
 
 func NewSingedRequest(
 	privateKey crypto.PrivateKey, pubKeyId string,
