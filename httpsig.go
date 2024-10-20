@@ -3,10 +3,13 @@ package main
 import (
 	"crypto"
 	"crypto/rsa"
+	"fmt"
 	"net/http"
 	"strings"
 
-	"github.com/go-fed/httpsig"
+	"github.com/Hana-ame/fedi-antenna/Tools/debug"
+	"github.com/Hana-ame/fedi-antenna/httpsig"
+	"github.com/Hana-ame/fedi-antenna/scheduler"
 )
 
 // usage(gin):
@@ -39,16 +42,28 @@ func parseAlgorithm(signature string) httpsig.Algorithm {
 }
 
 func parsePublicKey(signature string) *rsa.PublicKey {
+	defer func() {
+		if e := recover(); e != nil {
+			debug.E("parsePublicKey", fmt.Errorf("%v", e))
+			return
+		}
+	}()
 	for _, v := range strings.Split(signature, ",") {
 		// log.Println(v)
 		if strings.HasPrefix(v, "keyId") {
 			// log.Println(v)
-			keyId := strings.Split(v, "=")[1]
-			keyId = keyId[1 : len(keyId)-1]
+			keyID := strings.Split(v, "=")[1]
+			keyID = keyID[1 : len(keyID)-1]
+			ID := strings.Split(keyID, "#")[0]
 			// 此处中断
-			publicKeyString := fetchPublicKeyByKeyId(keyId)
+			// publicKeyString := fetchPublicKeyByKeyId(keyID)
 			//
-			publicKey, _ := ParsePublicKey(publicKeyString)
+			apUser, _ := scheduler.ByApID(ID)
+			apPbulicKey, ok := apUser.Get("PublicKey")
+			if !ok {
+				return nil
+			}
+			publicKey := apPbulicKey.Get("TODO")
 			return publicKey
 		}
 	}

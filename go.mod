@@ -3,10 +3,13 @@ module github.com/Hana-ame/fedi-antenna
 go 1.23.2
 
 require (
+	github.com/ake-persson/mapslice-json v0.0.0-20210720081907-22c8edf57807
 	github.com/fatih/color v1.17.0
 	github.com/gin-gonic/gin v1.10.0
 	github.com/glebarez/go-sqlite v1.22.0
+	github.com/go-fed/httpsig v1.1.0
 	github.com/gorilla/websocket v1.5.3
+	github.com/iancoleman/orderedmap v0.3.0
 	golang.org/x/crypto v0.23.0
 	golang.org/x/sys v0.20.0
 )

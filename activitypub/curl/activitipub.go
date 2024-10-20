@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	tools "github.com/Hana-ame/fedi-antenna/Tools"
@@ -38,6 +39,19 @@ func Get(id string) (*orderedmap.OrderedMap, error) {
 // 1QIDAQAB
 // -----END PUBLIC KEY-----
 // publicKeyID: ttps://mstdn.jp/users/nanakananoka#main-key
+func GetWithSignDefault(id string) (*orderedmap.OrderedMap, error) {
+	pk, err := tools.ReadKeyFromFile(os.Getenv("USERNAME") + ".pem")
+	if err != nil {
+		return nil, err
+	}
+	pem, err := tools.MarshalPrivateKey(pk)
+	if err != nil {
+		return nil, err
+	}
+	keyID := "https://" + os.Getenv("HOST") + "/user/" + os.Getenv("USERNAME") + "#main-key"
+	return GetWithSign(id, pem, keyID)
+}
+
 func GetWithSign(id string, privateKeyPem []byte, publicKeyID string) (*orderedmap.OrderedMap, error) {
 
 	r, _ := http.NewRequest(http.MethodGet, id, nil)
@@ -71,6 +85,19 @@ func GetWithSign(id string, privateKeyPem []byte, publicKeyID string) (*orderedm
 	}
 	defer resp.Body.Close()
 	return tools.ReaderToJson(resp.Body)
+}
+
+func PostWithSignDefault(id string, body []byte) (*orderedmap.OrderedMap, error) {
+	pk, err := tools.ReadKeyFromFile(os.Getenv("USERNAME") + ".pem")
+	if err != nil {
+		return nil, err
+	}
+	pem, err := tools.MarshalPrivateKey(pk)
+	if err != nil {
+		return nil, err
+	}
+	keyID := "https://" + os.Getenv("HOST") + "/user/" + os.Getenv("USERNAME") + "#main-key"
+	return PostWithSign(id, body, pem, keyID)
 }
 
 func PostWithSign(id string, body, privateKeyPem []byte, publicKeyID string) (*orderedmap.OrderedMap, error) {

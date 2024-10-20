@@ -1,6 +1,9 @@
 package main
 
-import "github.com/iancoleman/orderedmap"
+import (
+	tools "github.com/Hana-ame/fedi-antenna/Tools"
+	"github.com/Hana-ame/fedi-antenna/Tools/orderedmap"
+)
 
 // utils
 func newOrderedMap(keys []string, values []interface{}) *orderedmap.OrderedMap {
@@ -101,8 +104,8 @@ func genUserObj(name string) *orderedmap.OrderedMap {
 }
 
 func genPkPem(name string) string {
-	pk, _ := readKeyFromFile(name + ".pem")
-	pubKeyStr := MarshalPublicKey(&pk.PublicKey)
+	pk, _ := tools.ReadKeyFromFile(name + ".pem")
+	pubKeyStr, _ := tools.MarshalPublicKey(&pk.PublicKey)
 	return string(pubKeyStr)
 }
 

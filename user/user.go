@@ -3,6 +3,7 @@ package user
 import (
 	"fmt"
 
+	tools "github.com/Hana-ame/fedi-antenna/Tools"
 	"github.com/ake-persson/mapslice-json"
 )
 
@@ -10,7 +11,7 @@ var domain = "v.meromeromeiro.top"
 
 func UserAS(username string) ([]byte, error) {
 
-	pk, err := httpsig.ReadKeyFromFile("privateKey.pem")
+	pk, err := tools.ReadKeyFromFile("privateKey.pem")
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +65,7 @@ func UserAS(username string) ([]byte, error) {
 			msKV("id", fmt.Sprintf("https://%s/users/%s#main-key", domain, username)),
 			msKV("type", "Key"),
 			msKV("owner", fmt.Sprintf("https://%s/users/%s", domain, username)),
-			msKV("publicKeyPem", string(httpsig.MarshalPublicKey(&pk.PublicKey))),
+			msKV("publicKeyPem", string(tools.DefaultValue(func () ([]byte, error) { return tools.MarshalPublicKey(&pk.PublicKey)}, nil))),
 		}),
 	}
 

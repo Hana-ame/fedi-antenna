@@ -41,7 +41,7 @@ func printResp(resp *http.Response) {
 func TestMstdnJP(t *testing.T) {
 	o := genFollowObj("https://fedi.moonchan.xyz/users/nanaka", "https://mstdn.jp/users/meromero")
 	j, _ := json.Marshal(o)
-	pk, _ := ReadKeyFromFile("nanaka.pem")
+	pk, _ := tools.ReadKeyFromFile("nanaka.pem")
 	// r, _ := NewSingedRequest(pk, "https://fedi.moonchan.xyz/users/nanaka#main-key", "POST", "https://moonchan.xyz/api-pack/echo", j)
 	r, _ := NewSingedRequest(pk, "https://fedi.moonchan.xyz/users/nanaka#main-key", "POST", "https://mstdn.jp/users/meromero/inbox", j)
 	log.Println(r.Header)
@@ -52,7 +52,7 @@ func TestMstdnJP(t *testing.T) {
 
 // passed?
 func TestReq(t *testing.T) {
-	pk, err := ReadKeyFromFile("nanaka.pem")
+	pk, err := tools.ReadKeyFromFile("nanaka.pem")
 	log.Println(err)
 	r, err := NewSingedRequest(pk, "id", "POST", "https://moonchan.xyz/api-pack/echo", []byte("something else"))
 	log.Println(err)
